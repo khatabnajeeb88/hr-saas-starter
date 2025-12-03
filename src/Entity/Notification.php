@@ -3,9 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\NotificationRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: NotificationRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['notification:read']],
+    denormalizationContext: ['groups' => ['notification:write']],
+)]
 class Notification
 {
     #[ORM\Id]
@@ -18,15 +24,19 @@ class Notification
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['notification:read'])]
     private ?string $type = null;
 
     #[ORM\Column]
+    #[Groups(['notification:read'])]
     private array $data = [];
 
     #[ORM\Column]
+    #[Groups(['notification:read'])]
     private ?bool $isRead = false;
 
     #[ORM\Column]
+    #[Groups(['notification:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()

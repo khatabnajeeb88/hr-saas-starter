@@ -3,12 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\TeamRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TeamRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['team:read']],
+    denormalizationContext: ['groups' => ['team:write']],
+)]
 #[ORM\Table(name: 'team')]
 #[ORM\UniqueConstraint(name: 'UNIQ_TEAM_SLUG', fields: ['slug'])]
 #[UniqueEntity(fields: ['slug'], message: 'This slug is already in use.')]
@@ -20,9 +26,11 @@ class Team
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['team:read', 'team:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['team:read'])]
     private ?string $slug = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
