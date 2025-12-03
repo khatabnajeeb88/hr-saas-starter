@@ -7,7 +7,9 @@ use App\Entity\TeamMember;
 use App\Entity\User;
 use App\Repository\TeamRepository;
 use App\Repository\TeamMemberRepository;
+use App\Event\TeamMemberAddedEvent;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TeamManager
@@ -17,6 +19,7 @@ class TeamManager
         private TeamRepository $teamRepository,
         private TeamMemberRepository $teamMemberRepository,
         private SluggerInterface $slugger,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -78,6 +81,8 @@ class TeamManager
 
         $this->entityManager->persist($teamMember);
         $this->entityManager->flush();
+
+        $this->eventDispatcher->dispatch(new TeamMemberAddedEvent($teamMember));
 
         return $teamMember;
     }

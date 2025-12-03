@@ -13,5 +13,12 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+        
+        {% if app.user %}
+            {% include '_notifications.html.twig' with {
+                mercure_url: mercure('https://example.com/users/' ~ app.user.id ~ '/notifications'),
+                topics: ['https://example.com/users/' ~ app.user.id ~ '/notifications']
+            } %}
+        {% endif %}
     </body>
 </html>
