@@ -77,7 +77,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getTeamMembers(): Collection
+    {
+        return $this->teamMembers;
+    }
+
+    public function addTeamMember(TeamMember $teamMember): static
+    {
+        if (!$this->teamMembers->contains($teamMember)) {
+            $this->teamMembers->add($teamMember);
+            $teamMember->setUser($this);
+        }
+
+        return $this;
+    }
+
     public function removeTeamMember(TeamMember $teamMember): static
+
     {
         if ($this->teamMembers->removeElement($teamMember)) {
             // set the owning side to null (unless already changed)

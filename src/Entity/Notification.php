@@ -14,6 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Notification
 {
+    use Traits\TenantAwareTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
