@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Invoice {{ invoice.invoiceNumber }}{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Invoice {{ invoice.invoiceNumber }}</h1>
+            <div class="space-x-4">
+                <a href="{{ path('invoice_download', {id: invoice.id}) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download PDF
+                </a>
+                <a href="{{ path('invoice_list') }}" class="text-gray-600 hover:text-gray-900">Back to Invoices</a>
+            </div>
+        </div>
+
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6 flex justify-between items-center bg-gray-50 border-b border-gray-200">
+                <div>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Invoice Details</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Issued on {{ invoice.issuedAt|date('F d, Y') }}</p>
+                </div>
+                <div>
+                    <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
+                        {% if invoice.status == 'paid' %}bg-green-100 text-green-800
+                        {% elseif invoice.status == 'sent' %}bg-blue-100 text-blue-800
+                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                        {{ invoice.status|upper }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                <dl class="sm:divide-y sm:divide-gray-200">
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Billed To</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <div class="font-bold">{{ invoice.billingName }}</div>
+                            <div>{{ invoice.billingEmail }}</div>
+                            {% if invoice.billingAddress %}
+                            <div class="whitespace-pre-line">{{ invoice.billingAddress }}</div>
+                            {% endif %}
+                            {% if invoice.taxId %}
+                            <div class="mt-1 text-gray-500">Tax ID: {{ invoice.taxId }}</div>
+                            {% endif %}
+                        </dd>
+                    </div>
+
+                    <div class="py-4 sm:py-5 sm:px-6">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
+                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                {% for item in invoice.lineItems %}
+                                <tr>
+                                    <td class="px-3 py-4 text-sm text-gray-900">{{ item.description }}</td>
+                                    <td class="px-3 py-4 text-sm text-gray-900 text-right">{{ item.quantity }}</td>
+                                    <td class="px-3 py-4 text-sm text-gray-900 text-right">{{ invoice.currency }} {{ item.unit_price|number_format(2) }}</td>
+                                    <td class="px-3 py-4 text-sm text-gray-900 text-right">{{ invoice.currency }} {{ item.total|number_format(2) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="px-3 py-4 text-sm font-medium text-gray-900 text-right">Subtotal</td>
+                                    <td class="px-3 py-4 text-sm text-gray-900 text-right">{{ invoice.formattedSubtotal }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="px-3 py-4 text-sm font-medium text-gray-900 text-right">Tax</td>
+                                    <td class="px-3 py-4 text-sm text-gray-900 text-right">{{ invoice.formattedTax }}</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td colspan="3" class="px-3 py-4 text-base font-bold text-gray-900 text-right">Total</td>
+                                    <td class="px-3 py-4 text-base font-bold text-gray-900 text-right">{{ invoice.formattedTotal }}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    {% if invoice.payment %}
+                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 border-t border-gray-200">
+                        <dt class="text-sm font-medium text-gray-500">Payment Information</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            <div>Transaction ID: {{ invoice.payment.tapChargeId }}</div>
+                            <div>Date: {{ invoice.payment.createdAt|date('M d, Y H:i') }}</div>
+                            {% if invoice.payment.cardBrand %}
+                            <div>Method: {{ invoice.payment.cardBrand }} •••• {{ invoice.payment.cardLastFour }}</div>
+                            {% endif %}
+                        </dd>
+                    </div>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

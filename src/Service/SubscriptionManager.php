@@ -54,6 +54,7 @@ class SubscriptionManager
                 : $now->modify('+1 month');
             
             $subscription->setCurrentPeriodEnd($periodEnd);
+            $subscription->setNextBillingDate($periodEnd);
         }
 
         $this->entityManager->persist($subscription);

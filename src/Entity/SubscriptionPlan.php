@@ -47,9 +47,42 @@ class SubscriptionPlan
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     #[Groups(['plan:read', 'plan:write'])]
-    private ?string $price = null;
+    #[ORM\Column(length: 3)]
+    #[Groups(['plan:read', 'plan:write'])]
+    private ?string $currency = 'USD';
 
-    #[ORM\Column(length: 50)]
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): static
+    {
+        $this->currency = $currency;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    /**
+     * Get formatted price for display
+     */
+    public function getFormattedPrice(): string
+    {
+        $symbols = [
+            'USD' => '$',
+            'EUR' => '€',
+            'GBP' => '£',
+            'SAR' => 'SAR ',
+            'AED' => 'AED ',
+            'KWD' => 'KWD ',
+        ];
+
+        $symbol = $symbols[$this->currency] ?? $this->currency . ' ';
+        $price = number_format((float) $this->price, 2);
+        
+        return $symbol . $price . '/' . ($this->billingInterval === 'yearly' ? 'year' : 'month');
+    }
     #[Groups(['plan:read', 'plan:write'])]
     private ?string $billingInterval = 'monthly'; // monthly, yearly
 
@@ -284,14 +317,7 @@ class SubscriptionPlan
         return $this;
     }
 
-    /**
-     * Get formatted price for display
-     */
-    public function getFormattedPrice(): string
-    {
-        $price = number_format((float) $this->price, 2);
-        return '$' . $price . '/' . ($this->billingInterval === 'yearly' ? 'year' : 'month');
-    }
+
 
     /**
      * Check if this plan has a specific feature

@@ -84,6 +84,16 @@ class Subscription
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastPaymentAt = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['subscription:read'])]
+    private ?\DateTimeImmutable $nextBillingDate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $gracePeriodEndsAt = null;
+
+    #[ORM\Column]
+    private int $retryCount = 0;
+
     #[ORM\Column]
     #[Groups(['subscription:read'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -278,6 +288,61 @@ class Subscription
     public function setLastPaymentAt(?\DateTimeImmutable $lastPaymentAt): static
     {
         $this->lastPaymentAt = $lastPaymentAt;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getNextBillingDate(): ?\DateTimeImmutable
+    {
+        return $this->nextBillingDate;
+    }
+
+    public function setNextBillingDate(?\DateTimeImmutable $nextBillingDate): static
+    {
+        $this->nextBillingDate = $nextBillingDate;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getGracePeriodEndsAt(): ?\DateTimeImmutable
+    {
+        return $this->gracePeriodEndsAt;
+    }
+
+    public function setGracePeriodEndsAt(?\DateTimeImmutable $gracePeriodEndsAt): static
+    {
+        $this->gracePeriodEndsAt = $gracePeriodEndsAt;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getRetryCount(): int
+    {
+        return $this->retryCount;
+    }
+
+    public function setRetryCount(int $retryCount): static
+    {
+        $this->retryCount = $retryCount;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function incrementRetryCount(): static
+    {
+        $this->retryCount++;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function resetRetryCount(): static
+    {
+        $this->retryCount = 0;
         $this->updatedAt = new \DateTimeImmutable();
 
         return $this;

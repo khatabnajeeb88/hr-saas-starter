@@ -24,6 +24,8 @@ class WebhookController extends AbstractController
         private SubscriptionManager $subscriptionManager,
         private EntityManagerInterface $entityManager,
         private LoggerInterface $logger,
+        private \App\Service\PaymentNotificationService $notificationService,
+        private \App\Service\InvoiceService $invoiceService,
     ) {
     }
 
@@ -153,7 +155,21 @@ class WebhookController extends AbstractController
             'charge_id' => $payload['id'],
         ]);
 
-        // TODO: Dispatch PaymentSuccessEvent for email notifications
+        // Send payment success email
+        $payment = $this->paymentRepository->findByTapChargeId($payload['id']);
+        if ($payment) {
+            $this->notificationService->sendPaymentSuccessEmail($payment);
+            
+            // Generate invoice
+            try {
+                $this->invoiceService->createInvoiceForPayment($payment);
+            } catch (\Exception $e) {
+                $this->logger->error('Failed to create invoice', [
+                    'payment_id' => $payment->getId(),
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
     }
 
     private function handleFailedPayment($subscription, array $payload): void
@@ -170,7 +186,11 @@ class WebhookController extends AbstractController
             'reason' => $payload['response']['message'] ?? 'Unknown',
         ]);
 
-        // TODO: Dispatch PaymentFailedEvent for email notifications
+        // Send payment failure email
+        $payment = $this->paymentRepository->findByTapChargeId($payload['id']);
+        if ($payment) {
+            $this->notificationService->sendPaymentFailureEmail($payment);
+        }
     }
 
     private function handleRefundWebhook(array $payload): void

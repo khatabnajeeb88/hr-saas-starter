@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid #4F46E5;
+            padding-bottom: 20px;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4F46E5;
+            margin-bottom: 5px;
+        }
+        .invoice-title {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: right;
+            color: #333;
+        }
+        .invoice-details {
+            text-align: right;
+            margin-top: 10px;
+        }
+        .section {
+            margin: 20px 0;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #4F46E5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background-color: #4F46E5;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .total-row {
+            font-weight: bold;
+            font-size: 14px;
+            background-color: #f9fafb;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            font-size: 10px;
+            color: #6b7280;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .status-paid {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <table style="width: 100%; border: none;">
+            <tr>
+                <td style="width: 50%; border: none;">
+                    <div class="company-name">SaaS Starter Pack</div>
+                    <div>123 Business Street</div>
+                    <div>City, State 12345</div>
+                    <div>Email: [email protected]</div>
+                    <div>Phone: +1 (555) 123-4567</div>
+                </td>
+                <td style="width: 50%; border: none; vertical-align: top;">
+                    <div class="invoice-title">INVOICE</div>
+                    <div class="invoice-details">
+                        <div><strong>Invoice #:</strong> {{ invoice.invoiceNumber }}</div>
+                        <div><strong>Date:</strong> {{ invoice.issuedAt|date('M d, Y') }}</div>
+                        <div><strong>Status:</strong> <span class="status-badge status-paid">{{ invoice.status|upper }}</span></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">BILL TO:</div>
+        <div><strong>{{ invoice.billingName }}</strong></div>
+        <div>{{ invoice.billingEmail }}</div>
+        {% if invoice.billingAddress %}
+        <div>{{ invoice.billingAddress|nl2br }}</div>
+        {% endif %}
+        {% if invoice.taxId %}
+        <div><strong>Tax ID:</strong> {{ invoice.taxId }}</div>
+        {% endif %}
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Unit Price</th>
+                <th class="text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.lineItems %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td class="text-right">{{ item.quantity }}</td>
+                <td class="text-right">{{ invoice.currency }} {{ item.unit_price|number_format(2) }}</td>
+                <td class="text-right">{{ invoice.currency }} {{ item.total|number_format(2) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table style="width: 40%; margin-left: auto; margin-top: 20px;">
+        <tr>
+            <td><strong>Subtotal:</strong></td>
+            <td class="text-right">{{ invoice.formattedSubtotal }}</td>
+        </tr>
+        <tr>
+            <td><strong>Tax:</strong></td>
+            <td class="text-right">{{ invoice.formattedTax }}</td>
+        </tr>
+        <tr class="total-row">
+            <td><strong>TOTAL:</strong></td>
+            <td class="text-right">{{ invoice.formattedTotal }}</td>
+        </tr>
+    </table>
+
+    {% if invoice.payment %}
+    <div class="section">
+        <div class="section-title">PAYMENT INFORMATION:</div>
+        <div><strong>Transaction ID:</strong> {{ invoice.payment.tapChargeId }}</div>
+        <div><strong>Payment Date:</strong> {{ invoice.payment.createdAt|date('M d, Y H:i') }}</div>
+        {% if invoice.payment.cardBrand %}
+        <div><strong>Payment Method:</strong> {{ invoice.payment.cardBrand }} ending in {{ invoice.payment.cardLastFour }}</div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        <p><strong>Thank you for your business!</strong></p>
+        <p>This is a computer-generated invoice and does not require a signature.</p>
+        <p>For questions about this invoice, please contact [email protected]</p>
+        <p>© {{ 'now'|date('Y') }} SaaS Starter Pack. All rights reserved.</p>
+    </div>
+</body>
+</html>

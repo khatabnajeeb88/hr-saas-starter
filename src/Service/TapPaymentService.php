@@ -45,7 +45,7 @@ class TapPaymentService
 
         $chargeData = [
             'amount' => (float) $plan->getPrice(),
-            'currency' => 'SAR', // TODO: Make this configurable
+            'currency' => $plan->getCurrency() ?? 'USD',
             'customer' => [
                 'first_name' => explode(' ', $owner->getEmail())[0] ?? 'Customer',
                 'email' => $owner->getEmail(),
@@ -290,7 +290,7 @@ class TapPaymentService
 
         $chargeData = [
             'amount' => (float) $plan->getPrice(),
-            'currency' => 'SAR',
+            'currency' => $plan->getCurrency() ?? 'USD',
             'source' => [
                 'id' => $subscription->getPaymentMethodId(),
             ],
