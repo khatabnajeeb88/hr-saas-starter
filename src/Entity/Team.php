@@ -46,6 +46,9 @@ class Team
     #[ORM\OneToMany(targetEntity: TeamMember::class, mappedBy: 'team', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $members;
 
+    #[ORM\OneToOne(targetEntity: Subscription::class, mappedBy: 'team', cascade: ['persist', 'remove'])]
+    private ?Subscription $subscription = null;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -169,5 +172,51 @@ class Team
     public function isOwner(User $user): bool
     {
         return $this->owner === $user;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): static
+    {
+        // Unset the owning side of the relation if necessary
+        if ($subscription === null && $this->subscription !== null) {
+            $this->subscription->setTeam(null);
+        }
+
+        // Set the owning side of the relation if necessary
+        if ($subscription !== null && $subscription->getTeam() !== $this) {
+            $subscription->setTeam($this);
+        }
+
+        $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    /**
+     * Check if team has an active subscription
+     */
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscription !== null && $this->subscription->isActive();
+    }
+
+    /**
+     * Get the current subscription plan
+     */
+    public function getCurrentPlan(): ?SubscriptionPlan
+    {
+        return $this->subscription?->getPlan();
+    }
+
+    /**
+     * Check if team is on trial
+     */
+    public function onTrial(): bool
+    {
+        return $this->subscription !== null && $this->subscription->onTrial();
     }
 }

@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Subscribe to {{ plan.name }}{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Subscribe to {{ plan.name }}</h1>
+
+        {% for message in app.flashes('error') %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">{{ plan.name }}</h2>
+                <div class="text-4xl font-bold text-gray-900 my-4">{{ plan.formattedPrice }}</div>
+                {% if plan.description %}
+                    <p class="text-gray-600">{{ plan.description }}</p>
+                {% endif %}
+            </div>
+
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="font-semibold text-gray-900 mb-4">What's included:</h3>
+                <ul class="space-y-3 mb-6">
+                    {% if plan.teamMemberLimit %}
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700">Up to {{ plan.teamMemberLimit }} team members</span>
+                    </li>
+                    {% else %}
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-gray-700">Unlimited team members</span>
+                    </li>
+                    {% endif %}
+
+                    {% for planFeature in plan.planFeatures %}
+                        {% if planFeature.enabled %}
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="text-gray-700">
+                                {{ planFeature.feature.name }}
+                                {% if planFeature.value %}
+                                    ({{ planFeature.value }})
+                                {% endif %}
+                            </span>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                            <h4 class="font-semibold text-blue-900">14-Day Free Trial</h4>
+                            <p class="text-blue-700 text-sm mt-1">
+                                Start your free trial today. No credit card required. Cancel anytime.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" action="{{ path('subscription_subscribe', {planSlug: plan.slug}) }}">
+                    <input type="hidden" name="with_trial" value="1">
+                    
+                    <button type="submit" 
+                            class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+                        Start Free Trial
+                    </button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <a href="{{ path('subscription_plans') }}" class="text-gray-600 hover:text-gray-900">
+                        ← Back to all plans
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

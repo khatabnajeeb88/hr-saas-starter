@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Change Plan{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Change Subscription Plan</h1>
+
+        {% for message in app.flashes('error') %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Current Plan</h2>
+            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                <div>
+                    <h3 class="font-bold text-gray-900">{{ currentSubscription.plan.name }}</h3>
+                    <p class="text-gray-600 text-sm">{{ currentSubscription.plan.description }}</p>
+                </div>
+                <div class="text-2xl font-bold text-gray-900">
+                    {{ currentSubscription.plan.formattedPrice }}
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Available Plans</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for plan in availablePlans %}
+                {% if plan.id != currentSubscription.plan.id %}
+                <div class="bg-white rounded-lg shadow-lg p-6 border-2 {% if plan.slug == 'pro' %}border-blue-500{% else %}border-gray-200{% endif %}">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ plan.name }}</h3>
+                    <div class="text-3xl font-bold text-gray-900 mb-4">{{ plan.formattedPrice }}</div>
+                    
+                    {% if plan.description %}
+                        <p class="text-gray-600 mb-4">{{ plan.description }}</p>
+                    {% endif %}
+
+                    <ul class="space-y-2 mb-6">
+                        {% if plan.teamMemberLimit %}
+                        <li class="flex items-start text-sm">
+                            <svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="text-gray-700">{{ plan.teamMemberLimit }} team members</span>
+                        </li>
+                        {% else %}
+                        <li class="flex items-start text-sm">
+                            <svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="text-gray-700">Unlimited members</span>
+                        </li>
+                        {% endif %}
+
+                        {% for planFeature in plan.planFeatures|slice(0, 3) %}
+                            {% if planFeature.enabled %}
+                            <li class="flex items-start text-sm">
+                                <svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-gray-700">{{ planFeature.feature.name }}</span>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+
+                    <form method="post" action="{{ path('subscription_upgrade') }}">
+                        <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                        <button type="submit" 
+                                class="w-full py-2 px-4 rounded-lg font-semibold transition-colors
+                                       {% if plan.slug == 'pro' %}
+                                           bg-blue-500 text-white hover:bg-blue-600
+                                       {% else %}
+                                           bg-gray-200 text-gray-900 hover:bg-gray-300
+                                       {% endif %}">
+                            {% if plan.price > currentSubscription.plan.price %}
+                                Upgrade to {{ plan.name }}
+                            {% else %}
+                                Downgrade to {{ plan.name }}
+                            {% endif %}
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="mt-6 text-center">
+            <a href="{{ path('subscription_current') }}" class="text-gray-600 hover:text-gray-900">
+                ← Back to subscription
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
