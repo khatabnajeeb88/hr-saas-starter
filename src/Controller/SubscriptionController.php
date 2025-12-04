@@ -98,6 +98,11 @@ class SubscriptionController extends AbstractController
                 $withTrial = $request->request->get('with_trial', false);
                 $subscription = $this->subscriptionManager->createSubscription($team, $plan, $withTrial);
 
+                // If it's a paid plan, redirect to payment
+                if ((float) $plan->getPrice() > 0 && !$withTrial) {
+                    return $this->redirectToRoute('payment_checkout', ['id' => $subscription->getId()]);
+                }
+
                 $this->addFlash('success', 'Successfully subscribed to ' . $plan->getName() . '!');
                 return $this->redirectToRoute('subscription_current');
             } catch (\RuntimeException $e) {

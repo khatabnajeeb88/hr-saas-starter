@@ -75,6 +75,15 @@ class Subscription
     #[Groups(['subscription:read', 'subscription:write'])]
     private ?bool $autoRenew = true;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tapCustomerId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $paymentMethodId = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $lastPaymentAt = null;
+
     #[ORM\Column]
     #[Groups(['subscription:read'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -231,6 +240,45 @@ class Subscription
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getTapCustomerId(): ?string
+    {
+        return $this->tapCustomerId;
+    }
+
+    public function setTapCustomerId(?string $tapCustomerId): static
+    {
+        $this->tapCustomerId = $tapCustomerId;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getPaymentMethodId(): ?string
+    {
+        return $this->paymentMethodId;
+    }
+
+    public function setPaymentMethodId(?string $paymentMethodId): static
+    {
+        $this->paymentMethodId = $paymentMethodId;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getLastPaymentAt(): ?\DateTimeImmutable
+    {
+        return $this->lastPaymentAt;
+    }
+
+    public function setLastPaymentAt(?\DateTimeImmutable $lastPaymentAt): static
+    {
+        $this->lastPaymentAt = $lastPaymentAt;
+        $this->updatedAt = new \DateTimeImmutable();
 
         return $this;
     }

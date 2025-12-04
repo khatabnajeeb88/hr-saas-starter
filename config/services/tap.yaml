@@ -1,0 +1,6 @@
+services:
+    App\Service\TapPaymentService:
+        arguments:
+            $tapSecretKey: '%env(TAP_SECRET_KEY)%'
+            $tapPublicKey: '%env(TAP_PUBLIC_KEY)%'
+            $tapApiUrl: '%env(TAP_API_URL)%'
