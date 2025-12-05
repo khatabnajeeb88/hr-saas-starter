@@ -21,3 +21,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\InvoiceService:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
+    App\Service\TapPaymentService:
+        arguments:
+            $tapSecretKey: '%env(TAP_SECRET_KEY)%'
+            $tapPublicKey: '%env(TAP_PUBLIC_KEY)%'
+            $tapApiUrl: '%env(TAP_API_URL)%'

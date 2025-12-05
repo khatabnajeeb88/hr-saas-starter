@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TeamMemberRepository::class)]
 #[ORM\Table(name: 'team_member')]
-#[ORM\UniqueConstraint(name: 'UNIQ_TEAM_USER', fields: ['team_id', 'user_id'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_TEAM_USER', fields: ['team', 'user'])]
 class TeamMember
 {
     public const ROLE_OWNER = 'owner';

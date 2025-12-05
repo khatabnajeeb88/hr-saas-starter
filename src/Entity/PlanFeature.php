@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PlanFeatureRepository::class)]
 #[ORM\Table(name: 'plan_feature')]
-#[ORM\UniqueConstraint(name: 'UNIQ_PLAN_FEATURE', fields: ['plan_id', 'feature_id'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_PLAN_FEATURE', fields: ['plan', 'feature'])]
 class PlanFeature
 {
     #[ORM\Id]

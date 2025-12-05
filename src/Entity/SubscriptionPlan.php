@@ -47,6 +47,8 @@ class SubscriptionPlan
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     #[Groups(['plan:read', 'plan:write'])]
+    private ?string $price = null;
+
     #[ORM\Column(length: 3)]
     #[Groups(['plan:read', 'plan:write'])]
     private ?string $currency = 'USD';
