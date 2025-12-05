@@ -1,0 +1,22 @@
+{# Usage: {% embed 'components/card.html.twig' %}{% block card_content %}Your content here{% endblock %}{% endembed %} #}
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden {{ class|default('') }}">
+    {% if title is defined %}
+    <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+        {% if subtitle is defined %}
+        <p class="text-sm text-gray-600 mt-1">{{ subtitle }}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <div class="p-6">
+        {% block card_content %}{% endblock %}
+    </div>
+    
+    {% if footer is defined %}
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+        {{ footer|raw }}
+    </div>
+    {% endif %}
+</div>
