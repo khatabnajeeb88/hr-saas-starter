@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Update Payment Method{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-4" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ path('subscription_current') }}" class="text-gray-700 hover:text-gray-900">
+                        Subscription
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="{{ path('payment_method_index') }}" class="ml-1 text-gray-700 hover:text-gray-900 md:ml-2">Payment Method</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-gray-500 md:ml-2">Update</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">Update Payment Method</h1>
+
+            {% for message in app.flashes('error') %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            Your payment information is securely processed by Tap Payments. We never store your full card details.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" class="space-y-6">
+                <div>
+                    <label for="cardholder_name" class="block text-sm font-medium text-gray-700">Cardholder Name</label>
+                    <input type="text" id="cardholder_name" name="cardholder_name" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                </div>
+
+                <div>
+                    <label for="card_number" class="block text-sm font-medium text-gray-700">Card Number</label>
+                    <input type="text" id="card_number" name="card_number" required maxlength="19" placeholder="1234 5678 9012 3456"
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label for="expiry_month" class="block text-sm font-medium text-gray-700">Month</label>
+                        <select id="expiry_month" name="expiry_month" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                            <option value="">MM</option>
+                            {% for month in 1..12 %}
+                                <option value="{{ '%02d'|format(month) }}">{{ '%02d'|format(month) }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="expiry_year" class="block text-sm font-medium text-gray-700">Year</label>
+                        <select id="expiry_year" name="expiry_year" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                            <option value="">YYYY</option>
+                            {% for year in 'now'|date('Y')..'now'|date('Y') + 10 %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cvv" class="block text-sm font-medium text-gray-700">CVV</label>
+                        <input type="text" id="cvv" name="cvv" required maxlength="4" placeholder="123"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-4">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
+                        Update Payment Method
+                    </button>
+                    <a href="{{ path('payment_method_index') }}" class="text-gray-600 hover:text-gray-900">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
