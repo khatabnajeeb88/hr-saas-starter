@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Members - {{ team.name }}{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold">Manage Members</h1>
+            <p class="text-gray-600">{{ team.name }}</p>
+        </div>
+        <a href="{{ path('app_team_index') }}" class="text-gray-600 hover:text-gray-900">
+            Back to Teams
+        </a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Members List -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold">Team Members</h2>
+                </div>
+                <ul class="divide-y divide-gray-200">
+                    {% for member in team.members %}
+                        <li class="px-6 py-4 flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">{{ member.user.name|default(member.user.email) }}</p>
+                                <p class="text-sm text-gray-500">{{ member.user.email }}</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                    {% if member.role == 'owner' %}bg-purple-100 text-purple-800
+                                    {% elseif member.role == 'admin' %}bg-blue-100 text-blue-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ member.role|capitalize }}
+                                </span>
+
+                                {% if is_granted('edit', team) and member.role != 'owner' %}
+                                    <form action="{{ path('app_team_change_role', {'id': team.id, 'memberId': member.id}) }}" method="post" class="inline-block">
+                                        <select name="role" onchange="this.form.submit()" class="text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            <option value="admin" {% if member.role == 'admin' %}selected{% endif %}>Admin</option>
+                                            <option value="member" {% if member.role == 'member' %}selected{% endif %}>Member</option>
+                                        </select>
+                                    </form>
+
+                                    <form action="{{ path('app_team_remove_member', {'id': team.id, 'memberId': member.id}) }}" method="post" class="inline-block" onsubmit="return confirm('Are you sure you want to remove this member?');">
+                                        <button type="submit" class="text-red-600 hover:text-red-900 text-sm font-medium">Remove</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Invite Form -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-lg font-semibold mb-4">Invite New Member</h2>
+                <form action="{{ path('app_team_invite', {'id': team.id}) }}" method="post" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email" name="email" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                    </div>
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                        <select id="role" name="role" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                            <option value="member">Member</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Send Invitation
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
