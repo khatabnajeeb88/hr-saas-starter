@@ -11,7 +11,8 @@ class TenantFilter extends SQLFilter
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias): string
     {
         // Check if the entity has the TenantAwareTrait
-        if (!$targetEntity->reflClass->hasTrait(TenantAwareTrait::class)) {
+        $traits = $targetEntity->reflClass->getTraitNames();
+        if (!in_array(TenantAwareTrait::class, $traits)) {
             return '';
         }
 
