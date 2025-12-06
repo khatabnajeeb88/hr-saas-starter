@@ -1,6 +1,6 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Update Payment Method{% endblock %}
+{% block title %}{{ 'payment_method.update_title'|trans }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="">
@@ -10,7 +10,7 @@
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
                     <a href="{{ path('subscription_current') }}" class="text-gray-700 hover:text-gray-900">
-                        Subscription
+                        {{ 'subscription.current.title'|trans }}
                     </a>
                 </li>
                 <li>
@@ -18,7 +18,7 @@
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        <a href="{{ path('payment_method_index') }}" class="ml-1 text-gray-700 hover:text-gray-900 md:ml-2">Payment Method</a>
+                        <a href="{{ path('payment_method_index') }}" class="ml-1 text-gray-700 hover:text-gray-900 md:ml-2">{{ 'payment_method.title'|trans }}</a>
                     </div>
                 </li>
                 <li>
@@ -26,18 +26,18 @@
                         <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        <span class="ml-1 text-gray-500 md:ml-2">Update</span>
+                        <span class="ml-1 text-gray-500 md:ml-2">{{ 'common.update'|trans }}</span> {# Assuming common.update exists or create payment_method.update_breadcrumb #}
                     </div>
                 </li>
             </ol>
         </nav>
 
         <div class="bg-white rounded-lg shadow-md p-6">
-            <h1 class="text-2xl font-bold text-gray-900 mb-6">Update Payment Method</h1>
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">{{ 'payment_method.update_title'|trans }}</h1>
 
             {% for message in app.flashes('error') %}
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    {{ message }}
+                    {{ message|trans }}
                 </div>
             {% endfor %}
 
@@ -50,7 +50,7 @@
                     </div>
                     <div class="ml-3">
                         <p class="text-sm text-blue-700">
-                            Your payment information is securely processed by Tap Payments. We never store your full card details.
+                            {{ 'payment_method.secure_msg'|trans }}
                         </p>
                     </div>
                 </div>
@@ -58,20 +58,20 @@
 
             <form method="post" class="space-y-6">
                 <div>
-                    <label for="cardholder_name" class="block text-sm font-medium text-gray-700">Cardholder Name</label>
+                    <label for="cardholder_name" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.cardholder_name'|trans }}</label>
                     <input type="text" id="cardholder_name" name="cardholder_name" required
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                 </div>
 
                 <div>
-                    <label for="card_number" class="block text-sm font-medium text-gray-700">Card Number</label>
+                    <label for="card_number" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.card_number'|trans }}</label>
                     <input type="text" id="card_number" name="card_number" required maxlength="19" placeholder="1234 5678 9012 3456"
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                 </div>
 
                 <div class="grid grid-cols-3 gap-4">
                     <div>
-                        <label for="expiry_month" class="block text-sm font-medium text-gray-700">Month</label>
+                        <label for="expiry_month" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.month'|trans }}</label>
                         <select id="expiry_month" name="expiry_month" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                             <option value="">MM</option>
@@ -81,7 +81,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="expiry_year" class="block text-sm font-medium text-gray-700">Year</label>
+                        <label for="expiry_year" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.year'|trans }}</label>
                         <select id="expiry_year" name="expiry_year" required
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                             <option value="">YYYY</option>
@@ -91,7 +91,7 @@
                         </select>
                     </div>
                     <div>
-                        <label for="cvv" class="block text-sm font-medium text-gray-700">CVV</label>
+                        <label for="cvv" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.cvv'|trans }}</label>
                         <input type="text" id="cvv" name="cvv" required maxlength="4" placeholder="123"
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                     </div>
@@ -99,10 +99,10 @@
 
                 <div class="flex items-center justify-between pt-4">
                     <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
-                        Update Payment Method
+                        {{ 'payment_method.form.save_btn'|trans }}
                     </button>
                     <a href="{{ path('payment_method_index') }}" class="text-gray-600 hover:text-gray-900">
-                        Cancel
+                        {{ 'common.cancel'|trans }}
                     </a>
                 </div>
             </form>

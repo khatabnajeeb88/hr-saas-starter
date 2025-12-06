@@ -1,13 +1,13 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}My Teams{% endblock %}
+{% block title %}{{ 'team.my_teams'|trans }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold">My Teams</h1>
+        <h1 class="text-2xl font-bold">{{ 'team.my_teams'|trans }}</h1>
         <a href="{{ path('app_team_new') }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-            Create New Team
+            {{ 'team.create_new'|trans }}
         </a>
     </div>
 
@@ -26,27 +26,27 @@
                         {% if member.role == 'owner' %}bg-purple-100 text-purple-800
                         {% elseif member.role == 'admin' %}bg-blue-100 text-blue-800
                         {% else %}bg-gray-100 text-gray-800{% endif %}">
-                        {{ member.role|capitalize }}
+                        {{ ('team.role.' ~ member.role)|trans }}
                     </span>
                 </div>
                 
                 <div class="space-y-2">
                     <form action="{{ path('app_team_switch', {'id': member.team.id}) }}" method="post">
                         <button type="submit" class="w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded">
-                            Switch to Team
+                             {{ 'team.switch'|trans }}
                         </button>
                     </form>
                     
                     <a href="{{ path('app_team_members', {'id': member.team.id}) }}" class="block text-center border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-2 px-4 rounded">
-                        Manage Members
+                        {{ 'team.manage_members'|trans }}
                     </a>
                 </div>
             </div>
         {% else %}
             <div class="col-span-full text-center py-12 bg-gray-50 rounded-lg">
-                <p class="text-gray-500 mb-4">You don't belong to any teams yet.</p>
+                <p class="text-gray-500 mb-4">{{ 'dashboard.no_plan'|trans }}</p> {# Reusing or creating a specific empty state key #}
                 <a href="{{ path('app_team_new') }}" class="text-indigo-600 hover:text-indigo-800 font-semibold">
-                    Create your first team
+                    {{ 'team.create_new'|trans }}
                 </a>
             </div>
         {% endfor %}

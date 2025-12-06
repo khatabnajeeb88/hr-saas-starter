@@ -29,19 +29,19 @@ class TeamController extends AbstractController
     }
 
     #[Route('/new', name: 'app_team_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, TeamManager $teamManager): Response
+    public function new(Request $request, TeamManager $teamManager, \Symfony\Contracts\Translation\TranslatorInterface $translator): Response
     {
         if ($request->isMethod('POST')) {
             $name = $request->request->get('name');
             
             if (empty($name)) {
-                $this->addFlash('error', 'Team name is required.');
+                $this->addFlash('error', 'flash.error.team_name_required');
             } else {
                 /** @var User $user */
                 $user = $this->getUser();
                 $team = $teamManager->createTeam($user, $name);
                 
-                $this->addFlash('success', 'Team created successfully.');
+                $this->addFlash('success', 'flash.success.team_created');
                 return $this->redirectToRoute('app_team_index');
             }
         }
@@ -50,7 +50,7 @@ class TeamController extends AbstractController
     }
 
     #[Route('/{id}/switch', name: 'app_team_switch', methods: ['POST'])]
-    public function switch(Team $team, Request $request): Response
+    public function switch(Team $team, Request $request, \Symfony\Contracts\Translation\TranslatorInterface $translator): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -71,7 +71,7 @@ class TeamController extends AbstractController
         // Store active team ID in session
         $request->getSession()->set('active_team_id', $team->getId());
         
-        $this->addFlash('success', 'Switched to team ' . $team->getName());
+        $this->addFlash('success', $translator->trans('flash.success.team_switched', ['%name%' => $team->getName()]));
         
         // Redirect to dashboard or previous page
         return $this->redirectToRoute('app_team_index');

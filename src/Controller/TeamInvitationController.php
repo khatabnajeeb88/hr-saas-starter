@@ -17,7 +17,8 @@ class TeamInvitationController extends AbstractController
     public function accept(
         string $token,
         EntityManagerInterface $entityManager,
-        TeamManager $teamManager
+        TeamManager $teamManager,
+        \Symfony\Contracts\Translation\TranslatorInterface $translator
     ): Response {
         $invitation = $entityManager->getRepository(TeamInvitation::class)->findOneBy(['token' => $token]);
 
@@ -26,7 +27,7 @@ class TeamInvitationController extends AbstractController
         }
 
         if ($invitation->isExpired()) {
-            $this->addFlash('error', 'This invitation has expired.');
+            $this->addFlash('error', 'flash.error.invitation_expired');
             return $this->redirectToRoute('app_home'); // Or login
         }
 
@@ -54,7 +55,7 @@ class TeamInvitationController extends AbstractController
             $entityManager->remove($invitation);
             $entityManager->flush();
 
-            $this->addFlash('success', 'You have successfully joined ' . $invitation->getTeam()->getName());
+            $this->addFlash('success', $translator->trans('flash.success.joined_team', ['%name%' => $invitation->getTeam()->getName()]));
             
             // Switch to the new team
             // $request->getSession()->set('active_team_id', $invitation->getTeam()->getId());

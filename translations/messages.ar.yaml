@@ -27,6 +27,168 @@ dashboard:
     member: عضو
     members: أعضاء
 
+team:
+    my_teams: فرقي
+    create_new: إنشاء فريق جديد
+    manage_members: إدارة الأعضاء
+    switch: الانتقال إلى الفريق
+    role:
+        owner: المالك
+        admin: مسؤول
+        member: عضو
+    create:
+        title: إنشاء فريق جديد
+        name_label: اسم الفريق
+        submit: إنشاء الفريق
+        cancel: إلغاء
+    members:
+        title: إدارة الأعضاء
+        back: العودة إلى الفرق
+        list_title: أعضاء الفريق
+        invite_title: دعوة عضو جديد
+        invite_email: البريد الإلكتروني
+        invite_role: الدور
+        invite_submit: إرسال الدعوة
+        remove: إزالة
+        remove_confirm: هل أنت متأكد أنك تريد إزالة هذا العضو؟
+
+subscription:
+    management: إدارة الاشتراك
+    current:
+        title: الاشتراك الحالي
+        plan: الخطة
+        status: الحالة
+        billing_cycle: دورة الفوترة
+        next_billing: تاريخ الفوترة القادم
+        team_members: أعضاء الفريق
+        auto_renew: التجديد التلقائي
+        trial_active: الفترة التجريبية نشطة
+        trial_ends: تنتهي الفترة التجريبية في %date%.
+        canceled_title: الاشتراك ملغى
+        canceled_msg: سينتهي اشتراكك في %date%.
+    actions:
+        resume: استئناف الاشتراك
+        change_plan: تغيير الخطة
+        cancel: إلغاء الاشتراك
+        view_plans: عرض جميع الخطط
+    features: مميزات الخطة
+    plans:
+        title: اختر خطتك
+        subtitle: اختر الخطة المثالية لفريقك
+        most_popular: الأكثر شعبية
+        get_started_free: ابدأ مجاناً
+        choose: اختر %plan%
+        trial_note: جميع الخطط تشمل فترة تجريبية لمدة 14 يوماً. لا تتطلب بطاقة ائتمان.
+    subscribe:
+        title: الاشتراك في %plan%
+        included: ما الذي تشمله:
+        trial_info_title: فترة تجريبية مجانية لمدة 14 يوماً
+        trial_info_desc: ابدأ فترتك التجريبية اليوم. لا تتطلب بطاقة ائتمان. يمكنك الإلغاء في أي وقت.
+        start_trial: بدء الفترة التجريبية
+        back: العودة لجميع الخطط
+    upgrade:
+        title: تغيير خطة الاشتراك
+        current_plan: الخطة الحالية
+        available_plans: الخطط المتاحة
+        upgrade_to: الترقية إلى %plan%
+        downgrade_to: التخفيض إلى %plan%
+    cancel:
+        title: إلغاء الاشتراك
+        confirm_title: هل أنت متأكد أنك تريد الإلغاء؟
+        confirm_msg: يؤسفنا رؤيتك تغادر. يرجى إخبارنا إذا كان هناك أي شيء يمكننا القيام به لتحسين تجربتك.
+        lose_title: ما ستخسره:
+        options: خيارات الإلغاء
+        at_period_end: الإلغاء في نهاية الفترة
+        at_period_end_desc: ستحتفظ بالوصول حتى %date%
+        immediately: الإلغاء فوراً
+        immediately_desc: سينتهي وصولك فوراً (لا يوجد استرداد للمبلغ)
+        confirm_btn: تأكيد الإلغاء
+        keep_btn: الاحتفاظ بالاشتراك
+
+invoice:
+    title: الفواتير
+    total: "الإجمالي: %count% فاتورة|الإجمالي: %count% فواتير"
+    empty: لا توجد فواتير بعد
+    empty_msg: ستظهر فواتيرك هنا بعد معالجة المدفوعات.
+    view_plans: عرض خطط الاشتراك
+    table:
+        number: رقم الفاتورة
+        date: التاريخ
+        amount: المبلغ
+        status: الحالة
+        actions: الإجراءات
+    action:
+        view: عرض
+        download: تحميل
+    details:
+        title: تفاصيل الفاتورة
+        issued: صدرت في %date%
+        billed_to: الفاتورة إلى
+        tax_id: الرقم الضريبي
+    items:
+        description: الوصف
+        qty: الكمية
+        unit_price: سعر الوحدة
+        total: الإجمالي
+    summary:
+        subtotal: المجموع الفرعي
+        tax: الضريبة
+        total: الإجمالي
+    payment:
+        info: معلومات الدفع
+        transaction_id: رقم المعاملة
+        date: التاريخ
+        method: الطريقة
+
+payment_method:
+    title: طريقة الدفع
+    no_subscription: لا يوجد اشتراك نشط
+    no_subscription_msg: تحتاج إلى اشتراك نشط لإدارة طرق الدفع.
+    current: طريقة الدفع الحالية
+    card_ending: بطاقة تنتهي بـ ****
+    id: معرف طريقة الدفع
+    update: تحديث البطاقة
+    remove: إزالة
+    remove_confirm: هل أنت متأكد أنك تريد إزالة طريقة الدفع هذه؟
+    no_method: لا توجد طريقة دفع مسجلة
+    add: إضافة طريقة دفع
+    subscription_details: تفاصيل الاشتراك
+    update_page:
+        title: تحديث طريقة الدفع
+        secure_note: تتم معالجة معلومات الدفع الخاصة بك بشكل آمن بواسطة Tap Payments. نحن لا نقوم بتخزين تفاصيل بطاقتك الكاملة أبداً.
+    form:
+        cardholder: اسم حامل البطاقة
+        card_number: رقم البطاقة
+        month: الشهر
+        year: السنة
+        cvv: رمز الأمان (CVV)
+        submit: تحديث طريقة الدفع
+        cancel: إلغاء
+
+profile:
+    edit:
+        title: تعديل الملف الشخصي
+        email: البريد الإلكتروني
+        name: الاسم
+        save: حفظ التغييرات
+        change_password: تغيير كلمة المرور
+    2fa:
+        title: المصادقة الثنائية
+        enabled: مفعلة
+        enabled_msg: حسابك محمي بالمصادقة الثنائية.
+        disable: تعطيل المصادقة الثنائية
+        disable_confirm: هل أنت متأكد أنك تريد تعطيل المصادقة الثنائية؟
+        not_enabled: غير مفعلة
+        not_enabled_msg: أضف طبقة أمان إضافية لحسابك.
+        enable: تفعيل المصادقة الثنائية
+    password:
+        title: تغيير كلمة المرور
+        current: كلمة المرور الحالية
+        new: كلمة المرور الجديدة
+        confirm: تأكيد كلمة المرور الجديدة
+        submit: تغيير كلمة المرور
+        back: العودة للملف الشخصي
+
 common:
     status: الحالة
     date: التاريخ
@@ -40,3 +202,24 @@ common:
     download: تحميل
     enabled: مفعل
     disabled: معطل
+
+flash:
+    error:
+        email_required: البريد الإلكتروني مطلوب.
+        invalid_current_password: كلمة المرور الحالية غير صحيحة.
+        password_mismatch: كلمات المرور الجديدة غير متطابقة.
+        password_short: يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.
+        plan_not_found: الخطة المختارة غير صالحة.
+        subscription_not_found: لم يتم العثور على اشتراك نشط.
+        team_required: يجب أن تكون جزءًا من فريق.
+        not_allowed: غير مسموح لك بإجراء هذا الإجراء.
+        team_name_required: اسم الفريق مطلوب.
+        invitation_expired: انتهت صلاحية هذه الدعوة.
+    success:
+        profile_updated: تم تحديث الملف الشخصي بنجاح.
+        password_changed: تم تغيير كلمة المرور بنجاح.
+        subscription_updated: تم تحديث الاشتراك بنجاح.
+        payment_method_updated: تم تحديث طريقة الدفع بنجاح.
+        team_created: تم إنشاء الفريق بنجاح.
+        team_switched: تم التبديل إلى فريق %name%
+        joined_team: لقد انضممت بنجاح إلى %name%

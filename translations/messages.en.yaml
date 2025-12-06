@@ -27,6 +27,168 @@ dashboard:
     member: member
     members: members
 
+team:
+    my_teams: My Teams
+    create_new: Create New Team
+    manage_members: Manage Members
+    switch: Switch to Team
+    role:
+        owner: Owner
+        admin: Admin
+        member: Member
+    create:
+        title: Create New Team
+        name_label: Team Name
+        submit: Create Team
+        cancel: Cancel
+    members:
+        title: Manage Members
+        back: Back to Teams
+        list_title: Team Members
+        invite_title: Invite New Member
+        invite_email: Email Address
+        invite_role: Role
+        invite_submit: Send Invitation
+        remove: Remove
+        remove_confirm: Are you sure you want to remove this member?
+
+subscription:
+    management: Subscription Management
+    current:
+        title: Current Subscription
+        plan: Plan
+        status: Status
+        billing_cycle: Billing Cycle
+        next_billing: Next Billing Date
+        team_members: Team Members
+        auto_renew: Auto-Renewal
+        trial_active: Trial Period Active
+        trial_ends: Your trial ends on %date%.
+        canceled_title: Subscription Canceled
+        canceled_msg: Your subscription will end on %date%.
+    actions:
+        resume: Resume Subscription
+        change_plan: Change Plan
+        cancel: Cancel Subscription
+        view_plans: View All Plans
+    features: Plan Features
+    plans:
+        title: Choose Your Plan
+        subtitle: Select the perfect plan for your team
+        most_popular: MOST POPULAR
+        get_started_free: Get Started Free
+        choose: Choose %plan%
+        trial_note: All plans include 14-day free trial. No credit card required.
+    subscribe:
+        title: Subscribe to %plan%
+        included: What's included:
+        trial_info_title: 14-Day Free Trial
+        trial_info_desc: Start your free trial today. No credit card required. Cancel anytime.
+        start_trial: Start Free Trial
+        back: Back to all plans
+    upgrade:
+        title: Change Subscription Plan
+        current_plan: Current Plan
+        available_plans: Available Plans
+        upgrade_to: Upgrade to %plan%
+        downgrade_to: Downgrade to %plan%
+    cancel:
+        title: Cancel Subscription
+        confirm_title: Are you sure you want to cancel?
+        confirm_msg: We're sorry to see you go. Please let us know if there's anything we can do to improve your experience.
+        lose_title: What you'll lose:
+        options: Cancellation Options
+        at_period_end: Cancel at period end
+        at_period_end_desc: You'll retain access until %date%
+        immediately: Cancel immediately
+        immediately_desc: Your access will end right away (no refund)
+        confirm_btn: Confirm Cancellation
+        keep_btn: Keep Subscription
+
+invoice:
+    title: Invoices
+    total: "Total: %count% invoice|Total: %count% invoices"
+    empty: No Invoices Yet
+    empty_msg: Your invoices will appear here after payments are processed.
+    view_plans: View Subscription Plans
+    table:
+        number: Invoice #
+        date: Date
+        amount: Amount
+        status: Status
+        actions: Actions
+    action:
+        view: View
+        download: Download
+    details:
+        title: Invoice Details
+        issued: Issued on %date%
+        billed_to: Billed To
+        tax_id: Tax ID
+    items:
+        description: Description
+        qty: Qty
+        unit_price: Unit Price
+        total: Total
+    summary:
+        subtotal: Subtotal
+        tax: Tax
+        total: Total
+    payment:
+        info: Payment Information
+        transaction_id: Transaction ID
+        date: Date
+        method: Method
+
+payment_method:
+    title: Payment Method
+    no_subscription: No Active Subscription
+    no_subscription_msg: You need an active subscription to manage payment methods.
+    current: Current Payment Method
+    card_ending: Card ending in ****
+    id: Payment Method ID
+    update: Update Card
+    remove: Remove
+    remove_confirm: Are you sure you want to remove this payment method?
+    no_method: No payment method on file
+    add: Add Payment Method
+    subscription_details: Subscription Details
+    update_page:
+        title: Update Payment Method
+        secure_note: Your payment information is securely processed by Tap Payments. We never store your full card details.
+    form:
+        cardholder: Cardholder Name
+        card_number: Card Number
+        month: Month
+        year: Year
+        cvv: CVV
+        submit: Update Payment Method
+        cancel: Cancel
+
+profile:
+    edit:
+        title: Edit Profile
+        email: Email
+        name: Name
+        save: Save Changes
+        change_password: Change Password
+    2fa:
+        title: Two-Factor Authentication
+        enabled: Enabled
+        enabled_msg: Your account is protected with two-factor authentication.
+        disable: Disable 2FA
+        disable_confirm: Are you sure you want to disable two-factor authentication?
+        not_enabled: Not Enabled
+        not_enabled_msg: Add an extra layer of security to your account.
+        enable: Enable 2FA
+    password:
+        title: Change Password
+        current: Current Password
+        new: New Password
+        confirm: Confirm New Password
+        submit: Change Password
+        back: Back to Profile
+
 common:
     status: Status
     date: Date
@@ -40,3 +202,24 @@ common:
     download: Download
     enabled: Enabled
     disabled: Disabled
+
+flash:
+    error:
+        email_required: Email is required.
+        invalid_current_password: Invalid current password.
+        password_mismatch: New passwords do not match.
+        password_short: Password must be at least 6 characters.
+        plan_not_found: Invalid plan selected.
+        subscription_not_found: No active subscription found.
+        team_required: You must be part of a team.
+        not_allowed: You are not allowed to perform this action.
+        team_name_required: Team name is required.
+        invitation_expired: This invitation has expired.
+    success:
+        profile_updated: Profile updated successfully.
+        password_changed: Password changed successfully.
+        subscription_updated: Subscription updated successfully.
+        payment_method_updated: Payment method updated successfully.
+        team_created: Team created successfully.
+        team_switched: Switched to team %name%
+        joined_team: You have successfully joined %name%

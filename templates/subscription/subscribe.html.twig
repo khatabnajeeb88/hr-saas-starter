@@ -1,15 +1,15 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Subscribe to {{ plan.name }}{% endblock %}
+{% block title %}{{ 'subscription.subscribe.title'|trans({'%plan%': plan.name}) }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="">
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Subscribe to {{ plan.name }}</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">{{ 'subscription.subscribe.title'|trans({'%plan%': plan.name}) }}</h1>
 
         {% for message in app.flashes('error') %}
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                {{ message }}
+                {{ message|trans }}
             </div>
         {% endfor %}
 
@@ -23,7 +23,7 @@
             </div>
 
             <div class="border-t border-gray-200 pt-6">
-                <h3 class="font-semibold text-gray-900 mb-4">What's included:</h3>
+                <h3 class="font-semibold text-gray-900 mb-4">{{ 'subscription.subscribe.included'|trans }}</h3>
                 <ul class="space-y-3 mb-6">
                     {% if plan.teamMemberLimit %}
                     <li class="flex items-start">
@@ -64,9 +64,9 @@
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                         </svg>
                         <div>
-                            <h4 class="font-semibold text-blue-900">14-Day Free Trial</h4>
+                            <h4 class="font-semibold text-blue-900">{{ 'subscription.subscribe.trial_info_title'|trans }}</h4>
                             <p class="text-blue-700 text-sm mt-1">
-                                Start your free trial today. No credit card required. Cancel anytime.
+                                {{ 'subscription.subscribe.trial_info_desc'|trans }}
                             </p>
                         </div>
                     </div>
@@ -77,13 +77,13 @@
                     
                     <button type="submit" 
                             class="w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
-                        Start Free Trial
+                        {{ 'subscription.subscribe.start_trial'|trans }}
                     </button>
                 </form>
 
                 <div class="mt-4 text-center">
                     <a href="{{ path('subscription_plans') }}" class="text-gray-600 hover:text-gray-900">
-                        ← Back to all plans
+                        ← {{ 'subscription.subscribe.back'|trans }}
                     </a>
                 </div>
             </div>

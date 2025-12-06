@@ -44,7 +44,7 @@ class SubscriptionController extends AbstractController
         $teams = $user->getTeamMembers();
         
         if ($teams->isEmpty()) {
-            $this->addFlash('warning', 'You are not a member of any team.');
+            $this->addFlash('warning', 'flash.error.team_required');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -52,7 +52,7 @@ class SubscriptionController extends AbstractController
         $subscription = $team->getSubscription();
 
         if (!$subscription) {
-            $this->addFlash('info', 'Your team does not have an active subscription.');
+            $this->addFlash('info', 'flash.error.subscription_not_found');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -73,7 +73,7 @@ class SubscriptionController extends AbstractController
         
         $teams = $user->getTeamMembers();
         if ($teams->isEmpty()) {
-            $this->addFlash('error', 'You must be part of a team to subscribe.');
+            $this->addFlash('error', 'flash.error.team_required');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -83,7 +83,7 @@ class SubscriptionController extends AbstractController
         if (!$team->isOwner($user)) {
             $member = $team->getMemberByUser($user);
             if (!$member || !in_array($member->getRole(), ['admin', 'owner'])) {
-                $this->addFlash('error', 'Only team owners and admins can manage subscriptions.');
+                $this->addFlash('error', 'flash.error.not_allowed');
                 return $this->redirectToRoute('subscription_current');
             }
         }
@@ -124,7 +124,7 @@ class SubscriptionController extends AbstractController
         
         $teams = $user->getTeamMembers();
         if ($teams->isEmpty()) {
-            $this->addFlash('error', 'You must be part of a team.');
+            $this->addFlash('error', 'flash.error.team_required');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -132,7 +132,7 @@ class SubscriptionController extends AbstractController
         $currentSubscription = $team->getSubscription();
 
         if (!$currentSubscription) {
-            $this->addFlash('error', 'No active subscription found.');
+            $this->addFlash('error', 'flash.error.subscription_not_found');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -144,7 +144,7 @@ class SubscriptionController extends AbstractController
             $newPlan = $this->planRepository->find($newPlanId);
 
             if (!$newPlan) {
-                $this->addFlash('error', 'Invalid plan selected.');
+                $this->addFlash('error', 'flash.error.plan_not_found');
                 return $this->redirectToRoute('subscription_upgrade');
             }
 
@@ -174,7 +174,7 @@ class SubscriptionController extends AbstractController
         
         $teams = $user->getTeamMembers();
         if ($teams->isEmpty()) {
-            $this->addFlash('error', 'You must be part of a team.');
+            $this->addFlash('error', 'flash.error.team_required');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -182,7 +182,7 @@ class SubscriptionController extends AbstractController
         $subscription = $team->getSubscription();
 
         if (!$subscription) {
-            $this->addFlash('error', 'No active subscription found.');
+            $this->addFlash('error', 'flash.error.subscription_not_found');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -221,7 +221,7 @@ class SubscriptionController extends AbstractController
         
         $teams = $user->getTeamMembers();
         if ($teams->isEmpty()) {
-            $this->addFlash('error', 'You must be part of a team.');
+            $this->addFlash('error', 'flash.error.team_required');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -229,7 +229,7 @@ class SubscriptionController extends AbstractController
         $subscription = $team->getSubscription();
 
         if (!$subscription) {
-            $this->addFlash('error', 'No subscription found.');
+            $this->addFlash('error', 'flash.error.subscription_not_found');
             return $this->redirectToRoute('subscription_plans');
         }
 

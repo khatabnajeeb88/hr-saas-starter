@@ -1,20 +1,20 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Change Plan{% endblock %}
+{% block title %}{{ 'subscription.upgrade.title'|trans }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Change Subscription Plan</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">{{ 'subscription.upgrade.title'|trans }}</h1>
 
         {% for message in app.flashes('error') %}
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                {{ message }}
+                {{ message|trans }}
             </div>
         {% endfor %}
 
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Current Plan</h2>
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ 'subscription.upgrade.current_plan'|trans }}</h2>
             <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                 <div>
                     <h3 class="font-bold text-gray-900">{{ currentSubscription.plan.name }}</h3>
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">Available Plans</h2>
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ 'subscription.upgrade.available_plans'|trans }}</h2>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {% for plan in availablePlans %}
@@ -45,7 +45,7 @@
                             <svg class="w-4 h-4 text-green-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span class="text-gray-700">{{ plan.teamMemberLimit }} team members</span>
+                            <span class="text-gray-700">Up to {{ plan.teamMemberLimit }} team members</span>
                         </li>
                         {% else %}
                         <li class="flex items-start text-sm">
@@ -78,9 +78,9 @@
                                            bg-gray-200 text-gray-900 hover:bg-gray-300
                                        {% endif %}">
                             {% if plan.price > currentSubscription.plan.price %}
-                                Upgrade to {{ plan.name }}
+                                {{ 'subscription.upgrade.upgrade_to'|trans({'%plan%': plan.name}) }}
                             {% else %}
-                                Downgrade to {{ plan.name }}
+                                {{ 'subscription.upgrade.downgrade_to'|trans({'%plan%': plan.name}) }}
                             {% endif %}
                         </button>
                     </form>
@@ -91,7 +91,7 @@
 
         <div class="mt-6 text-center">
             <a href="{{ path('subscription_current') }}" class="text-gray-600 hover:text-gray-900">
-                ← Back to subscription
+                ← {{ 'subscription.subscribe.back'|trans }}
             </a>
         </div>
     </div>

@@ -27,14 +27,14 @@ class ProfileController extends AbstractController
 
             // Basic validation
             if (empty($email)) {
-                $this->addFlash('error', 'Email is required.');
+                $this->addFlash('error', 'flash.error.email_required');
             } else {
                 $user->setName($name);
                 $user->setEmail($email);
 
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Profile updated successfully.');
+                $this->addFlash('success', 'flash.success.profile_updated');
                 return $this->redirectToRoute('app_profile_edit');
             }
         }
@@ -59,18 +59,18 @@ class ProfileController extends AbstractController
             $confirmPassword = $request->request->get('confirm_password');
 
             if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
-                $this->addFlash('error', 'Invalid current password.');
+                $this->addFlash('error', 'flash.error.invalid_current_password');
             } elseif ($newPassword !== $confirmPassword) {
-                $this->addFlash('error', 'New passwords do not match.');
+                $this->addFlash('error', 'flash.error.password_mismatch');
             } elseif (strlen($newPassword) < 6) {
-                $this->addFlash('error', 'Password must be at least 6 characters.');
+                $this->addFlash('error', 'flash.error.password_short');
             } else {
                 $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
                 $user->setPassword($hashedPassword);
                 
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Password changed successfully.');
+                $this->addFlash('success', 'flash.success.password_changed');
                 return $this->redirectToRoute('app_profile_edit');
             }
         }

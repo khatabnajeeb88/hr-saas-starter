@@ -1,15 +1,15 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Cancel Subscription{% endblock %}
+{% block title %}{{ 'subscription.cancel.title'|trans }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="">
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Cancel Subscription</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">{{ 'subscription.cancel.title'|trans }}</h1>
 
         {% for message in app.flashes('error') %}
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                {{ message }}
+                {{ message|trans }}
             </div>
         {% endfor %}
 
@@ -20,16 +20,16 @@
                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                     </svg>
                     <div>
-                        <h3 class="font-semibold text-yellow-900">Are you sure you want to cancel?</h3>
+                        <h3 class="font-semibold text-yellow-900">{{ 'subscription.cancel.confirm_title'|trans }}</h3>
                         <p class="text-yellow-700 text-sm mt-1">
-                            We're sorry to see you go. Please let us know if there's anything we can do to improve your experience.
+                            {{ 'subscription.cancel.confirm_msg'|trans }}
                         </p>
                     </div>
                 </div>
             </div>
 
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-900 mb-2">Current Plan</h3>
+                <h3 class="font-semibold text-gray-900 mb-2">{{ 'subscription.upgrade.current_plan'|trans }}</h3>
                 <div class="p-4 bg-gray-50 rounded-lg">
                     <div class="flex justify-between items-center">
                         <div>
@@ -44,7 +44,7 @@
             </div>
 
             <div class="mb-6">
-                <h3 class="font-semibold text-gray-900 mb-3">What you'll lose:</h3>
+                <h3 class="font-semibold text-gray-900 mb-3">{{ 'subscription.cancel.lose_title'|trans }}</h3>
                 <ul class="space-y-2">
                     {% for planFeature in subscription.plan.planFeatures %}
                         {% if planFeature.enabled %}
@@ -60,16 +60,16 @@
             </div>
 
             <div class="border-t border-gray-200 pt-6">
-                <h3 class="font-semibold text-gray-900 mb-4">Cancellation Options</h3>
+                <h3 class="font-semibold text-gray-900 mb-4">{{ 'subscription.cancel.options'|trans }}</h3>
                 
                 <form method="post" action="{{ path('subscription_cancel') }}" class="space-y-4">
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <label class="flex items-start cursor-pointer">
                             <input type="radio" name="immediately" value="0" checked class="mt-1 mr-3">
                             <div>
-                                <div class="font-semibold text-gray-900">Cancel at period end</div>
+                                <div class="font-semibold text-gray-900">{{ 'subscription.cancel.at_period_end'|trans }}</div>
                                 <div class="text-sm text-gray-600">
-                                    You'll retain access until {{ subscription.currentPeriodEnd|date('M d, Y') }}
+                                    {{ 'subscription.cancel.at_period_end_desc'|trans({'%date%': subscription.currentPeriodEnd|date('M d, Y')}) }}
                                 </div>
                             </div>
                         </label>
@@ -79,9 +79,9 @@
                         <label class="flex items-start cursor-pointer">
                             <input type="radio" name="immediately" value="1" class="mt-1 mr-3">
                             <div>
-                                <div class="font-semibold text-gray-900">Cancel immediately</div>
+                                <div class="font-semibold text-gray-900">{{ 'subscription.cancel.immediately'|trans }}</div>
                                 <div class="text-sm text-gray-600">
-                                    Your access will end right away (no refund)
+                                    {{ 'subscription.cancel.immediately_desc'|trans }}
                                 </div>
                             </div>
                         </label>
@@ -90,11 +90,11 @@
                     <div class="flex gap-4 mt-6">
                         <button type="submit" 
                                 class="flex-1 bg-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-600 transition-colors">
-                            Confirm Cancellation
+                            {{ 'subscription.cancel.confirm_btn'|trans }}
                         </button>
                         <a href="{{ path('subscription_current') }}" 
                            class="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-center">
-                            Keep Subscription
+                            {{ 'subscription.cancel.keep_btn'|trans }}
                         </a>
                     </div>
                 </form>

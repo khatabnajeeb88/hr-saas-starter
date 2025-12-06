@@ -57,7 +57,7 @@ class PaymentMethodController extends AbstractController
         }
 
         if (!$subscription) {
-            $this->addFlash('error', 'No active subscription found.');
+            $this->addFlash('error', 'flash.error.subscription_not_found');
             return $this->redirectToRoute('subscription_plans');
         }
 
@@ -97,7 +97,7 @@ class PaymentMethodController extends AbstractController
                     $subscription->setPaymentMethodId($charge['card']['id']);
                     $entityManager->flush();
 
-                    $this->addFlash('success', 'Payment method updated successfully.');
+                    $this->addFlash('success', 'flash.success.payment_method_updated');
                     return $this->redirectToRoute('payment_method_index');
                 }
 
@@ -129,7 +129,7 @@ class PaymentMethodController extends AbstractController
         }
 
         if (!$subscription) {
-            $this->addFlash('error', 'No active subscription found.');
+            $this->addFlash('error', 'flash.error.subscription_not_found');
             return $this->redirectToRoute('subscription_plans');
         }
 

@@ -1,6 +1,6 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Invoice {{ invoice.invoiceNumber }}{% endblock %}
+{% block title %}{{ 'invoice.details.title'|trans }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="">
@@ -12,17 +12,17 @@
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
                     </svg>
-                    Download PDF
+                    {{ 'invoice.action.download'|trans }}
                 </a>
-                <a href="{{ path('invoice_list') }}" class="text-gray-600 hover:text-gray-900">Back to Invoices</a>
+                <a href="{{ path('invoice_list') }}" class="text-gray-600 hover:text-gray-900">{{ 'invoice.action.view'|trans }}</a> {# 'Back to Invoices' could be 'invoice.action.back' or just 'invoice.list' #}
             </div>
         </div>
 
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6 flex justify-between items-center bg-gray-50 border-b border-gray-200">
                 <div>
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Invoice Details</h3>
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Issued on {{ invoice.issuedAt|date('F d, Y') }}</p>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">{{ 'invoice.details.title'|trans }}</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ 'invoice.details.issued'|trans({'%date%': invoice.issuedAt|date('F d, Y')}) }}</p>
                 </div>
                 <div>
                     <span class="px-3 py-1 inline-flex text-sm leading-5 font-semibold rounded-full 
@@ -37,7 +37,7 @@
             <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
                 <dl class="sm:divide-y sm:divide-gray-200">
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Billed To</dt>
+                        <dt class="text-sm font-medium text-gray-500">{{ 'invoice.details.billed_to'|trans }}</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             <div class="font-bold">{{ invoice.billingName }}</div>
                             <div>{{ invoice.billingEmail }}</div>
@@ -45,7 +45,7 @@
                             <div class="whitespace-pre-line">{{ invoice.billingAddress }}</div>
                             {% endif %}
                             {% if invoice.taxId %}
-                            <div class="mt-1 text-gray-500">Tax ID: {{ invoice.taxId }}</div>
+                            <div class="mt-1 text-gray-500">{{ 'invoice.details.tax_id'|trans }}: {{ invoice.taxId }}</div>
                             {% endif %}
                         </dd>
                     </div>
@@ -54,10 +54,10 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
-                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'invoice.items.description'|trans }}</th>
+                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'invoice.items.qty'|trans }}</th>
+                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'invoice.items.unit_price'|trans }}</th>
+                                    <th scope="col" class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">{{ 'invoice.items.total'|trans }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
@@ -72,15 +72,15 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="3" class="px-3 py-4 text-sm font-medium text-gray-900 text-right">Subtotal</td>
+                                    <td colspan="3" class="px-3 py-4 text-sm font-medium text-gray-900 text-right">{{ 'invoice.summary.subtotal'|trans }}</td>
                                     <td class="px-3 py-4 text-sm text-gray-900 text-right">{{ invoice.formattedSubtotal }}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" class="px-3 py-4 text-sm font-medium text-gray-900 text-right">Tax</td>
+                                    <td colspan="3" class="px-3 py-4 text-sm font-medium text-gray-900 text-right">{{ 'invoice.summary.tax'|trans }}</td>
                                     <td class="px-3 py-4 text-sm text-gray-900 text-right">{{ invoice.formattedTax }}</td>
                                 </tr>
                                 <tr class="bg-gray-50">
-                                    <td colspan="3" class="px-3 py-4 text-base font-bold text-gray-900 text-right">Total</td>
+                                    <td colspan="3" class="px-3 py-4 text-base font-bold text-gray-900 text-right">{{ 'invoice.summary.total'|trans }}</td>
                                     <td class="px-3 py-4 text-base font-bold text-gray-900 text-right">{{ invoice.formattedTotal }}</td>
                                 </tr>
                             </tfoot>
@@ -89,12 +89,12 @@
 
                     {% if invoice.payment %}
                     <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 border-t border-gray-200">
-                        <dt class="text-sm font-medium text-gray-500">Payment Information</dt>
+                        <dt class="text-sm font-medium text-gray-500">{{ 'invoice.payment.info'|trans }}</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            <div>Transaction ID: {{ invoice.payment.tapChargeId }}</div>
-                            <div>Date: {{ invoice.payment.createdAt|date('M d, Y H:i') }}</div>
+                            <div>{{ 'invoice.payment.transaction_id'|trans }}: {{ invoice.payment.tapChargeId }}</div>
+                            <div>{{ 'invoice.payment.date'|trans }}: {{ invoice.payment.createdAt|date('M d, Y H:i') }}</div>
                             {% if invoice.payment.cardBrand %}
-                            <div>Method: {{ invoice.payment.cardBrand }} •••• {{ invoice.payment.cardLastFour }}</div>
+                            <div>{{ 'invoice.payment.method'|trans }}: {{ invoice.payment.cardBrand }} •••• {{ invoice.payment.cardLastFour }}</div>
                             {% endif %}
                         </dd>
                     </div>

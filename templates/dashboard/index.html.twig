@@ -1,11 +1,11 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}{{ 'dashboard.title'|trans }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="mb-6">
-    <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
-    <p class="text-gray-600 mt-1">Welcome back, {{ app.user.name|default(app.user.email) }}</p>
+    <h1 class="text-3xl font-bold text-gray-900">{{ 'dashboard.title'|trans }}</h1>
+    <p class="text-gray-600 mt-1">{{ 'dashboard.welcome'|trans({'%name%': app.user.name|default(app.user.email)}) }}</p>
 </div>
 
 <!-- Stats Grid -->

@@ -1,13 +1,13 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Subscription Plans{% endblock %}
+{% block title %}{{ 'subscription.plans.title'|trans }}{% endblock %}
 
 {% block dashboard_content %}
 <div class="">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Choose Your Plan</h1>
-            <p class="text-xl text-gray-600">Select the perfect plan for your team</p>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ 'subscription.plans.title'|trans }}</h1>
+            <p class="text-xl text-gray-600">{{ 'subscription.plans.subtitle'|trans }}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -15,7 +15,7 @@
             <div class="bg-white rounded-lg shadow-lg overflow-hidden border-2 {% if plan.slug == 'pro' %}border-blue-500{% else %}border-gray-200{% endif %} hover:shadow-xl transition-shadow">
                 {% if plan.slug == 'pro' %}
                 <div class="bg-blue-500 text-white text-center py-2 text-sm font-semibold">
-                    MOST POPULAR
+                    {{ 'subscription.plans.most_popular'|trans }}
                 </div>
                 {% endif %}
                 
@@ -31,7 +31,7 @@
                     {% endif %}
 
                     <div class="mb-6">
-                        <h4 class="font-semibold text-gray-900 mb-3">Features:</h4>
+                        <h4 class="font-semibold text-gray-900 mb-3">{{ 'subscription.features'|trans }}:</h4>
                         <ul class="space-y-2">
                             {% if plan.teamMemberLimit %}
                             <li class="flex items-start">
@@ -75,9 +75,9 @@
                                   bg-gray-100 text-gray-900 hover:bg-gray-200
                               {% endif %}">
                         {% if plan.price == '0.00' %}
-                            Get Started Free
+                            {{ 'subscription.plans.get_started_free'|trans }}
                         {% else %}
-                            Choose {{ plan.name }}
+                             {{ 'subscription.plans.choose'|trans({'%plan%': plan.name}) }}
                         {% endif %}
                     </a>
                 </div>
@@ -86,7 +86,7 @@
         </div>
 
         <div class="mt-12 text-center">
-            <p class="text-gray-600">All plans include 14-day free trial. No credit card required.</p>
+            <p class="text-gray-600">{{ 'subscription.plans.trial_note'|trans }}</p>
         </div>
     </div>
 </div>
