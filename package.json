@@ -6,6 +6,9 @@
     "test": "tests"
   },
   "scripts": {
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production",
     "build:css": "npx tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css",
     "watch:css": "npx tailwindcss -i ./assets/styles/app.css -o ./public/build/app.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,8 +19,11 @@
   "description": "",
   "devDependencies": {
     "@symfony/webpack-encore": "^5.3.1",
+    "@tailwindcss/cli": "^4.1.17",
+    "@tailwindcss/postcss": "^4.1.17",
     "autoprefixer": "^10.4.22",
     "postcss": "^8.5.6",
+    "postcss-loader": "^8.2.0",
     "tailwindcss": "^4.1.17"
   },
   "dependencies": {

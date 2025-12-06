@@ -1,0 +1,42 @@
+menu:
+    dashboard: لوحة التحكم
+    teams: الفرق
+    subscription: الاشتراك
+    invoices: الفواتير
+    payment_method: طريقة الدفع
+    profile: الملف الشخصي
+    logout: تسجيل الخروج
+    settings: الإعدادات
+
+dashboard:
+    title: لوحة التحكم
+    welcome: مرحباً بك، %name%
+    subscription_status: حالة الاشتراك
+    no_plan: لا توجد خطة
+    view_plans: عرض الخطط
+    teams_count: الفرق
+    manage_teams: إدارة الفرق
+    invoices_count: الفواتير
+    view_all: عرض الكل
+    recent_invoices: الفواتير الأخيرة
+    quick_actions: إجراءات سريعة
+    create_team: إنشاء فريق جديد
+    update_payment: تحديث طريقة الدفع
+    choose_plan: اختر خطة
+    your_teams: فرقك
+    member: عضو
+    members: أعضاء
+
+common:
+    status: الحالة
+    date: التاريخ
+    amount: المبلغ
+    actions: الإجراءات
+    save: حفظ
+    cancel: إلغاء
+    delete: حذف
+    edit: تعديل
+    view: عرض
+    download: تحميل
+    enabled: مفعل
+    disabled: معطل

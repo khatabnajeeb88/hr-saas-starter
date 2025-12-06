@@ -1,0 +1,42 @@
+menu:
+    dashboard: Dashboard
+    teams: Teams
+    subscription: Subscription
+    invoices: Invoices
+    payment_method: Payment Method
+    profile: Profile
+    logout: Sign Out
+    settings: Settings
+
+dashboard:
+    title: Dashboard
+    welcome: Welcome back, %name%
+    subscription_status: Subscription
+    no_plan: No Plan
+    view_plans: View Plans
+    teams_count: Teams
+    manage_teams: Manage Teams
+    invoices_count: Invoices
+    view_all: View All
+    recent_invoices: Recent Invoices
+    quick_actions: Quick Actions
+    create_team: Create New Team
+    update_payment: Update Payment Method
+    choose_plan: Choose a Plan
+    your_teams: Your Teams
+    member: member
+    members: members
+
+common:
+    status: Status
+    date: Date
+    amount: Amount
+    actions: Actions
+    save: Save
+    cancel: Cancel
+    delete: Delete
+    edit: Edit
+    view: View
+    download: Download
+    enabled: Enabled
+    disabled: Disabled
