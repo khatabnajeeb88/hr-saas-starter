@@ -189,6 +189,32 @@ profile:
         submit: تغيير كلمة المرور
         back: العودة للملف الشخصي
 
+login:
+    title: تسجيل الدخول
+    welcome_back: مرحباً بعودتك
+    subtitle: سجل الدخول إلى حسابك للمتابعة
+    email: البريد الإلكتروني
+    email_placeholder: أدخل بريدك الإلكتروني
+    password: كلمة المرور
+    password_placeholder: أدخل كلمة المرور
+    forgot_password: نسيت كلمة المرور؟
+    sign_in: تسجيل الدخول
+    no_account: ليس لديك حساب؟
+    sign_up: إنشاء حساب
+    already_logged_in: أنت مسجل الدخول باسم
+    logout: تسجيل الخروج
+
+register:
+    title: إنشاء حساب
+    get_started: ابدأ الآن
+    subtitle: أنشئ حسابك للبدء
+    email_placeholder: أدخل بريدك الإلكتروني
+    password: كلمة المرور
+    password_placeholder: أنشئ كلمة مرور قوية
+    create_account: إنشاء حساب
+    have_account: لديك حساب بالفعل؟
+    sign_in: تسجيل الدخول
+
 common:
     status: الحالة
     date: التاريخ

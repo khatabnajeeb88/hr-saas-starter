@@ -189,6 +189,32 @@ profile:
         submit: Change Password
         back: Back to Profile
 
+login:
+    title: Sign In
+    welcome_back: Welcome Back
+    subtitle: Sign in to your account to continue
+    email: Email
+    email_placeholder: Enter your email
+    password: Password
+    password_placeholder: Enter your password
+    forgot_password: Forgot password?
+    sign_in: Sign In
+    no_account: Don't have an account?
+    sign_up: Sign up
+    already_logged_in: You are logged in as
+    logout: Logout
+
+register:
+    title: Create Account
+    get_started: Get Started
+    subtitle: Create your account to get started
+    email_placeholder: Enter your email
+    password: Password
+    password_placeholder: Create a strong password
+    create_account: Create Account
+    have_account: Already have an account?
+    sign_in: Sign in
+
 common:
     status: Status
     date: Date
