@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/dashboard.html.twig' %}
 
 {% block title %}My Teams{% endblock %}
 
-{% block body %}
-<div class="container mx-auto px-4 py-8">
+{% block dashboard_content %}
+<div class="">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold">My Teams</h1>
         <a href="{{ path('app_team_new') }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
