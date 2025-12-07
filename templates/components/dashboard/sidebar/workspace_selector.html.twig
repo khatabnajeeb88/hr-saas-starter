@@ -1,0 +1,49 @@
+{# Workspace Selector Component #}
+{# Parameters: none (can be extended to accept workspace data) #}
+
+<div class="border-t border-slate-100 p-3" x-data="{ workspaceOpen: false }">
+    <button @click="workspaceOpen = !workspaceOpen" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+            <div class="text-start">
+                <p class="text-sm font-semibold text-slate-900">FlyonUI</p>
+                <p class="text-xs text-slate-500">Workspace</p>
+            </div>
+        </div>
+        <svg class="w-4 h-4 text-slate-400 transition-transform" :class="{'rotate-180': workspaceOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+    </button>
+    
+    {# Workspace Dropdown #}
+    <div x-show="workspaceOpen" x-collapse class="mt-2 space-y-1">
+        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
+            <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-white">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-900">Shadcn/Studio</p>
+                <p class="text-xs text-slate-500">Workspace</p>
+            </div>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors">
+            <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-slate-900">Themeselection</p>
+                <p class="text-xs text-slate-500">Workspace</p>
+            </div>
+        </a>
+        <button class="w-full flex items-center gap-2 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-lg transition-colors font-medium">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Add New Workspace
+        </button>
+    </div>
+</div>

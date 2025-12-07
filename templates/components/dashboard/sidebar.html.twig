@@ -1,0 +1,16 @@
+{# Main Sidebar Component #}
+{# Parameters: user (User entity), currentRoute (string) #}
+
+<div class="fixed inset-y-0 start-0 w-64 bg-white border-e border-slate-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0 z-40 flex flex-col" 
+     :class="{'translate-x-0': sidebarOpen, '{{ app.request.locale == 'ar' ? 'translate-x-full' : '-translate-x-full' }}': !sidebarOpen}"
+     id="sidebar">
+    
+    {# User Profile Card (Top) #}
+    {% include 'components/dashboard/sidebar/user_profile.html.twig' with {'user': user} %}
+
+    {# Navigation Menu #}
+    {% include 'components/dashboard/sidebar/navigation.html.twig' with {'currentRoute': currentRoute} %}
+    
+    {# Workspace Selector (Bottom) #}
+    {% include 'components/dashboard/sidebar/workspace_selector.html.twig' %}
+</div>
