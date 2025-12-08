@@ -78,6 +78,7 @@ class LinkedInAuthenticator extends OAuth2Authenticator implements Authenticatio
 
                 // 4) Update the user
                 $user->setLinkedinId($linkedinUser->getId());
+                $user->setAvatar($linkedinUser->getImageUrl()); // Adjust based on LinkedIn provider method
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 

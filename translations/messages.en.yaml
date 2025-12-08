@@ -7,6 +7,12 @@ menu:
     profile: Profile
     logout: Sign Out
     settings: Settings
+    pages: Pages
+    applications: Applications
+    sample_page: Sample Page
+    default: Default
+    analytics: Analytics
+    ecommerce: Ecommerce
 
 dashboard:
     title: Dashboard

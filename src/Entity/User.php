@@ -74,6 +74,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[Groups(['user:read', 'user:write'])]
     private ?string $linkedinId = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user:read', 'user:write'])]
+    private ?string $avatar = null;
+
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $totpSecret = null;
 
@@ -252,6 +256,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function setLinkedinId(?string $linkedinId): static
     {
         $this->linkedinId = $linkedinId;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

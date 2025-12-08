@@ -18,37 +18,34 @@
         
         <div x-show="dashboardDropdown" x-collapse class="mt-1 ms-8 space-y-1">
             <a href="{{ path('app_dashboard') }}" class="block px-3 py-2 text-sm rounded-lg {% if currentRoute == 'app_dashboard' %}bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 font-medium{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800{% endif %}">
-                Default
+                {{ 'menu.default'|trans }}
             </a>
             <a href="#" class="flex items-center justify-between px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">
-                <span>Analytics</span>
+                <span>{{ 'menu.analytics'|trans }}</span>
                 <span class="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded">Pro</span>
             </a>
             <a href="#" class="flex items-center justify-between px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg">
-                <span>eCommerce</span>
+                <span>{{ 'menu.ecommerce'|trans }}</span>
                 <span class="text-xs bg-purple-100 text-purple-600 px-2 py-0.5 rounded">Pro</span>
             </a>
         </div>
     </div>
 
     {# PAGES Section #}
-    <div class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-3 mt-6">Pages</div>
+    <div class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-3 mt-6">{{'menu.pages'|trans }}</div>
     
-    <a href="{{ path('app_profile_edit') }}" class="flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors group {% if currentRoute starts with 'app_profile' %}bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
+    <a href="{{ path('app_dashboard') }}" class="flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors group {% if currentRoute starts with 'app_dashboard' %}bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
         <div class="flex items-center gap-3">
-            <svg class="w-5 h-5 {% if currentRoute starts with 'app_profile' %}text-purple-600{% else %}text-slate-400 group-hover:text-slate-500{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 {% if currentRoute starts with 'app_dashboard' %}text-purple-600{% else %}text-slate-400 group-hover:text-slate-500{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
             </svg>
-            <span>Account Setting</span>
+            <span>{{ 'menu.sample_page'|trans }}</span>
         </div>
-        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
     </a>
 
     {# APPLICATIONS Section #}
-    <div class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-3 mt-6">Applications</div>
+    <div class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-3 mt-6">{{ 'menu.applications'|trans }}</div>
     
     <a href="{{ path('app_team_index') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors group mb-1 {% if currentRoute starts with 'app_team' %}bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200{% endif %}">
         <svg class="w-5 h-5 me-3 {% if currentRoute starts with 'app_team' %}text-purple-600{% else %}text-slate-400 group-hover:text-slate-500{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">

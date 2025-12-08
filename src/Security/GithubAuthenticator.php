@@ -79,6 +79,11 @@ class GithubAuthenticator extends OAuth2Authenticator implements AuthenticationE
 
                 // 4) Update the user
                 $user->setGithubId($githubUser->getId());
+                // GithubResourceOwner doesn't always have getAvatar, check array
+                $data = $githubUser->toArray();
+                if (isset($data['avatar_url'])) {
+                    $user->setAvatar($data['avatar_url']);
+                }
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 

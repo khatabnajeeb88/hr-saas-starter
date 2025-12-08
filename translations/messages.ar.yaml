@@ -7,6 +7,12 @@ menu:
     profile: الملف الشخصي
     logout: تسجيل الخروج
     settings: الإعدادات
+    pages: الصفحات
+    applications: التطبيقات
+    sample_page: صفحة عينة
+    default: الافتراضي
+    analytics: تحليلات
+    ecommerce: تجارة الإلكترونية
 
 dashboard:
     title: لوحة التحكم

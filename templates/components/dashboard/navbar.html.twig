@@ -53,7 +53,11 @@
             <div class="relative ms-2" x-data="{ open: false }">
                 <button @click="open = !open" class="flex items-center">
                     <div class="w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-700 overflow-hidden">
-                        <img src="https://i.pravatar.cc/150?u={{ app.user.email }}" alt="{{ app.user.name }}" class="w-full h-full object-cover">
+                        {% if app.user.avatar %}
+                            <img src="{{ app.user.avatar }}" alt="{{ app.user.name }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <span class="font-medium text-sm">{{ app.user.name|default(app.user.email)|first|upper }}</span>
+                        {% endif %}
                     </div>
                 </button>
                 
