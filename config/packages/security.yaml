@@ -43,7 +43,11 @@ security:
                 lifetime: 604800
                 path: /
                 always_remember_me: true
-            custom_authenticator: App\Security\AppAuthenticator
+            custom_authenticator:
+                - App\Security\AppAuthenticator
+                - App\Security\GoogleAuthenticator
+                - App\Security\GithubAuthenticator
+                - App\Security\LinkedInAuthenticator
             entry_point: App\Security\AppAuthenticator
 
             # Activate different ways to authenticate:

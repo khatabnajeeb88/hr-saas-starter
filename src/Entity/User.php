@@ -62,6 +62,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user:read', 'user:write'])]
+    private ?string $googleId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user:read', 'user:write'])]
+    private ?string $githubId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user:read', 'user:write'])]
+    private ?string $linkedinId = null;
+
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $totpSecret = null;
 
@@ -204,6 +216,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): static
+    {
+        $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    public function getGithubId(): ?string
+    {
+        return $this->githubId;
+    }
+
+    public function setGithubId(?string $githubId): static
+    {
+        $this->githubId = $githubId;
+
+        return $this;
+    }
+
+    public function getLinkedinId(): ?string
+    {
+        return $this->linkedinId;
+    }
+
+    public function setLinkedinId(?string $linkedinId): static
+    {
+        $this->linkedinId = $linkedinId;
 
         return $this;
     }

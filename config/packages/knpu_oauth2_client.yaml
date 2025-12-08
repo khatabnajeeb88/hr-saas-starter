@@ -1,0 +1,27 @@
+knpu_oauth2_client:
+    clients:
+        # will cause service: knpu.oauth2.client.google to be created
+        google:
+            type: google
+            client_id: '%env(GOOGLE_CLIENT_ID)%'
+            client_secret: '%env(GOOGLE_CLIENT_SECRET)%'
+            # the route that you're redirected to after
+            # see the controller example below
+            redirect_route: connect_google_check
+            redirect_params: {}
+
+        # will cause service: knpu.oauth2.client.github to be created
+        github:
+            type: github
+            client_id: '%env(GITHUB_CLIENT_ID)%'
+            client_secret: '%env(GITHUB_CLIENT_SECRET)%'
+            redirect_route: connect_github_check
+            redirect_params: {}
+
+        # will cause service: knpu.oauth2.client.linkedin to be created
+        linkedin:
+            type: linkedin
+            client_id: '%env(LINKEDIN_CLIENT_ID)%'
+            client_secret: '%env(LINKEDIN_CLIENT_SECRET)%'
+            redirect_route: connect_linkedin_check
+            redirect_params: {}
