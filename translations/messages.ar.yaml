@@ -33,6 +33,10 @@ dashboard:
     member: عضو
     members: أعضاء
     search_placeholder: البحث
+    notifications: إشعارات
+    mark_all_read: علامة على كل شيء
+    loading: تحميل...
+    no_new_notifications: لا توجد إشعارات جديدة
 
 team:
     my_teams: مساحات عملي

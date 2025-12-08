@@ -33,6 +33,10 @@ dashboard:
     member: member
     members: members
     search_placeholder: Search
+    notifications: Notifications
+    mark_all_read: Mark all read
+    loading: Loading...
+    no_new_notifications: No new notifications
 
 team:
     my_teams: My Workspaces

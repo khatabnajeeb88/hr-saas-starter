@@ -42,12 +42,104 @@
             {% include 'components/theme_switcher.html.twig' %}
 
             <!-- Notifications -->
-            <button class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors relative">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                </svg>
-                 <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
+            <div class="relative" x-data="{ 
+                open: false,
+                notifications: [],
+                loading: false,
+                hasUnread: false,
+                urlList: '{{ path('internal_notifications_list') }}',
+                urlMarkAllRead: '{{ path('internal_notification_mark_all_read') }}',
+                async fetchNotifications() {
+                    this.loading = true;
+                    try {
+                        const response = await fetch(this.urlList);
+                        this.notifications = await response.json();
+                        this.hasUnread = this.notifications.some(n => !n.isRead);
+                    } catch (error) {
+                        console.error('Error fetching notifications:', error);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                async markAsRead(id) {
+                     try {
+                        // Optimistic update
+                        const notification = this.notifications.find(n => n.id === id);
+                        if (notification) notification.isRead = true;
+                        this.hasUnread = this.notifications.some(n => !n.isRead);
+
+                        // Calculate the correct URL
+                        // Since we don't have the ID in the template variable easily, we construct it:
+                        // Taking base path from urlList which is like /en/internal/notifications
+                        // and turning it into /en/internal/notifications/{id}/read
+                        const url = this.urlList + '/' + id + '/read';
+
+                        await fetch(url, { method: 'POST' });
+                    } catch (error) {
+                        console.error('Error marking as read:', error);
+                    }
+                },
+                async markAllAsRead() {
+                    try {
+                        // Optimistic update
+                        this.notifications.forEach(n => n.isRead = true);
+                        this.hasUnread = false;
+
+                        await fetch(this.urlMarkAllRead, { method: 'POST' });
+                    } catch (error) {
+                        console.error('Error marking all as read:', error);
+                    }
+                },
+                toggle() {
+                    this.open = !this.open;
+                    if (this.open) {
+                        this.fetchNotifications();
+                    }
+                }
+            }" @click.away="open = false">
+                <button type="button" @click="toggle()" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    <span x-show="hasUnread" class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+
+                <div x-show="open" style="min-width: 300px;" x-transition.origin.top.right class="absolute end-0 mt-2 min-w-80 w-80 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-100 dark:border-slate-700 py-2 z-50">
+                    <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                        <h3 class="font-semibold text-slate-900 dark:text-slate-100">{{ 'dashboard.notifications'|trans }}</h3>
+                        <div class="flex gap-2">
+                             <button type="button" @click.stop="markAllAsRead()" class="text-xs text-slate-500 hover:text-slate-700 font-medium" x-show="hasUnread">{{ 'dashboard.mark_all_read'|trans }}</button>
+                        </div>
+                    </div>
+                    
+                    <div class="max-h-96 overflow-y-auto">
+                        <template x-if="loading">
+                             <div class="p-4 text-center text-slate-500 text-sm">{{ 'dashboard.loading'|trans }}</div>
+                        </template>
+
+                        <template x-if="!loading && notifications.length === 0">
+                            <div class="p-4 text-center text-slate-500 text-sm">{{ 'dashboard.no_new_notifications'|trans }}</div>
+                        </template>
+
+                        <template x-for="notification in notifications" :key="notification.id">
+                            <div class="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-750 border-b border-slate-50 dark:border-slate-700/50 last:border-0 transition-colors group cursor-pointer" :class="{'bg-slate-50 dark:bg-slate-800/50': !notification.isRead}" @click="markAsRead(notification.id)">
+                                <div class="flex items-start gap-3">
+                                    <div class="shrink-0 mt-1">
+                                         <div class="w-2 h-2 rounded-full" :class="notification.isRead ? 'bg-slate-300 dark:bg-slate-600' : 'bg-blue-500'"></div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm text-slate-800 dark:text-slate-200" :class="{'font-semibold': !notification.isRead}" x-text="notification.data.message"></p>
+                                        <div class="flex justify-between items-center mt-1">
+                                            <p class="text-xs text-slate-500" x-text="new Date(notification.createdAt).toLocaleString()"></p>
+                                            <button @click.stop="markAsRead(notification.id)" x-show="!notification.isRead" class="text-xs text-blue-600 hover:text-blue-800 opacity-0 group-hover:opacity-100 transition-opacity">Mark read</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
 
             <!-- User Menu -->
             <div class="relative ms-2" x-data="{ open: false }">
