@@ -1,0 +1,48 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block main_menu_before %}
+    {# You can add custom content before the menu here #}
+{% endblock %}
+
+{% block content_title %}SaaS Admin Dashboard{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Welcome to the Admin Panel</h5>
+                        <p class="card-text">
+                            Use the sidebar to manage Users, Teams, Subscriptions, and Billings.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {# We can add stats widgets here in the future #}
+        <div class="row mt-4">
+             <div class="col-md-3">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Users</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Manage Users</h5>
+                        <p class="card-text">View and verify registered users.</p>
+                        <a href="{{ path('admin', { crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\UserCrudController' }) }}" class="btn btn-light btn-sm">Go to Users</a>
+                    </div>
+                </div>
+            </div>
+             <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Subscriptions</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Active Subscriptions</h5>
+                        <p class="card-text">Monitor recurring revenue.</p>
+                        <a href="{{ path('admin', { crudAction: 'index', crudControllerFqcn: 'App\\Controller\\Admin\\SubscriptionCrudController' }) }}" class="btn btn-light btn-sm">Go to Subs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
