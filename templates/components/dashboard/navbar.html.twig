@@ -66,6 +66,9 @@
                         <p class="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{{ app.user.name|default('User'|trans) }}</p>
                         <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ app.user.email }}</p>
                     </div>
+                    <a href="{{ path('invoice_list') }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-slate-700 hover:text-purple-600 dark:hover:text-white">
+                        {{ 'menu.invoices'|trans }}
+                    </a>
                      <a href="{{ path('app_profile_edit') }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-slate-700 hover:text-purple-600 dark:hover:text-white">
                         {{ 'menu.settings'|trans }}
                     </a>

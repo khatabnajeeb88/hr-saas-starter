@@ -1,6 +1,6 @@
 menu:
     dashboard: Dashboard
-    teams: Teams
+    teams: Workspaces
     subscription: Subscription
     invoices: Invoices
     payment_method: Payment Method
@@ -20,38 +20,40 @@ dashboard:
     subscription_status: Subscription
     no_plan: No Plan
     view_plans: View Plans
-    teams_count: Teams
-    manage_teams: Manage Teams
+    teams_count: Workspaces
+    manage_teams: Manage Workspaces
     invoices_count: Invoices
     view_all: View All
     recent_invoices: Recent Invoices
     quick_actions: Quick Actions
-    create_team: Create New Team
+    create_team: Create New Workspace
     update_payment: Update Payment Method
     choose_plan: Choose a Plan
-    your_teams: Your Teams
+    your_teams: Your Workspaces
     member: member
     members: members
     search_placeholder: Search
 
 team:
-    my_teams: My Teams
-    create_new: Create New Team
+    my_teams: My Workspaces
+    create_new: Create New Workspace
     manage_members: Manage Members
-    switch: Switch to Team
+    switch: Switch Workspace
+    workspace: Workspace
+    add_new_workspace: Add New Workspace
     role:
         owner: Owner
         admin: Admin
         member: Member
     create:
-        title: Create New Team
-        name_label: Team Name
-        submit: Create Team
+        title: Create New Workspace
+        name_label: Workspace Name
+        submit: Create Workspace
         cancel: Cancel
     members:
         title: Manage Members
-        back: Back to Teams
-        list_title: Team Members
+        back: Back to Workspaces
+        list_title: Workspace Members
         invite_title: Invite New Member
         invite_email: Email Address
         invite_role: Role
@@ -67,7 +69,7 @@ subscription:
         status: Status
         billing_cycle: Billing Cycle
         next_billing: Next Billing Date
-        team_members: Team Members
+        team_members: Workspace Members
         auto_renew: Auto-Renewal
         trial_active: Trial Period Active
         trial_ends: Your trial ends on %date%.
@@ -81,7 +83,7 @@ subscription:
     features: Plan Features
     plans:
         title: Choose Your Plan
-        subtitle: Select the perfect plan for your team
+        subtitle: Select the perfect plan for your workspace
         most_popular: MOST POPULAR
         get_started_free: Get Started Free
         choose: Choose %plan%
@@ -244,15 +246,15 @@ flash:
         password_short: Password must be at least 6 characters.
         plan_not_found: Invalid plan selected.
         subscription_not_found: No active subscription found.
-        team_required: You must be part of a team.
+        team_required: You must be part of a workspace.
         not_allowed: You are not allowed to perform this action.
-        team_name_required: Team name is required.
+        team_name_required: Workspace name is required.
         invitation_expired: This invitation has expired.
     success:
         profile_updated: Profile updated successfully.
         password_changed: Password changed successfully.
         subscription_updated: Subscription updated successfully.
         payment_method_updated: Payment method updated successfully.
-        team_created: Team created successfully.
-        team_switched: Switched to team %name%
+        team_created: Workspace created successfully.
+        team_switched: Switched to workspace %name%
         joined_team: You have successfully joined %name%

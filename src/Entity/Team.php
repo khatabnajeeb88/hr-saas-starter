@@ -144,7 +144,7 @@ class Team
     public function hasMember(User $user): bool
     {
         foreach ($this->members as $member) {
-            if ($member->getUser() === $user) {
+            if ($member->getUser() === $user || ($member->getUser() && $user->getId() && $member->getUser()->getId() === $user->getId())) {
                 return true;
             }
         }
@@ -158,7 +158,7 @@ class Team
     public function getMemberByUser(User $user): ?TeamMember
     {
         foreach ($this->members as $member) {
-            if ($member->getUser() === $user) {
+            if ($member->getUser() === $user || ($member->getUser() && $user->getId() && $member->getUser()->getId() === $user->getId())) {
                 return $member;
             }
         }
@@ -171,7 +171,7 @@ class Team
      */
     public function isOwner(User $user): bool
     {
-        return $this->owner === $user;
+        return $this->owner === $user || ($this->owner && $user->getId() && $this->owner->getId() === $user->getId());
     }
 
     public function getSubscription(): ?Subscription

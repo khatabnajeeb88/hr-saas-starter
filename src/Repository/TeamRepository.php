@@ -49,6 +49,14 @@ class TeamRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Team[]
+     */
+    public function findTeamsByUser(User $user): array
+    {
+        return $this->findByMember($user);
+    }
+
+    /**
      * Find a team by its slug
      */
     public function findOneBySlug(string $slug): ?Team

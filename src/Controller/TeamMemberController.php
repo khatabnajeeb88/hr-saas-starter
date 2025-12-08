@@ -8,6 +8,7 @@ use App\Entity\TeamMember;
 use App\Entity\User;
 use App\Repository\TeamInvitationRepository;
 use App\Service\TeamManager;
+use App\Security\Voter\TeamVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +27,7 @@ class TeamMemberController extends AbstractController
     #[Route('/', name: 'app_team_members', methods: ['GET'])]
     public function index(Team $team): Response
     {
-        $this->denyAccessUnlessGranted('view', $team);
+        $this->denyAccessUnlessGranted(TeamVoter::VIEW, $team);
 
         return $this->render('team/members.html.twig', [
             'team' => $team,
@@ -40,7 +41,7 @@ class TeamMemberController extends AbstractController
         EntityManagerInterface $entityManager,
         MailerInterface $mailer
     ): Response {
-        $this->denyAccessUnlessGranted('edit', $team);
+        $this->denyAccessUnlessGranted(TeamVoter::MANAGE_MEMBERS, $team);
 
         $email = $request->request->get('email');
         $role = $request->request->get('role', TeamMember::ROLE_MEMBER);
@@ -92,7 +93,7 @@ class TeamMemberController extends AbstractController
         int $memberId,
         EntityManagerInterface $entityManager
     ): Response {
-        $this->denyAccessUnlessGranted('edit', $team);
+        $this->denyAccessUnlessGranted(TeamVoter::MANAGE_MEMBERS, $team);
 
         $member = $entityManager->getRepository(TeamMember::class)->find($memberId);
 
@@ -120,7 +121,7 @@ class TeamMemberController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
-        $this->denyAccessUnlessGranted('edit', $team);
+        $this->denyAccessUnlessGranted(TeamVoter::MANAGE_MEMBERS, $team);
 
         $member = $entityManager->getRepository(TeamMember::class)->find($memberId);
         $newRole = $request->request->get('role');

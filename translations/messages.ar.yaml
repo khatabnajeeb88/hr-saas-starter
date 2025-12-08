@@ -1,6 +1,6 @@
 menu:
     dashboard: لوحة التحكم
-    teams: الفرق
+    teams: مساحات العمل
     subscription: الاشتراك
     invoices: الفواتير
     payment_method: طريقة الدفع
@@ -20,38 +20,40 @@ dashboard:
     subscription_status: حالة الاشتراك
     no_plan: لا توجد خطة
     view_plans: عرض الخطط
-    teams_count: الفرق
-    manage_teams: إدارة الفرق
+    teams_count: مساحات العمل
+    manage_teams: إدارة مساحات العمل
     invoices_count: الفواتير
     view_all: عرض الكل
     recent_invoices: الفواتير الأخيرة
     quick_actions: إجراءات سريعة
-    create_team: إنشاء فريق جديد
+    create_team: إنشاء مساحة عمل جديدة
     update_payment: تحديث طريقة الدفع
     choose_plan: اختر خطة
-    your_teams: فرقك
+    your_teams: مساحات عملك
     member: عضو
     members: أعضاء
     search_placeholder: البحث
 
 team:
-    my_teams: فرقي
-    create_new: إنشاء فريق جديد
+    my_teams: مساحات عملي
+    create_new: إنشاء مساحة عمل جديدة
     manage_members: إدارة الأعضاء
-    switch: الانتقال إلى الفريق
+    switch: الانتقال إلى مساحة العمل
+    workspace: مساحة عمل
+    add_new_workspace: إضافة مساحة عمل جديدة
     role:
         owner: المالك
         admin: مسؤول
         member: عضو
     create:
-        title: إنشاء فريق جديد
-        name_label: اسم الفريق
-        submit: إنشاء الفريق
+        title: إنشاء مساحة عمل جديدة
+        name_label: اسم مساحة العمل
+        submit: إنشاء مساحة العمل
         cancel: إلغاء
     members:
         title: إدارة الأعضاء
-        back: العودة إلى الفرق
-        list_title: أعضاء الفريق
+        back: العودة إلى مساحات العمل
+        list_title: أعضاء مساحة العمل
         invite_title: دعوة عضو جديد
         invite_email: البريد الإلكتروني
         invite_role: الدور
@@ -67,7 +69,7 @@ subscription:
         status: الحالة
         billing_cycle: دورة الفوترة
         next_billing: تاريخ الفوترة القادم
-        team_members: أعضاء الفريق
+        team_members: أعضاء مساحة العمل
         auto_renew: التجديد التلقائي
         trial_active: الفترة التجريبية نشطة
         trial_ends: تنتهي الفترة التجريبية في %date%.
@@ -81,7 +83,7 @@ subscription:
     features: مميزات الخطة
     plans:
         title: اختر خطتك
-        subtitle: اختر الخطة المثالية لفريقك
+        subtitle: اختر الخطة المثالية لمساحة عملك
         most_popular: الأكثر شعبية
         get_started_free: ابدأ مجاناً
         choose: اختر %plan%
@@ -162,7 +164,7 @@ payment_method:
     subscription_details: تفاصيل الاشتراك
     update_page:
         title: تحديث طريقة الدفع
-        secure_note: تتم معالجة معلومات الدفع الخاصة بك بشكل آمن بواسطة Tap Payments. نحن لا نقوم بتخزين تفاصيل بطاقتك الكاملة أبداً.
+    secure_note: تتم معالجة معلومات الدفع الخاصة بك بشكل آمن بواسطة Tap Payments. نحن لا نقوم بتخزين تفاصيل بطاقتك الكاملة أبداً.
     form:
         cardholder: اسم حامل البطاقة
         card_number: رقم البطاقة
@@ -244,15 +246,15 @@ flash:
         password_short: يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.
         plan_not_found: الخطة المختارة غير صالحة.
         subscription_not_found: لم يتم العثور على اشتراك نشط.
-        team_required: يجب أن تكون جزءًا من فريق.
+        team_required: يجب أن تكون جزءًا من مساحة العمل.
         not_allowed: غير مسموح لك بإجراء هذا الإجراء.
-        team_name_required: اسم الفريق مطلوب.
+        team_name_required: اسم مساحة العمل مطلوب.
         invitation_expired: انتهت صلاحية هذه الدعوة.
     success:
         profile_updated: تم تحديث الملف الشخصي بنجاح.
         password_changed: تم تغيير كلمة المرور بنجاح.
         subscription_updated: تم تحديث الاشتراك بنجاح.
         payment_method_updated: تم تحديث طريقة الدفع بنجاح.
-        team_created: تم إنشاء الفريق بنجاح.
-        team_switched: تم التبديل إلى فريق %name%
+        team_created: تم إنشاء مساحة العمل بنجاح.
+        team_switched: تم التبديل إلى مساحة العمل %name%
         joined_team: لقد انضممت بنجاح إلى %name%

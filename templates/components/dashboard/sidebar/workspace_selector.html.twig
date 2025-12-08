@@ -5,13 +5,11 @@
     <button @click="workspaceOpen = !workspaceOpen" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center text-white">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
+                <span class="font-bold text-xs">{{ current_team ? current_team.name|first|upper : '?' }}</span>
             </div>
             <div class="text-start">
-                <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">FlyonUI</p>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Workspace</p>
+                <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">{{ current_team ? current_team.name : 'No Workspace' }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">{{ 'team.workspace'|trans }}</p>
             </div>
         </div>
         <svg class="w-4 h-4 text-slate-400 transition-transform" :class="{'rotate-180': workspaceOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,29 +19,39 @@
     
     {# Workspace Dropdown #}
     <div x-show="workspaceOpen" x-collapse class="mt-2 space-y-1">
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-            <div class="w-8 h-8 rounded-lg bg-slate-800 dark:bg-slate-700 flex items-center justify-center text-white">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
-            </div>
-            <div>
-                <p class="text-sm font-medium text-slate-900 dark:text-slate-100">Shadcn/Studio</p>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Workspace</p>
-            </div>
-        </a>
-        <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-            <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-            </div>
-            <div>
-                <p class="text-sm font-medium text-slate-900 dark:text-slate-100">Themeselection</p>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Workspace</p>
-            </div>
-        </a>
-        <button class="w-full flex items-center gap-2 px-3 py-2 text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors font-medium">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            Add New Workspace
-        </button>
+        {% for member in app.user.teamMembers %}
+            {% set team = member.team %}
+            {% set isActive = current_team and current_team.id == team.id %}
+            
+            <a href="{{ path('app_workspace_switch', {id: team.id}) }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors {{ isActive ? 'bg-slate-50 dark:bg-slate-800' : '' }}">
+                <div class="w-8 h-8 rounded-lg {{ isActive ? 'bg-purple-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400' }} flex items-center justify-center">
+                    <span class="font-bold text-xs">{{ team.name|first|upper }}</span>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-slate-900 dark:text-slate-100 {{ isActive ? 'text-purple-600 dark:text-purple-400' : '' }}">{{ team.name }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ 'team.workspace'|trans }}</p>
+                </div>
+                {% if isActive %}
+                    <svg class="w-4 h-4 text-purple-600 dark:text-purple-400 ms-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                {% endif %}
+            </a>
+        {% endfor %}
+        
+        <div class="pt-2 border-t border-slate-100 dark:border-slate-700 mt-2 space-y-1">
+             <a href="{{ path('app_team_index') }}" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                {{ 'dashboard.manage_teams'|trans }}
+            </a>
+             <a href="{{ path('app_team_new') }}" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 rounded-lg transition-colors font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                {{ 'team.add_new_workspace'|trans }}
+            </a>
+        </div>
     </div>
 </div>

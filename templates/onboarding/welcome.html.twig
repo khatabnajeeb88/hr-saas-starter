@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to FlyonUI{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 border border-slate-100 dark:border-slate-700">
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4 text-purple-600 dark:text-purple-400">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Create your Workspace</h1>
+            <p class="text-slate-500 dark:text-slate-400">Welcome! Let's get started by creating a workspace for your team.</p>
+        </div>
+
+        {% for message in app.flashes('error') %}
+            <div class="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-sm">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <form action="{{ path('app_onboarding_create') }}" method="POST" class="space-y-6">
+            <div>
+                <label for="team_name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Workspace Name
+                </label>
+                <input type="text" 
+                       id="team_name" 
+                       name="team_name" 
+                       required 
+                       placeholder="e.g. Acme Corp, Design Team"
+                       class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                >
+            </div>
+
+            <button type="submit" class="w-full py-2.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2">
+                <span>Create Workspace</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
