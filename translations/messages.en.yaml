@@ -26,6 +26,7 @@ dashboard:
     your_teams: Your Teams
     member: member
     members: members
+    search_placeholder: Search
 
 team:
     my_teams: My Teams

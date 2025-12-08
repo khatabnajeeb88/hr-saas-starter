@@ -1,13 +1,13 @@
 {# Sidebar User Profile Component #}
 {# Parameters: user (User entity) #}
 
-<div class="p-6 border-b border-slate-100">
+<div class="p-6 border-b border-slate-100 dark:border-slate-700">
     <div class="text-center mb-4">
         <div class="w-20 h-20 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 mx-auto mb-3 flex items-center justify-center text-white font-bold text-2xl overflow-hidden">
             <span>{{ user.email|first|upper }}</span>
         </div>
-        <h3 class="font-semibold text-slate-900 text-sm">{{ user.name|default('Mitchell Johnson') }}</h3>
-        <p class="text-xs text-slate-500 mt-0.5">{{ user.email|default('flyonui@mitchell') }}</p>
+        <h3 class="font-semibold text-slate-900 dark:text-slate-100 text-sm">{{ user.name|default('Mitchell Johnson') }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ user.email|default('flyonui@mitchell') }}</p>
     </div>
     
     {# Social Icons #}

@@ -1,7 +1,7 @@
 {# Main Sidebar Component #}
 {# Parameters: user (User entity), currentRoute (string) #}
 
-<div class="fixed inset-y-0 start-0 w-64 bg-white border-e border-slate-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0 z-40 flex flex-col" 
+<div class="fixed inset-y-0 start-0 w-64 bg-white dark:bg-slate-800 border-e border-slate-200 dark:border-slate-700 transform transition-transform duration-200 ease-in-out lg:translate-x-0 z-40 flex flex-col" 
      :class="{'translate-x-0': sidebarOpen, '{{ app.request.locale == 'ar' ? 'translate-x-full' : '-translate-x-full' }}': !sidebarOpen}"
      id="sidebar">
     

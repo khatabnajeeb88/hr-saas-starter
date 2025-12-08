@@ -26,6 +26,7 @@ dashboard:
     your_teams: فرقك
     member: عضو
     members: أعضاء
+    search_placeholder: البحث
 
 team:
     my_teams: فرقي
