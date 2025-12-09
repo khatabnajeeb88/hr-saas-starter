@@ -46,6 +46,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
+      - name: Create .env
+        run: touch .env
+
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist
 
