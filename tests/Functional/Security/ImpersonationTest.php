@@ -21,12 +21,36 @@ class ImpersonationTest extends WebTestCase
         $admin->setRoles(['ROLE_ADMIN']);
         $em->persist($admin);
 
+        $adminTeam = new \App\Entity\Team();
+        $adminTeam->setName('Admin Team');
+        $adminTeam->setOwner($admin);
+        $adminTeam->setSlug('admin-team-' . uniqid());
+        $em->persist($adminTeam);
+
+        $adminMember = new \App\Entity\TeamMember();
+        $adminMember->setUser($admin);
+        $adminMember->setTeam($adminTeam);
+        $adminMember->setRole('owner');
+        $em->persist($adminMember);
+
         // Create User
         $user = new User();
         $user->setEmail('user_imp_' . uniqid() . '@example.com');
         $user->setPassword($hasher->hashPassword($user, 'password'));
         $user->setRoles(['ROLE_USER']);
         $em->persist($user);
+
+        $userTeam = new \App\Entity\Team();
+        $userTeam->setName('User Team');
+        $userTeam->setOwner($user);
+        $userTeam->setSlug('user-team-' . uniqid());
+        $em->persist($userTeam);
+
+        $userMember = new \App\Entity\TeamMember();
+        $userMember->setUser($user);
+        $userMember->setTeam($userTeam);
+        $userMember->setRole('owner');
+        $em->persist($userMember);
         
         $em->flush();
 
