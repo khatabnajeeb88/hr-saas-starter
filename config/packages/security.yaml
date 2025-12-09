@@ -23,6 +23,12 @@ security:
                 check_path: /api/v1/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            login_throttling:
+                max_attempts: 5
+
+
+
+
 
         api:
             pattern: ^/api/v1
@@ -35,6 +41,12 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+                enable_csrf: true
+            login_throttling:
+                max_attempts: 5
+
+
+
             logout:
                 path: app_logout
                 target: /

@@ -1,0 +1,12 @@
+framework:
+    rate_limiter:
+        # define 2 limiters
+        falsified_login:
+            policy: fixed_window
+            limit: 5
+            interval: '1 minute'
+
+        anonymous_api:
+            policy: fixed_window
+            limit: 60
+            interval: '1 minute'
