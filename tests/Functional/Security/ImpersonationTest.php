@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Tests\Functional\Security;
+
+use App\Entity\User;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+class ImpersonationTest extends WebTestCase
+{
+    public function testAdminCanImpersonateUser(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+        $em = $container->get('doctrine')->getManager();
+        $hasher = $container->get('security.user_password_hasher');
+
+        // Create Admin
+        $admin = new User();
+        $admin->setEmail('admin_imp_' . uniqid() . '@example.com');
+        $admin->setPassword($hasher->hashPassword($admin, 'password'));
+        $admin->setRoles(['ROLE_ADMIN']);
+        $em->persist($admin);
+
+        // Create User
+        $user = new User();
+        $user->setEmail('user_imp_' . uniqid() . '@example.com');
+        $user->setPassword($hasher->hashPassword($user, 'password'));
+        $user->setRoles(['ROLE_USER']);
+        $em->persist($user);
+        
+        $em->flush();
+
+        // 2. Login as Admin
+        $client->loginUser($admin);
+
+        // 3. Request homepage with switch_user
+        $client->request('GET', '/en/dashboard', ['_switch_user' => $user->getEmail()]);
+        
+        // 4. Verify we are redirected (likely) or content shows impersonation
+        $this->assertResponseIsSuccessful();
+        
+        // Check if we are seeing the page as the user.
+        // The simple way is to check for the impersonation banner we added.
+        $this->assertSelectorTextContains('body', 'Impersonation Mode');
+        $this->assertSelectorTextContains('body', 'You are currently acting as ' . $user->getEmail());
+
+        // 5. Exit impersonation
+        $client->request('GET', '/en/dashboard', ['_switch_user' => '_exit']);
+        $this->assertResponseIsSuccessful();
+        
+        // Banner should be gone
+        $this->assertSelectorNotExists('.bg-amber-100'); // Class of the banner
+    }
+
+    public function testUserCannotImpersonate(): void
+    {
+        $client = static::createClient();
+        $container = static::getContainer();
+        $em = $container->get('doctrine')->getManager();
+        $hasher = $container->get('security.user_password_hasher');
+        
+        $user = new User();
+        $user->setEmail('user_fail_imp_' . uniqid() . '@example.com');
+        $user->setPassword($hasher->hashPassword($user, 'password'));
+        $user->setRoles(['ROLE_USER']);
+        $em->persist($user);
+
+        $target = new User();
+        $target->setEmail('target_imp_' . uniqid() . '@example.com');
+        $target->setPassword($hasher->hashPassword($target, 'password'));
+        $target->setRoles(['ROLE_USER']);
+        $em->persist($target);
+
+        $em->flush();
+
+        $client->loginUser($user);
+        
+        $client->request('GET', '/en/dashboard', ['_switch_user' => $target->getEmail()]);
+        
+        // Should be forbidden
+        $this->assertResponseStatusCodeSame(403);
+    }
+}

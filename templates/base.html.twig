@@ -21,6 +21,18 @@
         {% endblock %}
     </head>
     <body class="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 min-h-screen">
+        {% if is_granted('IS_IMPERSONATOR') %}
+            <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-700 p-4 sticky top-0 z-50 flex justify-between items-center" role="alert">
+                <div>
+                    <p class="font-bold">Impersonation Mode</p>
+                    <p>You are currently acting as {{ app.user.email }}.</p>
+                </div>
+                <a href="{{ path('admin', {'_switch_user': '_exit'}) }}" class="bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">
+                    Exit Impersonation
+                </a>
+            </div>
+        {% endif %}
+
         {% block body %}{% endblock %}
         
         {% if app.user %}
