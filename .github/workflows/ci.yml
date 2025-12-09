@@ -129,11 +129,16 @@ jobs:
 #            --exclude='phpunit.dist.xml' \
 #            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
 #
-#      - name: Post-Deployment Commands
+#      - name: Install Dependencies
 #        run: |
-#          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && \
-#          composer install --no-dev --optimize-autoloader && \
-#          php bin/console doctrine:migrations:migrate --no-interaction && \
-#          php bin/console cache:clear --env=prod"
+#          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && composer install --no-dev --optimize-autoloader"
+#
+#      - name: Run Migrations
+#        run: |
+#          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && php bin/console doctrine:migrations:migrate --no-interaction"
+#
+#      - name: Clear Cache
+#        run: |
+#          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.DEPLOY_PATH }} && php bin/console cache:clear --env=prod"
 
 
