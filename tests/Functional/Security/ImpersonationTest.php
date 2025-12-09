@@ -36,7 +36,12 @@ class ImpersonationTest extends WebTestCase
         // 3. Request homepage with switch_user
         $client->request('GET', '/en/dashboard', ['_switch_user' => $user->getEmail()]);
         
-        // 4. Verify we are redirected (likely) or content shows impersonation
+        // Follow redirect if it happens (it usually does for switch_user to clear the param)
+        if ($client->getResponse()->isRedirect()) {
+            $client->followRedirect();
+        }
+        
+        // 4. Verify we are content shows impersonation
         $this->assertResponseIsSuccessful();
         
         // Check if we are seeing the page as the user.
@@ -46,10 +51,16 @@ class ImpersonationTest extends WebTestCase
 
         // 5. Exit impersonation
         $client->request('GET', '/en/dashboard', ['_switch_user' => '_exit']);
+        
+        // Follow redirect after exit
+        if ($client->getResponse()->isRedirect()) {
+            $client->followRedirect();
+        }
+
         $this->assertResponseIsSuccessful();
         
         // Banner should be gone
-        $this->assertSelectorNotExists('.bg-amber-100'); // Class of the banner
+        $this->assertSelectorNotExists('.bg-yellow-100'); // Class of the banner
     }
 
     public function testUserCannotImpersonate(): void
