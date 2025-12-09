@@ -16,14 +16,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PaymentController extends AbstractController
 {
     public function __construct(
-        private TapPaymentService $tapPaymentService,
+        private TapPaymentService $tapPaymentService, // Keep for BC or migrate logic
         private SubscriptionRepository $subscriptionRepository,
         private UrlGeneratorInterface $urlGenerator,
+        private \App\Service\PaymentGatewayFactory $gatewayFactory,
     ) {
     }
 
     #[Route('/checkout/{id}', name: 'payment_checkout')]
-    public function checkout(int $id): Response
+    public function checkout(Request $request, int $id): Response
     {
         $subscription = $this->subscriptionRepository->find($id);
 
@@ -34,21 +35,38 @@ class PaymentController extends AbstractController
         // Check permissions
         $this->denyAccessUnlessGranted('SUBSCRIPTION_MANAGE', $subscription);
 
-        // Generate URLs
-        $redirectUrl = $this->urlGenerator->generate('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $webhookUrl = $this->urlGenerator->generate('webhook_tap', [], UrlGeneratorInterface::ABSOLUTE_URL);
-
+        // Determine gateway
+        $gatewayName = $request->query->get('gateway');
+        
         try {
-            // Create charge with Tap
-            $chargeData = $this->tapPaymentService->createCharge(
+            if ($gatewayName) {
+                $gateway = $this->gatewayFactory->getGateway($gatewayName);
+            } else {
+                $gateway = $this->gatewayFactory->getDefaultGateway();
+                $gatewayName = $gateway->getName();
+            }
+            
+            // Generate URLs
+            $redirectUrl = $this->urlGenerator->generate('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $webhookUrl = $this->urlGenerator->generate('webhook_' . $gatewayName, [], UrlGeneratorInterface::ABSOLUTE_URL);
+            
+            $chargeData = $gateway->createCharge(
                 $subscription,
-                $redirectUrl,
-                $webhookUrl
+                [
+                    'redirect_url' => $redirectUrl,
+                    'webhook_url' => $webhookUrl,
+                    'source_id' => null, // Or handle saved cards
+                ]
             );
 
-            // Redirect to Tap checkout page
+            // Handle response based on gateway
+            // Tap returns transaction.url
+            // Stripe returns transaction.url (mapped in adapter) or url directly
+            
             if (isset($chargeData['transaction']['url'])) {
                 return $this->redirect($chargeData['transaction']['url']);
+            } elseif (isset($chargeData['url'])) {
+                return $this->redirect($chargeData['url']);
             }
 
             $this->addFlash('error', 'Failed to initialize payment. Please try again.');
@@ -62,23 +80,27 @@ class PaymentController extends AbstractController
     #[Route('/success', name: 'payment_success')]
     public function success(Request $request): Response
     {
+        // Handle Tap
         $tapId = $request->query->get('tap_id');
+        
+        // Handle Stripe
+        $stripeSessionId = $request->query->get('session_id');
+        $gatewayName = $request->query->get('gateway'); // We added this in Stripe return_url
 
-        if ($tapId) {
-            try {
-                // Retrieve charge details
-                $chargeData = $this->tapPaymentService->retrieveCharge($tapId);
+        $chargeData = null;
 
-                return $this->render('payment/success.html.twig', [
-                    'charge' => $chargeData,
-                ]);
-            } catch (\Exception $e) {
-                // Charge retrieval failed, but payment might still be processing
+        try {
+            if ($tapId) {
+                $chargeData = $this->gatewayFactory->getGateway('tap')->retrieveCharge($tapId);
+            } elseif ($stripeSessionId && $gatewayName === 'stripe') {
+                $chargeData = $this->gatewayFactory->getGateway('stripe')->retrieveCharge($stripeSessionId);
             }
+        } catch (\Exception $e) {
+            // Log error
         }
 
         return $this->render('payment/success.html.twig', [
-            'charge' => null,
+            'charge' => $chargeData,
         ]);
     }
 
@@ -90,6 +112,7 @@ class PaymentController extends AbstractController
 
         if ($tapId) {
             try {
+                // We can use legacy service or new gateway
                 $chargeData = $this->tapPaymentService->retrieveCharge($tapId);
                 $errorMessage = $chargeData['response']['message'] ?? 'Payment failed';
             } catch (\Exception $e) {

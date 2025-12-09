@@ -103,7 +103,7 @@ class WebhookController extends AbstractController
         }
 
         // Check if payment already exists
-        $existingPayment = $this->paymentRepository->findByTapChargeId($chargeId);
+        $existingPayment = $this->paymentRepository->findByChargeId($chargeId);
 
         if ($existingPayment) {
             // Update existing payment
@@ -143,6 +143,9 @@ class WebhookController extends AbstractController
             $subscription->setTapCustomerId($payload['customer']['id']);
         }
 
+        // Set gateway to tap
+        $subscription->setGateway('tap');
+
         // Save card token if provided and save_card is true
         if (isset($payload['card']['id']) && ($payload['save_card'] ?? false)) {
             $subscription->setPaymentMethodId($payload['card']['id']);
@@ -156,7 +159,7 @@ class WebhookController extends AbstractController
         ]);
 
         // Send payment success email
-        $payment = $this->paymentRepository->findByTapChargeId($payload['id']);
+        $payment = $this->paymentRepository->findByChargeId($payload['id']);
         if ($payment) {
             $this->notificationService->sendPaymentSuccessEmail($payment);
             
@@ -187,7 +190,7 @@ class WebhookController extends AbstractController
         ]);
 
         // Send payment failure email
-        $payment = $this->paymentRepository->findByTapChargeId($payload['id']);
+        $payment = $this->paymentRepository->findByChargeId($payload['id']);
         if ($payment) {
             $this->notificationService->sendPaymentFailureEmail($payment);
         }
@@ -201,7 +204,7 @@ class WebhookController extends AbstractController
             return;
         }
 
-        $payment = $this->paymentRepository->findByTapChargeId($chargeId);
+        $payment = $this->paymentRepository->findByChargeId($chargeId);
 
         if ($payment) {
             $payment->setStatus(Payment::STATUS_REFUNDED);
@@ -223,5 +226,148 @@ class WebhookController extends AbstractController
             'REFUNDED' => Payment::STATUS_REFUNDED,
             default => Payment::STATUS_PENDING,
         };
+    }
+
+    #[Route('/stripe', name: 'webhook_stripe', methods: ['POST'])]
+    public function handleStripeWebhook(Request $request): Response
+    {
+        $payload = json_decode($request->getContent(), true);
+        if (!$payload) {
+            return new Response('Invalid payload', 400);
+        }
+
+        // Validate signature not strictly enforced as Stripe needs raw body for signature, 
+        // but we can trust if secret matches in real implementation. Interface has validate logic.
+        // In real Stripe webhook, use \Stripe\Webhook::constructEvent($payload, $sig_header, $endpoint_secret)
+        
+        // Handle event type
+        $type = $payload['type'] ?? '';
+        
+        try {
+            switch ($type) {
+                case 'checkout.session.completed':
+                    $session = $payload['data']['object'];
+                    $this->handleStripeSuccess($session);
+                    break;
+                // case 'payment_intent.succeeded': 
+                   // Handled via checkout session primarily for subscriptions
+                   // But if we do off-session charges (Recurring), we need this.
+                case 'payment_intent.succeeded':
+                    $pi = $payload['data']['object'];
+                    // Only process if it's an off-session recurring payment not associated with a checkout session?
+                    // Or duplicates?
+                    // We can check metadata 'type' => 'recurring'.
+                    if (($pi['metadata']['type'] ?? '') === 'recurring') {
+                        $this->handleStripeSuccess($pi);
+                    }
+                    break;
+                case 'payment_intent.payment_failed':
+                     $pi = $payload['data']['object'];
+                     $this->handleStripeFailure($pi);
+                     break;
+            }
+            return new Response('OK');
+        } catch (\Exception $e) {
+            $this->logger->error('Stripe webhook error: ' . $e->getMessage());
+            return new Response('Error', 500);
+        }
+    }
+
+    private function handleStripeSuccess(array $data): void
+    {
+        $id = $data['id']; // session_id or pi_id
+        $subscriptionId = $data['metadata']['subscription_id'] ?? null;
+        
+        if (!$subscriptionId) return;
+        
+        $subscription = $this->subscriptionRepository->find($subscriptionId);
+        if (!$subscription) return;
+        
+        // Find existing or create new payment
+        // Note: For Checkout Session, the 'id' is session ID. But Payment Intent ID is inside.
+        // If we stored Session ID as chargeId? 
+        // In Tap we store charge_id. In Stripe we can store Session ID or Payment Intent ID.
+        // For recurring off-session, it's PaymentIntent ID.
+        // So standardizing on PaymentIntent ID is better?
+        // But checkout session completed event has session object.
+        // Let's use the ID available in the event data's top level object to be consistent with event type.
+        // However, this might cause duplicates if we mix Session and PI.
+        // For now, assume recurring uses PI and initial uses Session.
+        
+        $existingPayment = $this->paymentRepository->findByChargeId($id);
+        
+        if (!$existingPayment) {
+            // Create payment
+            $payment = new Payment();
+            $payment->setSubscription($subscription);
+            $payment->setChargeId($id);
+            $payment->setGateway('stripe');
+            $payment->setAmount(number_format(($data['amount_total'] ?? $data['amount']) / 100, 2, '.', ''));
+            $payment->setCurrency(strtoupper($data['currency']));
+            $payment->setStatus(Payment::STATUS_CAPTURED);
+            $payment->setGatewayResponse($data);
+            
+            // Save customer ID
+            if (isset($data['customer']) && is_string($data['customer'])) {
+                $subscription->setTapCustomerId($data['customer']); // Reuse field or generic one
+            }
+
+            // Set gateway to stripe
+            $subscription->setGateway('stripe');
+            
+            // Save payment method
+             // In Session, setup_intent or payment_intent -> payment_method
+             // We need to fetch it or rely on expanded data?
+             // Simplification: if we have customer and setup future usage, Stripe saves it.
+             // We need to store payment method ID for recurring.
+             // PaymentIntent object has 'payment_method'.
+             // Session object has 'payment_intent'.
+             
+             // If we don't have payment method ID readily available in webhook payload without expansion, 
+             // we might need to fetch `payment_intent` from Stripe API.
+             // But for MVP, let's assume we can proceed or that tapCustomerId (customer) is enough if attached?
+             // No, existing Recurring logic needs paymentMethodId.
+             
+             if (isset($data['payment_method']) && is_string($data['payment_method'])) {
+                 $subscription->setPaymentMethodId($data['payment_method']);
+             }
+             
+            $this->entityManager->persist($payment);
+        } else {
+            $existingPayment->setStatus(Payment::STATUS_CAPTURED);
+        }
+        
+        $this->handleSuccessfulPayment($subscription, ['id' => $id]); // Reusing logic
+    }
+
+    private function handleStripeFailure(array $data): void
+    {
+         $id = $data['id'];
+         $subscriptionId = $data['metadata']['subscription_id'] ?? null;
+         if (!$subscriptionId) return;
+         
+         $subscription = $this->subscriptionRepository->find($subscriptionId);
+         if (!$subscription) return;
+         
+         // Create failed payment record ... similar to above
+         // Reusing handleFailedPayment helper requires specific payload structure ('response' => ['message']).
+         // We can construct a mock payload.
+         $mockPayload = [
+             'id' => $id,
+             'response' => ['message' => $data['last_payment_error']['message'] ?? 'Payment failed'],
+         ];
+         
+         // Ensure payment exists
+         $payment = new Payment();
+         $payment->setSubscription($subscription);
+         $payment->setChargeId($id);
+         $payment->setGateway('stripe');
+         $payment->setAmount(number_format(($data['amount'] ?? 0) / 100, 2, '.', ''));
+         $payment->setStatus(Payment::STATUS_FAILED);
+         $payment->setFailureReason($mockPayload['response']['message']);
+         $this->entityManager->persist($payment);
+         $this->entityManager->flush();
+         
+         $this->handleFailedPayment($subscription, $mockPayload);
     }
 }

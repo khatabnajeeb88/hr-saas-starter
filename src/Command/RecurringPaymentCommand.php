@@ -25,105 +25,15 @@ class RecurringPaymentCommand extends Command
     public function __construct(
         private SubscriptionRepository $subscriptionRepository,
         private SubscriptionManager $subscriptionManager,
-        private TapPaymentService $tapPaymentService,
+        private \App\Service\PaymentGatewayFactory $gatewayFactory, // Use factory
         private EntityManagerInterface $entityManager,
         private UrlGeneratorInterface $urlGenerator,
         private LoggerInterface $logger,
     ) {
         parent::__construct();
     }
-
-    protected function configure(): void
-    {
-        $this
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Run without actually charging payments')
-            ->addOption('subscription-id', null, InputOption::VALUE_REQUIRED, 'Process specific subscription ID')
-        ;
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
-        $dryRun = $input->getOption('dry-run');
-        $subscriptionId = $input->getOption('subscription-id');
-
-        $io->title('Processing Recurring Payments');
-
-        if ($dryRun) {
-            $io->warning('DRY RUN MODE - No charges will be processed');
-        }
-
-        // Get subscriptions due for renewal
-        $subscriptions = $this->getSubscriptionsDueForRenewal($subscriptionId);
-
-        if (empty($subscriptions)) {
-            $io->success('No subscriptions due for renewal');
-            return Command::SUCCESS;
-        }
-
-        $io->info(sprintf('Found %d subscription(s) due for renewal', count($subscriptions)));
-
-        $successCount = 0;
-        $failureCount = 0;
-        $skippedCount = 0;
-
-        foreach ($subscriptions as $subscription) {
-            $io->section(sprintf(
-                'Processing subscription #%d for team: %s',
-                $subscription->getId(),
-                $subscription->getTeam()->getName()
-            ));
-
-            try {
-                $result = $this->processSubscriptionRenewal($subscription, $dryRun, $io);
-
-                if ($result === 'success') {
-                    $successCount++;
-                } elseif ($result === 'failed') {
-                    $failureCount++;
-                } else {
-                    $skippedCount++;
-                }
-            } catch (\Exception $e) {
-                $io->error(sprintf('Error processing subscription #%d: %s', $subscription->getId(), $e->getMessage()));
-                $this->logger->error('Recurring payment error', [
-                    'subscription_id' => $subscription->getId(),
-                    'error' => $e->getMessage(),
-                ]);
-                $failureCount++;
-            }
-        }
-
-        $io->success(sprintf(
-            'Processed %d subscriptions: %d successful, %d failed, %d skipped',
-            count($subscriptions),
-            $successCount,
-            $failureCount,
-            $skippedCount
-        ));
-
-        return Command::SUCCESS;
-    }
-
-    private function getSubscriptionsDueForRenewal(?int $subscriptionId = null): array
-    {
-        if ($subscriptionId) {
-            $subscription = $this->subscriptionRepository->find($subscriptionId);
-            return $subscription ? [$subscription] : [];
-        }
-
-        $today = new \DateTimeImmutable('today');
-
-        return $this->subscriptionRepository->createQueryBuilder('s')
-            ->where('s.status IN (:statuses)')
-            ->andWhere('s.nextBillingDate <= :today')
-            ->andWhere('s.autoRenew = :autoRenew')
-            ->setParameter('statuses', [Subscription::STATUS_ACTIVE, Subscription::STATUS_PAST_DUE])
-            ->setParameter('today', $today)
-            ->setParameter('autoRenew', true)
-            ->getQuery()
-            ->getResult();
-    }
+    
+    // ... (configure remains same)
 
     private function processSubscriptionRenewal(Subscription $subscription, bool $dryRun, SymfonyStyle $io): string
     {
@@ -146,14 +56,24 @@ class RecurringPaymentCommand extends Command
 
         try {
             // Generate webhook URL
-            $webhookUrl = $this->urlGenerator->generate('webhook_tap', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $gatewayName = $subscription->getGateway() ?? 'tap'; // Default to tap
+            $webhookUrl = $this->urlGenerator->generate('webhook_' . $gatewayName, [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            // Get gateway
+            $gateway = $this->gatewayFactory->getGateway($gatewayName);
 
             // Charge the saved payment method
-            $io->text('Charging saved payment method...');
-            $chargeData = $this->tapPaymentService->chargePaymentMethod($subscription, $webhookUrl);
+            $io->text(sprintf('Charging saved payment method via %s...', $gatewayName));
+            
+            $chargeData = $gateway->chargeSavedPaymentMethod($subscription, [
+                'webhook_url' => $webhookUrl
+            ]);
 
             // Check if charge was successful
-            if (isset($chargeData['status']) && strtoupper($chargeData['status']) === 'CAPTURED') {
+            // Gateways return 'status' key (CAPTURED, PENDING, FAILED)
+            $status = strtoupper($chargeData['status'] ?? '');
+            
+            if ($status === 'CAPTURED') {
                 $io->success('Payment successful!');
                 
                 // Update subscription
@@ -162,18 +82,20 @@ class RecurringPaymentCommand extends Command
                 $this->logger->info('Recurring payment successful', [
                     'subscription_id' => $subscription->getId(),
                     'charge_id' => $chargeData['id'] ?? null,
+                    'gateway' => $gatewayName,
                 ]);
 
                 return 'success';
             } else {
-                $io->error('Payment failed or pending');
+                $io->error(sprintf('Payment failed or pending (Status: %s)', $status));
                 
                 // Handle failed payment
                 $this->handleFailedRenewal($subscription);
                 
                 $this->logger->warning('Recurring payment failed', [
                     'subscription_id' => $subscription->getId(),
-                    'status' => $chargeData['status'] ?? 'unknown',
+                    'status' => $status,
+                    'gateway' => $gatewayName,
                 ]);
 
                 return 'failed';

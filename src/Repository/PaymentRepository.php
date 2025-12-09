@@ -18,12 +18,12 @@ class PaymentRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find payment by Tap charge ID
+     * Find payment by charge ID
      */
-    public function findByTapChargeId(string $chargeId): ?Payment
+    public function findByChargeId(string $chargeId): ?Payment
     {
         return $this->createQueryBuilder('p')
-            ->where('p.tapChargeId = :chargeId')
+            ->where('p.chargeId = :chargeId')
             ->setParameter('chargeId', $chargeId)
             ->getQuery()
             ->getOneOrNullResult();

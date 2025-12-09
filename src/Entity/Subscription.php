@@ -75,6 +75,10 @@ class Subscription
     #[Groups(['subscription:read', 'subscription:write'])]
     private ?bool $autoRenew = true;
 
+    #[ORM\Column(length: 50, options: ['default' => 'tap'])]
+    #[Groups(['subscription:read'])]
+    private ?string $gateway = 'tap';
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $tapCustomerId = null;
 
@@ -225,6 +229,19 @@ class Subscription
     public function setAutoRenew(bool $autoRenew): static
     {
         $this->autoRenew = $autoRenew;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getGateway(): ?string
+    {
+        return $this->gateway;
+    }
+
+    public function setGateway(string $gateway): static
+    {
+        $this->gateway = $gateway;
         $this->updatedAt = new \DateTimeImmutable();
 
         return $this;

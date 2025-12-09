@@ -208,7 +208,7 @@ class TapPaymentService
     {
         $payment = new Payment();
         $payment->setSubscription($subscription);
-        $payment->setTapChargeId($chargeData['id']);
+        $payment->setChargeId($chargeData['id']);
         $payment->setAmount($chargeData['amount']);
         $payment->setCurrency($chargeData['currency']);
         $payment->setStatus($this->mapTapStatusToPaymentStatus($chargeData['status']));

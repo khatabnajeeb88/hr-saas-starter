@@ -25,8 +25,11 @@ class Payment
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Subscription $subscription = null;
 
+    #[ORM\Column(length: 50, options: ['default' => 'tap'])]
+    private ?string $gateway = 'tap';
+
     #[ORM\Column(length: 255)]
-    private ?string $tapChargeId = null;
+    private ?string $chargeId = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $amount = null;
@@ -88,14 +91,27 @@ class Payment
         return $this;
     }
 
-    public function getTapChargeId(): ?string
+    public function getGateway(): ?string
     {
-        return $this->tapChargeId;
+        return $this->gateway;
     }
 
-    public function setTapChargeId(string $tapChargeId): static
+    public function setGateway(string $gateway): static
     {
-        $this->tapChargeId = $tapChargeId;
+        $this->gateway = $gateway;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        return $this;
+    }
+
+    public function getChargeId(): ?string
+    {
+        return $this->chargeId;
+    }
+
+    public function setChargeId(string $chargeId): static
+    {
+        $this->chargeId = $chargeId;
         $this->updatedAt = new \DateTimeImmutable();
 
         return $this;
