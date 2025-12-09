@@ -63,6 +63,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToRoute('Payments', 'fas fa-money-bill-wave', 'admin_payment_index', ['_locale' => $locale]);
         
         yield MenuItem::section('System');
+        yield MenuItem::linkToCrud('Audit Logs', 'fas fa-list-alt', \App\Entity\AuditLog::class);
         yield MenuItem::linkToUrl('Return to App', 'fas fa-arrow-left', '/');
     }
 }

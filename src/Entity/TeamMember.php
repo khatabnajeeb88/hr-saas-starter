@@ -29,7 +29,7 @@ class TeamMember
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Team $team = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'teamMembers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
