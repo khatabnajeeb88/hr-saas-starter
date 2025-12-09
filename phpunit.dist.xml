@@ -20,10 +20,6 @@
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
-            <exclude>tests/E2E</exclude>
-        </testsuite>
-        <testsuite name="E2E">
-            <directory>tests/E2E</directory>
         </testsuite>
     </testsuites>
 
