@@ -54,7 +54,10 @@ jobs:
           echo "DATABASE_URL=mysql://root:root@127.0.0.1:3306/starter_test?serverVersion=5.7.39&charset=utf8mb4" > .env.test.local
 
       - name: Create Database Schema
-        run: php bin/console doctrine:schema:create --env=test
+        run: php bin/console doctrine:database:create --env=test --if-not-exists
+
+      - name: Run Migrations
+        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
 
       - name: Run PHPUnit
         run: php bin/phpunit

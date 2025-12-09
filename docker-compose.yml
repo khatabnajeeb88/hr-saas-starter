@@ -9,14 +9,42 @@ services:
     volumes:
       - .:/var/www/html
     environment:
-      DATABASE_URL: "mysql://root:root@host.docker.internal:3306/starter?serverVersion=5.7.39&charset=utf8mb4"
+      DATABASE_URL: "mysql://root:root@database:3306/starter?serverVersion=5.7.39&charset=utf8mb4"
       MESSENGER_TRANSPORT_DSN: "redis://redis:6379/messages"
       MAILER_DSN: "smtp://mailpit:1025"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
+      - database
       - redis
       - mailpit
+    networks:
+      - saas_network
+
+  database:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: saas_database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: starter
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - saas_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: saas_pma
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
     networks:
       - saas_network
 
@@ -54,6 +82,7 @@ services:
 
 volumes:
   redis_data:
+  db_data:
 
 networks:
   saas_network:
