@@ -57,6 +57,12 @@ jobs:
           echo "MERCURE_URL=https://example.com/.well-known/mercure" >> .env
           echo "MERCURE_PUBLIC_URL=https://example.com/.well-known/mercure" >> .env
           echo "MERCURE_JWT_SECRET=!ChangeThisMercureHubJWTSecretKey!" >> .env
+          echo "TAP_SECRET_KEY=sk_test_ci" >> .env
+          echo "TAP_PUBLIC_KEY=pk_test_ci" >> .env
+          echo "TAP_API_URL=https://api.tap.company/v2" >> .env
+          echo "STRIPE_SECRET_KEY=sk_test_ci" >> .env
+          echo "STRIPE_PUBLIC_KEY=pk_test_ci" >> .env
+          echo "DEFAULT_PAYMENT_GATEWAY=tap" >> .env
 
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist
