@@ -52,22 +52,15 @@ class DashboardController extends AbstractDashboardController
 
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::section('Users & Teams');
-        yield MenuItem::linkToCrud('Users', 'fas fa-users', User::class)
-            ->setRouteParams(['_locale' => $locale]);
-        yield MenuItem::linkToCrud('Team Invites', 'fas fa-envelope', TeamInvitation::class)
-            ->setRouteParams(['_locale' => $locale]);
-        yield MenuItem::linkToCrud('Social Providers', 'fas fa-share-alt', SocialProvider::class)
-            ->setRouteParams(['_locale' => $locale]);
+        yield MenuItem::linkToRoute('Users', 'fas fa-users', 'admin_user_index', ['_locale' => $locale]);
+        yield MenuItem::linkToRoute('Team Invites', 'fas fa-envelope', 'admin_team_invitation_index', ['_locale' => $locale]);
+        yield MenuItem::linkToRoute('Social Providers', 'fas fa-share-alt', 'admin_social_provider_index', ['_locale' => $locale]);
         
         yield MenuItem::section('Billing');
-        yield MenuItem::linkToCrud('Plans', 'fas fa-tags', SubscriptionPlan::class)
-            ->setRouteParams(['_locale' => $locale]);
-        yield MenuItem::linkToCrud('Subscriptions', 'fas fa-file-contract', Subscription::class)
-            ->setRouteParams(['_locale' => $locale]);
-        yield MenuItem::linkToCrud('Invoices', 'fas fa-file-invoice-dollar', Invoice::class)
-            ->setRouteParams(['_locale' => $locale]);
-        yield MenuItem::linkToCrud('Payments', 'fas fa-money-bill-wave', Payment::class)
-            ->setRouteParams(['_locale' => $locale]);
+        yield MenuItem::linkToRoute('Plans', 'fas fa-tags', 'admin_subscription_plan_index', ['_locale' => $locale]);
+        yield MenuItem::linkToRoute('Subscriptions', 'fas fa-file-contract', 'admin_subscription_index', ['_locale' => $locale]);
+        yield MenuItem::linkToRoute('Invoices', 'fas fa-file-invoice-dollar', 'admin_invoice_index', ['_locale' => $locale]);
+        yield MenuItem::linkToRoute('Payments', 'fas fa-money-bill-wave', 'admin_payment_index', ['_locale' => $locale]);
         
         yield MenuItem::section('System');
         yield MenuItem::linkToUrl('Return to App', 'fas fa-arrow-left', '/');
