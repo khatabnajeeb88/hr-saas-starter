@@ -12,6 +12,7 @@ class TenantFilter extends SQLFilter
     {
         // Check if the entity has the TenantAwareTrait
         $traits = $targetEntity->reflClass->getTraitNames();
+        
         if (!in_array(TenantAwareTrait::class, $traits)) {
             return '';
         }

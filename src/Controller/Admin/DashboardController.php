@@ -187,6 +187,7 @@ class DashboardController extends AbstractDashboardController
         
         yield MenuItem::section('System');
         yield MenuItem::linkToUrl('Audit Logs', 'fas fa-list-alt', $this->generateUrl('admin_audit_log_index', ['_locale' => $locale]));
+        yield MenuItem::linkToCrud('Announcements', 'fas fa-bullhorn', \App\Entity\Announcement::class);
         yield MenuItem::linkToUrl('Email Previews', 'fas fa-envelope-open-text', $this->generateUrl('admin_email_preview_index', ['_locale' => $locale]));
         yield MenuItem::linkToUrl('Return to App', 'fas fa-arrow-left', '/');
     }

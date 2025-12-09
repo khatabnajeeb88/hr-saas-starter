@@ -47,6 +47,7 @@
                 notifications: [],
                 loading: false,
                 hasUnread: false,
+                selectedAnnouncement: null,
                 urlList: '{{ path('internal_notifications_list') }}',
                 urlMarkAllRead: '{{ path('internal_notification_mark_all_read') }}',
                 async fetchNotifications() {
@@ -69,9 +70,6 @@
                         this.hasUnread = this.notifications.some(n => !n.isRead);
 
                         // Calculate the correct URL
-                        // Since we don't have the ID in the template variable easily, we construct it:
-                        // Taking base path from urlList which is like /en/internal/notifications
-                        // and turning it into /en/internal/notifications/{id}/read
                         const url = this.urlList + '/' + id + '/read';
 
                         await fetch(url, { method: 'POST' });
@@ -88,6 +86,18 @@
                         await fetch(this.urlMarkAllRead, { method: 'POST' });
                     } catch (error) {
                         console.error('Error marking all as read:', error);
+                    }
+                },
+                handleNotificationClick(notification) {
+                    // Always mark as read
+                    if (!notification.isRead) {
+                        this.markAsRead(notification.id);
+                    }
+
+                    // If it is an announcement, open modal
+                    if (notification.data.is_announcement) {
+                        this.selectedAnnouncement = notification;
+                        this.open = false; // Close dropdown
                     }
                 },
                 toggle() {
@@ -122,7 +132,7 @@
                         </template>
 
                         <template x-for="notification in notifications" :key="notification.id">
-                            <div class="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-750 border-b border-slate-50 dark:border-slate-700/50 last:border-0 transition-colors group cursor-pointer" :class="{'bg-slate-50 dark:bg-slate-800/50': !notification.isRead}" @click="markAsRead(notification.id)">
+                            <div class="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-750 border-b border-slate-50 dark:border-slate-700/50 last:border-0 transition-colors group cursor-pointer" :class="{'bg-slate-50 dark:bg-slate-800/50': !notification.isRead}" @click="handleNotificationClick(notification)">
                                 <div class="flex items-start gap-3">
                                     <div class="shrink-0 mt-1">
                                          <div class="w-2 h-2 rounded-full" :class="notification.isRead ? 'bg-slate-300 dark:bg-slate-600' : 'bg-blue-500'"></div>
@@ -137,6 +147,41 @@
                                 </div>
                             </div>
                         </template>
+                    </div>
+                </div>
+
+                <!-- Announcement Modal -->
+                <div x-show="selectedAnnouncement" 
+                     style="display: none"
+                     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                     x-transition.opacity>
+                    <div class="bg-white dark:bg-slate-800 rounded-lg shadow-2xl max-w-lg w-full mx-4 overflow-hidden" 
+                         @click.away="selectedAnnouncement = null"
+                         x-transition.scale>
+                        
+                        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between" :class="{
+                            'bg-blue-50 dark:bg-blue-900/20': selectedAnnouncement?.type === 'info',
+                            'bg-amber-50 dark:bg-amber-900/20': selectedAnnouncement?.type === 'warning',
+                            'bg-red-50 dark:bg-red-900/20': selectedAnnouncement?.type === 'danger',
+                            'bg-emerald-50 dark:bg-emerald-900/20': selectedAnnouncement?.type === 'success'
+                        }">
+                            <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100" x-text="selectedAnnouncement?.data?.message"></h3>
+                            <button @click="selectedAnnouncement = null" class="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-300">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="p-6 prose dark:prose-invert max-w-none">
+                            <div x-html="selectedAnnouncement?.data?.description"></div>
+                        </div>
+
+                        <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 flex justify-end">
+                            <button @click="selectedAnnouncement = null" class="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors">
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
