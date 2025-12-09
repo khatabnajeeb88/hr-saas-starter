@@ -1,8 +1,8 @@
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse';
-import dashboardLayout from './components/dashboardLayout';
-import dropdown from './components/dropdown';
-import notifications from './components/notifications';
+import dashboardLayout from './components/dashboardLayout.js';
+import dropdown from './components/dropdown.js';
+import notifications from './components/notifications.js';
 
 Alpine.plugin(collapse);
 
