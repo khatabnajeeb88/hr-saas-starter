@@ -54,6 +54,9 @@ jobs:
           echo "DATABASE_URL=mysql://root:root@127.0.0.1:3306/starter_test?serverVersion=5.7.39&charset=utf8mb4" >> .env
           echo "MESSENGER_TRANSPORT_DSN=redis://localhost:6379/messages" >> .env
           echo "MAILER_DSN=null://null" >> .env
+          echo "MERCURE_URL=https://example.com/.well-known/mercure" >> .env
+          echo "MERCURE_PUBLIC_URL=https://example.com/.well-known/mercure" >> .env
+          echo "MERCURE_JWT_SECRET=!ChangeThisMercureHubJWTSecretKey!" >> .env
 
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist

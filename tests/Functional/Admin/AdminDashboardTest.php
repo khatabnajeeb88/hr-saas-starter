@@ -32,6 +32,21 @@ class AdminDashboardTest extends WebTestCase
         $user->setRoles(['ROLE_USER']);
         
         $entityManager->persist($user);
+        $entityManager->persist($user);
+
+        // Create a team for the user to bypass onboarding
+        $team = new \App\Entity\Team();
+        $team->setName('User Team');
+        $team->setSlug('user-team-' . uniqid());
+        $team->setOwner($user);
+        $entityManager->persist($team);
+
+        $teamMember = new \App\Entity\TeamMember();
+        $teamMember->setUser($user);
+        $teamMember->setTeam($team);
+        $teamMember->setRole(\App\Entity\TeamMember::ROLE_OWNER);
+        $entityManager->persist($teamMember);
+
         $entityManager->flush();
 
         // Login as regular user
@@ -57,6 +72,21 @@ class AdminDashboardTest extends WebTestCase
         $admin->setRoles(['ROLE_ADMIN']);
         
         $entityManager->persist($admin);
+        $entityManager->persist($admin);
+
+        // Create a team for the admin to bypass onboarding
+        $team = new \App\Entity\Team();
+        $team->setName('Admin Team');
+        $team->setSlug('admin-team-' . uniqid());
+        $team->setOwner($admin);
+        $entityManager->persist($team);
+
+        $teamMember = new \App\Entity\TeamMember();
+        $teamMember->setUser($admin);
+        $teamMember->setTeam($team);
+        $teamMember->setRole(\App\Entity\TeamMember::ROLE_OWNER);
+        $entityManager->persist($teamMember);
+
         $entityManager->flush();
 
         // Login as admin
