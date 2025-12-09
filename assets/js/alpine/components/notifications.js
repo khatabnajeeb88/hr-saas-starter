@@ -61,6 +61,22 @@ export default (config) => ({
         }
     },
 
+    init() {
+        window.addEventListener('notification:received', (event) => {
+            const data = event.detail;
+            // Assuming data matches the structure, or we might need to fetch fresh list.
+            // For simplicity/accuracy, let's fetch fresh list or prepend if structure matches.
+            // The Mercure payload might be just the data, not the full DB record structure used in the list.
+            // Let's re-fetch for consistency for now, or construct a fake object.
+            
+            // If we re-fetch:
+            this.fetchNotifications();
+            this.hasUnread = true;
+        });
+        
+        this.fetchNotifications();
+    },
+
     toggle() {
         this.open = !this.open;
         if (this.open) {

@@ -38,6 +38,9 @@ export default class extends Controller {
         toast.innerText = data.type + ': ' + JSON.stringify(data.data);
         
         document.body.appendChild(toast);
+        
+        // Dispatch event for Alpine.js components
+        window.dispatchEvent(new CustomEvent('notification:received', { detail: data }));
 
         // Remove after 3 seconds
         setTimeout(() => {
