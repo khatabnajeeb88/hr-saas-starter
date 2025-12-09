@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-600 dark:text-slate-300" dir="{{ app.request.locale == 'ar' ? 'rtl' : 'ltr' }}" x-data="{ sidebarOpen: false, profileDropdown: false, dashboardDropdown: true, workspaceDropdown: false }">
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-600 dark:text-slate-300" dir="{{ app.request.locale == 'ar' ? 'rtl' : 'ltr' }}" x-data="dashboardLayout">
     {# Sidebar Component #}
     {% include 'components/dashboard/sidebar.html.twig' with {
         'user': app.user,
@@ -9,7 +9,7 @@
     } %}
     
     {# Mobile Overlay #}
-    <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden"></div>
+    <div x-show="sidebarOpen" @click="closeSidebar()" x-transition.opacity class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden"></div>
 
     {# Main Content #}
     <div class="lg:ms-64 transition-all duration-200 min-h-screen flex flex-col">
@@ -38,6 +38,5 @@
     </div>
 </div>
 
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 {% endblock %}
 

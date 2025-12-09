@@ -1,7 +1,7 @@
 <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-20">
     <div class="flex items-center justify-between h-16 px-6">
         <!-- Mobile Toggle -->
-        <button class="lg:hidden text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 me-4" @click="sidebarOpen = !sidebarOpen">
+        <button class="lg:hidden text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 me-4" @click="toggleSidebar()">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
@@ -25,14 +25,14 @@
         <div class="flex items-center space-s-4 ms-4">
             
             <!-- Language Switcher -->
-            <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors relative">
+            <div class="relative" x-data="dropdown">
+                <button @click="toggle()" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors relative">
                      <span class="sr-only">{{ 'dashboard.language_switcher'|trans }}</span>
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
                     </svg>
                 </button>
-                 <div x-show="open" @click.away="open = false" x-transition.origin.top.right class="absolute end-0 mt-2 w-32 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-100 dark:border-slate-700 py-1 z-50">
+                 <div x-show="open" @click.away="close()" x-transition.origin.top.right class="absolute end-0 mt-2 w-32 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-100 dark:border-slate-700 py-1 z-50">
                     <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': 'en'})) }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-slate-700 hover:text-purple-600 dark:hover:text-white {{ app.request.locale == 'en' ? 'font-bold text-purple-600 dark:text-purple-400' : '' }}">English</a>
                     <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': 'ar'})) }}" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-purple-50 dark:hover:bg-slate-700 hover:text-purple-600 dark:hover:text-white {{ app.request.locale == 'ar' ? 'font-bold text-purple-600 dark:text-purple-400' : '' }}">العربية</a>
                 </div>
@@ -42,71 +42,10 @@
             {% include 'components/theme_switcher.html.twig' %}
 
             <!-- Notifications -->
-            <div class="relative" x-data="{ 
-                open: false,
-                notifications: [],
-                loading: false,
-                hasUnread: false,
-                selectedAnnouncement: null,
+            <div class="relative" x-data="notifications({
                 urlList: '{{ path('internal_notifications_list') }}',
-                urlMarkAllRead: '{{ path('internal_notification_mark_all_read') }}',
-                async fetchNotifications() {
-                    this.loading = true;
-                    try {
-                        const response = await fetch(this.urlList);
-                        this.notifications = await response.json();
-                        this.hasUnread = this.notifications.some(n => !n.isRead);
-                    } catch (error) {
-                        console.error('Error fetching notifications:', error);
-                    } finally {
-                        this.loading = false;
-                    }
-                },
-                async markAsRead(id) {
-                     try {
-                        // Optimistic update
-                        const notification = this.notifications.find(n => n.id === id);
-                        if (notification) notification.isRead = true;
-                        this.hasUnread = this.notifications.some(n => !n.isRead);
-
-                        // Calculate the correct URL
-                        const url = this.urlList + '/' + id + '/read';
-
-                        await fetch(url, { method: 'POST' });
-                    } catch (error) {
-                        console.error('Error marking as read:', error);
-                    }
-                },
-                async markAllAsRead() {
-                    try {
-                        // Optimistic update
-                        this.notifications.forEach(n => n.isRead = true);
-                        this.hasUnread = false;
-
-                        await fetch(this.urlMarkAllRead, { method: 'POST' });
-                    } catch (error) {
-                        console.error('Error marking all as read:', error);
-                    }
-                },
-                handleNotificationClick(notification) {
-                    // Always mark as read
-                    if (!notification.isRead) {
-                        this.markAsRead(notification.id);
-                    }
-
-                    // If it is an announcement, open modal
-                    if (notification.data.is_announcement) {
-                        this.selectedAnnouncement = notification;
-                        this.open = false; // Close dropdown
-                    }
-                },
-                toggle() {
-                    this.open = !this.open;
-                    if (this.open) {
-                        this.fetchNotifications();
-                    }
-                }
-            }" @click.away="open = false">
+                urlMarkAllRead: '{{ path('internal_notification_mark_all_read') }}'
+            })" @click.away="close()">
                 <button type="button" @click="toggle()" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors relative">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
@@ -187,8 +126,8 @@
             </div>
 
             <!-- User Menu -->
-            <div class="relative ms-2" x-data="{ open: false }">
-                <button @click="open = !open" class="flex items-center">
+            <div class="relative ms-2" x-data="dropdown">
+                <button @click="toggle()" class="flex items-center">
                     <div class="w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-700 overflow-hidden">
                         {% if app.user.avatar %}
                             <img src="{{ app.user.avatar }}" alt="{{ app.user.name }}" class="w-full h-full object-cover">
@@ -198,7 +137,7 @@
                     </div>
                 </button>
                 
-                <div x-show="open" @click.away="open = false" x-transition.origin.top.right class="absolute end-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-100 dark:border-slate-700 py-1 z-50">
+                <div x-show="open" @click.away="close()" x-transition.origin.top.right class="absolute end-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-100 dark:border-slate-700 py-1 z-50">
                     <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-700">
                         <p class="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{{ app.user.name|default('User'|trans) }}</p>
                         <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ app.user.email }}</p>

@@ -1,8 +1,8 @@
 {# Workspace Selector Component #}
 {# Parameters: none (can be extended to accept workspace data) #}
 
-<div class="border-t border-slate-100 dark:border-slate-700 p-3" x-data="{ workspaceOpen: false }">
-    <button @click="workspaceOpen = !workspaceOpen" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<div class="border-t border-slate-100 dark:border-slate-700 p-3" x-data="dropdown">
+    <button @click="toggle()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
         <div class="flex items-center gap-3">
             <div class="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center text-white">
                 <span class="font-bold text-xs">{{ current_team ? current_team.name|first|upper : '?' }}</span>
@@ -12,13 +12,13 @@
                 <p class="text-xs text-slate-500 dark:text-slate-400">{{ 'team.workspace'|trans }}</p>
             </div>
         </div>
-        <svg class="w-4 h-4 text-slate-400 transition-transform" :class="{'rotate-180': workspaceOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-slate-400 transition-transform" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
         </svg>
     </button>
     
     {# Workspace Dropdown #}
-    <div x-show="workspaceOpen" x-collapse class="mt-2 space-y-1">
+    <div x-show="open" x-collapse class="mt-2 space-y-1">
         {% for member in app.user.teamMembers %}
             {% set team = member.team %}
             {% set isActive = current_team and current_team.id == team.id %}
