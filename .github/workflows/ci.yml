@@ -47,7 +47,10 @@ jobs:
             ${{ runner.os }}-composer-
 
       - name: Create .env
-        run: touch .env
+        run: |
+          touch .env
+          echo "DEFAULT_URI=http://localhost" >> .env
+          echo "APP_SECRET=ci-secret" >> .env
 
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist
