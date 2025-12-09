@@ -49,4 +49,4 @@ services:
     App\Service\PaymentGatewayFactory:
         arguments:
             $gateways: !tagged_iterator app.payment_gateway
-            $defaultGatewayName: '%env(default:DEFAULT_PAYMENT_GATEWAY)%'
+            $defaultGatewayName: '%env(default:tap:DEFAULT_PAYMENT_GATEWAY)%'
