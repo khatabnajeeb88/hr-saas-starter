@@ -14,16 +14,26 @@ class CheckoutTest extends WebTestCase
     {
         $client = static::createClient();
 
-        // Mock TapPaymentService
-        $paymentService = $this->createMock(TapPaymentService::class);
-        $paymentService->method('createCharge')
+        // Mock PaymentGatewayInterface
+        $gateway = $this->createMock(\App\Payment\Gateway\PaymentGatewayInterface::class);
+        $gateway->method('getName')->willReturn('tap');
+        $gateway->method('createCharge')
             ->willReturn([
                 'transaction' => [
                     'url' => 'https://sandbox.tap.company/pay/test_url'
                 ]
             ]);
 
-        $client->getContainer()->set(TapPaymentService::class, $paymentService);
+        // Mock PaymentGatewayFactory
+        $gatewayFactory = $this->createMock(\App\Service\PaymentGatewayFactory::class);
+        $gatewayFactory->method('getDefaultGateway')->willReturn($gateway);
+        $gatewayFactory->method('getGateway')->willReturn($gateway);
+
+        $client->getContainer()->set(\App\Service\PaymentGatewayFactory::class, $gatewayFactory);
+        
+        // Also mock TapPaymentService as it's required by controller constructor
+        $tapPaymentService = $this->createMock(TapPaymentService::class);
+        $client->getContainer()->set(TapPaymentService::class, $tapPaymentService);
 
         // Create User & Plan
         $container = static::getContainer();
