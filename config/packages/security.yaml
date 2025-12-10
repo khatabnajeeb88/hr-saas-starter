@@ -34,6 +34,7 @@ security:
             pattern: ^/api/v1
             stateless: true
             jwt: ~
+            custom_authenticator: App\Security\ApiTokenAuthenticator
 
         main:
             lazy: true

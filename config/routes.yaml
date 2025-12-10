@@ -12,11 +12,18 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+    exclude: ../src/Controller/Api/
     prefix: /{_locale}
     requirements:
         _locale: en|ar
     defaults:
         _locale: ar
+
+api_controllers:
+    resource:
+        path: ../src/Controller/Api/
+        namespace: App\Controller\Api
+    type: attribute
 
 root_redirect:
     path: /

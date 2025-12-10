@@ -47,7 +47,8 @@ class WorkspaceSubscriber implements EventSubscriberInterface
         if (str_starts_with($route, 'app_onboarding_') || 
             str_starts_with($route, '_wdt') || 
             str_starts_with($route, '_profiler') ||
-            str_starts_with($route, 'app_logout')
+            str_starts_with($route, 'app_logout') ||
+            str_starts_with($request->getPathInfo(), '/api/')
            ) {
             return;
         }
