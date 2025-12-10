@@ -12,6 +12,9 @@ A powerful, feature-rich boilerplate designed to jumpstart your SaaS application
 -   **Admin Dashboard**: EasyAdmin integration for effortless backend management.
 -   **Asset Management**: Webpack Encore with Tailwind CSS for modern, responsive UI.
 -   **Internationalization**: Multi-language support (English, Arabic, French) with URL localized routing.
+-   **Audit Logging**: Tracking of critical actions (logins, updates, deletions) for security and compliance.
+-   **Real-time Notifications**: Powered by Mercure for instant alerts and updates.
+-   **Advanced Security**: Rate limiting and brute-force protection for API and login endpoints.
 -   **CI/CD**: GitHub Actions workflow for automated testing and building.
 
 ## 🛠️ Technology Stack
@@ -81,6 +84,7 @@ npm run watch
 -   **API**: [http://localhost:8000/api/v1](http://localhost:8000/api/v1)
 -   **TopAdmin (phpMyAdmin)**: [http://localhost:8080](http://localhost:8080) (User: `root`, Pass: `root`)
 -   **Mailpit (Email Testing)**: [http://localhost:8025](http://localhost:8025)
+-   **Mercure Hub (Real-time Debugger)**: [http://localhost:1337](http://localhost:1337)
 
 ### Admin Panel
 Access the EasyAdmin dashboard at `/admin`.
