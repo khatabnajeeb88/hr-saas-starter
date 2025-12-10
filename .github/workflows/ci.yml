@@ -57,6 +57,9 @@ jobs:
           echo "MERCURE_URL=https://example.com/.well-known/mercure" >> .env
           echo "MERCURE_PUBLIC_URL=https://example.com/.well-known/mercure" >> .env
           echo "MERCURE_JWT_SECRET=!ChangeThisMercureHubJWTSecretKey!" >> .env
+          echo "JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem" >> .env
+          echo "JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem" >> .env
+          echo "JWT_PASSPHRASE=your_passphrase" >> .env
           echo "TAP_SECRET_KEY=sk_test_ci" >> .env
           echo "TAP_PUBLIC_KEY=pk_test_ci" >> .env
           echo "TAP_API_URL=https://api.tap.company/v2" >> .env
@@ -66,6 +69,9 @@ jobs:
 
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist
+
+      - name: Generate JWT Keys
+        run: php bin/console lexik:jwt:generate-keypair --skip-if-exists
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
