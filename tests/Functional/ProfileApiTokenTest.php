@@ -26,6 +26,7 @@ class ProfileApiTokenTest extends WebTestCase
         if (!$this->user) {
             $this->user = new User();
             $this->user->setEmail('profile_token_test@example.com');
+            $this->user->setPassword('password');
             $this->user->setIsVerified(true);
             $this->entityManager->persist($this->user);
             $this->entityManager->flush();
