@@ -1,58 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
+{% extends 'email/base.html.twig' %}
+
+{% block title %}{{ 'email.subscription_suspended.title'|trans }}{% endblock %}
+
+{% block stylesheets %}
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #DC2626; color: white; padding: 20px; text-align: center; }
-        .content { background: #f9fafb; padding: 30px; }
+        .header { background: #DC2626; }
         .alert { background: #FEE2E2; border: 2px solid #DC2626; padding: 20px; margin: 20px 0; border-radius: 6px; text-align: center; }
-        .button { display: inline-block; background: #DC2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-        .footer { text-align: center; color: #6b7280; font-size: 12px; padding: 20px; }
+        .button { background: #DC2626; }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Subscription Suspended</h1>
-        </div>
-        
-        <div class="content">
-            <p>Hi {{ user.email }},</p>
-            
-            <div class="alert">
-                <h2 style="margin: 0 0 10px 0; color: #DC2626;">⚠️ Your subscription has been suspended</h2>
-                <p style="margin: 0;">Due to multiple failed payment attempts</p>
-            </div>
-            
-            <p>We've attempted to process payment for {{ team.name }}'s {{ subscription.plan.name }} subscription multiple times without success. As a result, your subscription has been suspended.</p>
-            
-            <p><strong>What this means:</strong></p>
-            <ul>
-                <li>You no longer have access to {{ subscription.plan.name }} features</li>
-                <li>Your team data is safe and will be retained</li>
-                <li>You can reactivate anytime by updating your payment method</li>
-            </ul>
-            
-            <p><strong>To reactivate your subscription:</strong></p>
-            <ol>
-                <li>Update your payment method</li>
-                <li>Contact our support team</li>
-                <li>We'll process the outstanding payment</li>
-                <li>Your subscription will be reactivated immediately</li>
-            </ol>
-            
-            <a href="{{ url('payment_methods') }}" class="button">Reactivate Subscription</a>
-            
-            <p>We're sorry to see you go. If there's anything we can do to help, please don't hesitate to reach out to our support team.</p>
-            
-            <p><strong>Questions?</strong> Contact us at [email protected]</p>
-        </div>
-        
-        <div class="footer">
-            <p>© {{ 'now'|date('Y') }} SaaS Starter Pack. All rights reserved.</p>
-        </div>
+{% endblock %}
+
+{% block content %}
+    <p>{{ 'email.subscription_suspended.greeting'|trans({'%email%': user.email}) }},</p>
+    
+    <div class="alert">
+        <h2 style="margin: 0 0 10px 0; color: #DC2626;">{{ 'email.subscription_suspended.alert.title'|trans }}</h2>
+        <p style="margin: 0;">{{ 'email.subscription_suspended.alert.message'|trans }}</p>
     </div>
-</body>
-</html>
+    
+    <p>{{ 'email.subscription_suspended.message'|trans({'%team%': team.name, '%plan%': subscription.plan.name}) }}</p>
+    
+    <p><strong>{{ 'email.subscription_suspended.impact.title'|trans }}:</strong></p>
+    <ul>
+        <li>{{ 'email.subscription_suspended.impact.1'|trans({'%plan%': subscription.plan.name}) }}</li>
+        <li>{{ 'email.subscription_suspended.impact.2'|trans }}</li>
+        <li>{{ 'email.subscription_suspended.impact.3'|trans }}</li>
+    </ul>
+    
+    <p><strong>{{ 'email.subscription_suspended.reactivate.title'|trans }}:</strong></p>
+    <ol>
+        <li>{{ 'email.subscription_suspended.reactivate.1'|trans }}</li>
+        <li>{{ 'email.subscription_suspended.reactivate.2'|trans }}</li>
+        <li>{{ 'email.subscription_suspended.reactivate.3'|trans }}</li>
+        <li>{{ 'email.subscription_suspended.reactivate.4'|trans }}</li>
+    </ol>
+    
+    <div style="text-align: center;">
+        <a href="{{ url('payment_methods') }}" class="button">{{ 'email.subscription_suspended.button'|trans }}</a>
+    </div>
+    
+    <p>{{ 'email.subscription_suspended.closing'|trans }}</p>
+    
+    <p><strong>{{ 'email.subscription_suspended.questions'|trans }}</strong> {{ 'email.subscription_suspended.contact'|trans }}</p>
+{% endblock %}

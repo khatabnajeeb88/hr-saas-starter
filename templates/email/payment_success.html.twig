@@ -1,69 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #4F46E5; color: white; padding: 20px; text-align: center; }
-        .content { background: #f9fafb; padding: 30px; }
-        .receipt { background: white; padding: 20px; margin: 20px 0; border: 1px solid #e5e7eb; }
-        .row { display: flex; justify-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
-        .button { display: inline-block; background: #4F46E5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-        .footer { text-align: center; color: #6b7280; font-size: 12px; padding: 20px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Payment Successful!</h1>
+{% extends 'email/base.html.twig' %}
+
+{% block title %}{{ 'email.payment_success.title'|trans }}{% endblock %}
+
+{% block content %}
+    <p>{{ 'email.payment_success.greeting'|trans({'%email%': user.email}) }},</p>
+    
+    <p>{{ 'email.payment_success.message'|trans }}</p>
+    
+    <div class="receipt">
+        <h3>{{ 'email.payment_success.receipt.title'|trans }}</h3>
+        <div class="row">
+            <span>{{ 'email.payment_success.receipt.transaction_id'|trans }}:</span>
+            <strong>{{ payment.chargeId }}</strong>
         </div>
-        
-        <div class="content">
-            <p>Hi {{ user.email }},</p>
-            
-            <p>Thank you for your payment. Your subscription has been successfully renewed.</p>
-            
-            <div class="receipt">
-                <h3>Payment Receipt</h3>
-                <div class="row">
-                    <span>Transaction ID:</span>
-                    <strong>{{ payment.chargeId }}</strong>
-                </div>
-                <div class="row">
-                    <span>Date:</span>
-                    <strong>{{ payment.createdAt|date('M d, Y') }}</strong>
-                </div>
-                <div class="row">
-                    <span>Plan:</span>
-                    <strong>{{ subscription.plan.name }}</strong>
-                </div>
-                <div class="row">
-                    <span>Amount:</span>
-                    <strong>{{ payment.formattedAmount }}</strong>
-                </div>
-                {% if payment.cardBrand %}
-                <div class="row">
-                    <span>Payment Method:</span>
-                    <strong>{{ payment.cardBrand }} •••• {{ payment.cardLastFour }}</strong>
-                </div>
-                {% endif %}
-                <div class="row">
-                    <span>Next Billing Date:</span>
-                    <strong>{{ subscription.nextBillingDate|date('M d, Y') }}</strong>
-                </div>
-            </div>
-            
-            <p>Your subscription is active until {{ subscription.currentPeriodEnd|date('M d, Y') }}.</p>
-            
-            <a href="{{ url('subscription_current') }}" class="button">View Subscription</a>
-            
-            <p>If you have any questions, please don't hesitate to contact our support team.</p>
+        <div class="row">
+            <span>{{ 'email.payment_success.receipt.date'|trans }}:</span>
+            <strong>{{ payment.createdAt|date('M d, Y') }}</strong>
         </div>
-        
-        <div class="footer">
-            <p>© {{ 'now'|date('Y') }} SaaS Starter Pack. All rights reserved.</p>
+        <div class="row">
+            <span>{{ 'email.payment_success.receipt.plan'|trans }}:</span>
+            <strong>{{ subscription.plan.name }}</strong>
+        </div>
+        <div class="row">
+            <span>{{ 'email.payment_success.receipt.amount'|trans }}:</span>
+            <strong>{{ payment.formattedAmount }}</strong>
+        </div>
+        {% if payment.cardBrand %}
+        <div class="row">
+            <span>{{ 'email.payment_success.receipt.payment_method'|trans }}:</span>
+            <strong>{{ payment.cardBrand }} •••• {{ payment.cardLastFour }}</strong>
+        </div>
+        {% endif %}
+        <div class="row">
+            <span>{{ 'email.payment_success.receipt.next_billing'|trans }}:</span>
+            <strong>{{ subscription.nextBillingDate|date('M d, Y') }}</strong>
         </div>
     </div>
-</body>
-</html>
+    
+    <p>{{ 'email.payment_success.active_until'|trans({'%date%': subscription.currentPeriodEnd|date('M d, Y')}) }}</p>
+    
+    <div style="text-align: center;">
+        <a href="{{ url('subscription_current') }}" class="button">{{ 'email.payment_success.button'|trans }}</a>
+    </div>
+    
+    <p>{{ 'email.contact_support'|trans }}</p>
+{% endblock %}

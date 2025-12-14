@@ -1,62 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
+{% extends 'email/base.html.twig' %}
+
+{% block title %}{{ 'email.dunning_notice.title'|trans }}{% endblock %}
+
+{% block stylesheets %}
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #DC2626; color: white; padding: 20px; text-align: center; }
-        .content { background: #f9fafb; padding: 30px; }
+        .header { background: #DC2626; }
         .warning { background: #FEE2E2; border-left: 4px solid #DC2626; padding: 15px; margin: 20px 0; }
-        .button { display: inline-block; background: #DC2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-        .footer { text-align: center; color: #6b7280; font-size: 12px; padding: 20px; }
+        .button { background: #DC2626; }
+        [dir="rtl"] .warning { border-left: none; border-right: 4px solid #DC2626; }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Payment Failed - Urgent Action Required</h1>
-        </div>
-        
-        <div class="content">
-            <p>Hi {{ user.email }},</p>
-            
-            <div class="warning">
-                <strong>⚠️ Your subscription payment has failed.</strong>
-            </div>
-            
-            <p>We've attempted to charge your payment method for {{ team.name }}'s {{ subscription.plan.name }} subscription, but the payment was unsuccessful.</p>
-            
-            <p><strong>Retry Status:</strong></p>
-            <ul>
-                <li>Attempt: {{ retry_count }} of 3</li>
-                <li>Retries remaining: {{ retries_remaining }}</li>
-                {% if grace_period_ends_at %}
-                <li>Grace period ends: {{ grace_period_ends_at|date('M d, Y') }}</li>
-                {% endif %}
-            </ul>
-            
-            {% if retries_remaining > 0 %}
-            <p>We will automatically retry the payment, but we recommend updating your payment method now to avoid any service interruption.</p>
-            {% else %}
-            <p><strong>Final Notice:</strong> This is our last attempt. If payment fails again, your subscription will be suspended.</p>
-            {% endif %}
-            
-            <a href="{{ url('payment_methods') }}" class="button">Update Payment Method</a>
-            
-            <p><strong>What happens if I don't update?</strong></p>
-            <ul>
-                <li>We'll retry the payment {{ retries_remaining }} more time{{ retries_remaining != 1 ? 's' : '' }}</li>
-                <li>Your subscription will be suspended after all retries fail</li>
-                <li>You'll lose access to {{ subscription.plan.name }} features</li>
-            </ul>
-            
-            <p>Need help? Contact our support team immediately.</p>
-        </div>
-        
-        <div class="footer">
-            <p>© {{ 'now'|date('Y') }} SaaS Starter Pack. All rights reserved.</p>
-        </div>
+{% endblock %}
+
+{% block content %}
+    <p>{{ 'email.dunning_notice.greeting'|trans({'%email%': user.email}) }},</p>
+    
+    <div class="warning">
+        <strong>{{ 'email.dunning_notice.warning'|trans }}</strong>
     </div>
-</body>
-</html>
+    
+    <p>{{ 'email.dunning_notice.message'|trans({'%team%': team.name, '%plan%': subscription.plan.name}) }}</p>
+    
+    <p><strong>{{ 'email.dunning_notice.retry_status'|trans }}:</strong></p>
+    <ul>
+        <li>{{ 'email.dunning_notice.attempt'|trans }}: {{ retry_count }} {{ 'email.dunning_notice.of'|trans }} 3</li>
+        <li>{{ 'email.dunning_notice.retries_remaining'|trans }}: {{ retries_remaining }}</li>
+        {% if grace_period_ends_at %}
+        <li>{{ 'email.dunning_notice.grace_period'|trans }}: {{ grace_period_ends_at|date('M d, Y') }}</li>
+        {% endif %}
+    </ul>
+    
+    {% if retries_remaining > 0 %}
+    <p>{{ 'email.dunning_notice.retry_info'|trans }}</p>
+    {% else %}
+    <p><strong>{{ 'email.dunning_notice.final_notice'|trans }}:</strong> {{ 'email.dunning_notice.final_notice_msg'|trans }}</p>
+    {% endif %}
+    
+    <div style="text-align: center;">
+        <a href="{{ url('payment_methods') }}" class="button">{{ 'email.dunning_notice.button'|trans }}</a>
+    </div>
+    
+    <p><strong>{{ 'email.dunning_notice.consequences.title'|trans }}</strong></p>
+    <ul>
+        <li>{{ 'email.dunning_notice.consequences.1'|trans({'%count%': retries_remaining}) }}</li>
+        <li>{{ 'email.dunning_notice.consequences.2'|trans }}</li>
+        <li>{{ 'email.dunning_notice.consequences.3'|trans({'%plan%': subscription.plan.name}) }}</li>
+    </ul>
+    
+    <p>{{ 'email.dunning_notice.help'|trans }}</p>
+{% endblock %}

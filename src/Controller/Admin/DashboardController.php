@@ -16,9 +16,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Translation\LocaleSwitcher;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 #[IsGranted('ROLE_ADMIN')]
@@ -59,9 +66,69 @@ class DashboardController extends AbstractDashboardController
             throw $this->createNotFoundException('Template not found');
         }
 
+        return $this->render('admin/email_preview/show.html.twig', [
+            'template' => $template,
+            'template_name' => self::TEMPLATES[$template],
+        ]);
+    }
+
+    #[Route('/admin/email-preview/{template}/render', name: 'admin_email_preview_render')]
+    public function emailPreviewRender(string $template, Request $request, LocaleSwitcher $localeSwitcher): Response
+    {
+        if (!array_key_exists($template, self::TEMPLATES)) {
+            throw $this->createNotFoundException('Template not found');
+        }
+
+        // Force locale from query param if provided, otherwise it uses request locale
+        $locale = $request->query->get('_locale');
+        if ($locale) {
+            $localeSwitcher->setLocale($locale);
+        }
+
         $context = $this->createContext($template);
+        // Add locale to context in case templates use it explicitly
+        $context['locale'] = $locale ?? $request->getLocale();
 
         return $this->render("email/{$template}.html.twig", $context);
+    }
+
+    #[Route('/admin/email-preview/{template}/send-test', name: 'admin_email_preview_send_test', methods: ['POST'])]
+    public function emailPreviewSend(string $template, Request $request, MailerInterface $mailer): JsonResponse
+    {
+        if (!array_key_exists($template, self::TEMPLATES)) {
+            return new JsonResponse(['error' => 'Template not found'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $email = $data['email'] ?? null;
+        $locale = $data['locale'] ?? 'en';
+
+        if (!$email) {
+            return new JsonResponse(['error' => 'Email is required'], 400);
+        }
+
+        // Set locale for this request so translation works
+        $request->setLocale($locale);
+        $translator = $this->container->get('translator');
+
+        try {
+            $context = $this->createContext($template);
+            $context['locale'] = $locale;
+            
+            // Create the email
+            $emailMessage = (new TemplatedEmail())
+                ->from('noreply@saas-starter.com') // Should ideally come from config
+                ->to($email)
+                ->subject($translator->trans(self::TEMPLATES[$template] . ' (Test)', [], 'messages', $locale))
+                ->htmlTemplate("email/{$template}.html.twig")
+                ->context($context);
+
+            $mailer->send($emailMessage);
+
+            return new JsonResponse(['success' => true]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], 500);
+        }
     }
 
     private function createContext(string $template): array

@@ -1,0 +1,94 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block content_title %}Preview: {{ template_name }}{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+                <div class="btn-group" role="group" aria-label="Locale Switcher">
+                    <button type="button" class="btn btn-outline-primary active" id="btn-en" onclick="switchLocale('en')">English</button>
+                    <button type="button" class="btn btn-outline-primary" id="btn-ar" onclick="switchLocale('ar')">Arabic</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <form class="d-flex justify-content-end align-items-center gap-2" onsubmit="event.preventDefault(); sendTestEmail();">
+                    <label for="test-email" class="col-form-label text-muted mb-0">Send Test To:</label>
+                    <div class="input-group" style="max-width: 350px;">
+                        <input type="email" id="test-email" class="form-control" placeholder="[email protected]" aria-label="Recipient email">
+                        <button class="btn btn-primary" type="submit" id="btn-send">
+                            <i class="fa fa-paper-plane me-1"></i> Send
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <iframe id="preview-frame" src="{{ path('admin_email_preview_render', {template: template, _locale: 'en'}) }}" style="width: 100%; height: 800px; border: none;" title="Email Preview"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const template = '{{ template }}';
+        let currentLocale = 'en';
+        const renderUrl = "{{ path('admin_email_preview_render', {template: template}) }}";
+        const sendUrl = "{{ path('admin_email_preview_send_test', {template: template}) }}";
+
+        function switchLocale(locale) {
+            currentLocale = locale;
+            
+            // Update buttons
+            document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + locale).classList.add('active');
+
+            // Update iframe
+            const iframe = document.getElementById('preview-frame');
+            iframe.src = renderUrl + '?_locale=' + locale;
+        }
+
+        async function sendTestEmail() {
+            const emailInput = document.getElementById('test-email');
+            const email = emailInput.value;
+            const btn = document.getElementById('btn-send');
+            const originalText = btn.innerHTML;
+
+            if (!email) {
+                alert('Please enter an email address');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                const response = await fetch(sendUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        locale: currentLocale
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Test email sent successfully!');
+                } else {
+                    alert('Error sending email: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('An error occurred: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+    </script>
+{% endblock %}

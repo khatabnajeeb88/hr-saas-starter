@@ -1,21 +1,17 @@
-<h1>You've been invited to join {{ team.name }}</h1>
+{% extends 'email/base.html.twig' %}
 
-<p>
-    Hello,
-</p>
+{% block title %}{{ 'email.team_invitation.title'|trans({'%team%': team.name}) }}{% endblock %}
 
-<p>
-    You have been invited to join the team <strong>{{ team.name }}</strong> on SaaS Starter.
-</p>
-
-<p>
-    <a href="{{ url('app_invitation_accept', {'token': invitation.token}) }}">Click here to accept the invitation</a>
-</p>
-
-<p>
-    This link will expire in 7 days.
-</p>
-
-<p>
-    If you did not expect this invitation, you can ignore this email.
-</p>
+{% block content %}
+    <p>{{ 'email.team_invitation.greeting'|trans }},</p>
+    
+    <p>{{ 'email.team_invitation.message'|trans({'%team%': team.name})|raw }}</p>
+    
+    <div style="text-align: center;">
+        <a href="{{ url('app_invitation_accept', {'token': invitation.token}) }}" class="button">{{ 'email.team_invitation.button'|trans }}</a>
+    </div>
+    
+    <p>{{ 'email.team_invitation.expiry'|trans }}</p>
+    
+    <p>{{ 'email.team_invitation.ignore'|trans }}</p>
+{% endblock %}
