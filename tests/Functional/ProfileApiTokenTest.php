@@ -73,8 +73,8 @@ class ProfileApiTokenTest extends WebTestCase
 
         // Create a token manually
         $token = new ApiToken();
-        $token->setUser($this->user);
         $token->setDescription('Test Token');
+        $this->user->addApiToken($token);
         $this->entityManager->persist($token);
         $this->entityManager->flush();
 
