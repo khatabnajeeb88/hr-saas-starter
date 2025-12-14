@@ -185,6 +185,8 @@ profile:
         name: Name
         save: Save Changes
         change_password: Change Password
+        change_password_link: Change Password
+        save_btn: Save
     2fa:
         title: Two-Factor Authentication
         enabled: Enabled
@@ -194,6 +196,7 @@ profile:
         not_enabled: Not Enabled
         not_enabled_msg: Add an extra layer of security to your account.
         enable: Enable 2FA
+        enable_btn: Enable
     password:
         title: Change Password
         current: Current Password
@@ -201,6 +204,25 @@ profile:
         confirm: Confirm New Password
         submit: Change Password
         back: Back to Profile
+
+api_tokens:
+    title: API Tokens
+    description: Manage your personal access tokens.
+    create_btn: Create New Token
+    name_label: Description
+    name_placeholder: e.g. CI/CD Pipeline
+    created: Created
+    last_used: Last Used
+    expires: Expires
+    actions: Actions
+    delete: Revoke
+    delete_confirm: Are you sure you want to revoke this token? This action cannot be undone.
+    empty: No API tokens generated yet.
+    new_token_title: New API Token Generated
+    new_token_msg: Please copy your new API token. For security reasons, it will not be shown again.
+    copy: Copy
+    copied: Copied!
+    close: Close
 
 login:
     title: Sign In

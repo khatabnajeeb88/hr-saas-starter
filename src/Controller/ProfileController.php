@@ -77,4 +77,64 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/change_password.html.twig');
     }
+    #[Route('/api-tokens', name: 'app_profile_api_tokens_list', methods: ['GET'])]
+    public function getApiTokens(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $tokens = [];
+
+        foreach ($user->getApiTokens() as $token) {
+            $tokens[] = [
+                'id' => $token->getId(),
+                'description' => $token->getDescription(),
+                'maskedToken' => $token->getMaskedToken(),
+                'lastUsedAt' => $token->getLastUsedAt()?->format('c'),
+                'createdAt' => $token->getCreatedAt()->format('c'),
+            ];
+        }
+
+        return $this->json($tokens);
+    }
+
+    #[Route('/api-tokens', name: 'app_profile_api_tokens_create', methods: ['POST'])]
+    public function createApiToken(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+        $description = $data['description'] ?? 'Default Token';
+
+        $token = new \App\Entity\ApiToken();
+        $token->setUser($user);
+        $token->setDescription($description);
+        
+        $entityManager->persist($token);
+        $entityManager->flush();
+
+        return $this->json([
+            'id' => $token->getId(),
+            'description' => $token->getDescription(),
+            'token' => $token->getToken(), // Return full token ONLY here
+            'maskedToken' => $token->getMaskedToken(),
+            'lastUsedAt' => null,
+            'createdAt' => $token->getCreatedAt()->format('c'),
+        ], Response::HTTP_CREATED);
+    }
+
+    #[Route('/api-tokens/{id}', name: 'app_profile_api_tokens_revoke', methods: ['DELETE'])]
+    public function revokeApiToken(\App\Entity\ApiToken $token, EntityManagerInterface $entityManager): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($token->getUser() !== $user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $entityManager->remove($token);
+        $entityManager->flush();
+
+        return $this->json([], Response::HTTP_NO_CONTENT);
+    }
 }

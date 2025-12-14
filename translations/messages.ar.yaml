@@ -183,8 +183,10 @@ profile:
         title: تعديل الملف الشخصي
         email: البريد الإلكتروني
         name: الاسم
-        save: حفظ التغييرات
+        save: حفظ
         change_password: تغيير كلمة المرور
+        change_password_link: تغيير كلمة المرور
+        save_btn: حفظ
     2fa:
         title: المصادقة الثنائية
         enabled: مفعلة
@@ -194,6 +196,7 @@ profile:
         not_enabled: غير مفعلة
         not_enabled_msg: أضف طبقة أمان إضافية لحسابك.
         enable: تفعيل المصادقة الثنائية
+        enable_btn: تفعيل
     password:
         title: تغيير كلمة المرور
         current: كلمة المرور الحالية
@@ -201,6 +204,25 @@ profile:
         confirm: تأكيد كلمة المرور الجديدة
         submit: تغيير كلمة المرور
         back: العودة للملف الشخصي
+
+api_tokens:
+    title: رموز API
+    description: إدارة رموز الوصول الشخصية الخاصة بك.
+    create_btn: إنشاء رمز جديد
+    name_label: الوصف
+    name_placeholder: "مثلاً: تطبيق الجوال"
+    created: تم الإنشاء
+    last_used: آخر استخدام
+    expires: تنتهي الصلاحية
+    actions: الإجراءات
+    delete: إبطال
+    delete_confirm: هل أنت متأكد أنك تريد إبطال هذا الرمز؟ لا يمكن التراجع عن هذا الإجراء.
+    empty: لم يتم إنشاء أي رموز API بعد.
+    new_token_title: تم إنشاء رمز API جديد
+    new_token_msg: يرجى نسخ رمز API الجديد الخاص بك. لأسباب أمنية، لن يتم عرضه مرة أخرى.
+    copy: نسخ
+    copied: تم النسخ!
+    close: إغلاق
 
 login:
     title: تسجيل الدخول
