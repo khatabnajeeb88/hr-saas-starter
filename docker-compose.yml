@@ -5,11 +5,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: saas_php
+    container_name: hr_php
     volumes:
       - .:/var/www/html
     environment:
-      DATABASE_URL: "mysql://root:root@database:3306/starter?serverVersion=5.7.39&charset=utf8mb4"
+      DATABASE_URL: "mysql://root:root@database:3306/hr?serverVersion=5.7.39&charset=utf8mb4"
       MESSENGER_TRANSPORT_DSN: "redis://redis:6379/messages"
       MAILER_DSN: "smtp://mailpit:1025"
       MERCURE_URL: "http://mercure/.well-known/mercure"
@@ -22,25 +22,25 @@ services:
       - redis
       - mailpit
     networks:
-      - saas_network
+      - hr_network
 
   database:
     image: mysql:5.7
     platform: linux/amd64
-    container_name: saas_database
+    container_name: hr_database
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: starter
+      MYSQL_DATABASE: hr
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
     networks:
-      - saas_network
+      - hr_network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: saas_pma
+    container_name: hr_pma
     environment:
       PMA_HOST: database
       PMA_PORT: 3306
@@ -49,11 +49,11 @@ services:
     depends_on:
       - database
     networks:
-      - saas_network
+      - hr_network
 
   nginx:
     image: nginx:alpine
-    container_name: saas_nginx
+    container_name: hr_nginx
     ports:
       - "8000:80"
     volumes:
@@ -62,30 +62,30 @@ services:
     depends_on:
       - php
     networks:
-      - saas_network
+      - hr_network
 
   redis:
     image: redis:7-alpine
-    container_name: saas_redis
+    container_name: hr_redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
-      - saas_network
+      - hr_network
 
   mailpit:
     image: axllent/mailpit
-    container_name: saas_mailpit
+    container_name: hr_mailpit
     ports:
       - "8025:8025"  # Web UI
       - "1025:1025"  # SMTP
     networks:
-      - saas_network
+      - hr_network
 
   mercure:
     image: dunglas/mercure
-    container_name: saas_mercure
+    container_name: hr_mercure
     restart: unless-stopped
     environment:
       SERVER_NAME: ':80'
@@ -95,12 +95,12 @@ services:
     ports:
       - "1337:80"
     networks:
-      - saas_network
+      - hr_network
 
 volumes:
   redis_data:
   db_data:
 
 networks:
-  saas_network:
+  hr_network:
     driver: bridge
