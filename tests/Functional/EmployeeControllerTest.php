@@ -1,0 +1,206 @@
+<?php
+
+namespace App\Tests\Functional;
+
+use App\Entity\Employee;
+use App\Entity\Team;
+use App\Entity\TeamMember;
+use App\Entity\User;
+use App\Repository\EmployeeRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
+class EmployeeControllerTest extends WebTestCase
+{
+    private $client;
+    private $entityManager;
+    private $user;
+    private $team;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+        $this->entityManager = static::getContainer()->get('doctrine')->getManager();
+        $hasher = static::getContainer()->get(UserPasswordHasherInterface::class);
+
+        // Create User
+        $this->user = new User();
+        $this->user->setEmail('employee_test_user_' . uniqid() . '@example.com');
+        $this->user->setPassword($hasher->hashPassword($this->user, 'password'));
+        $this->user->setName('Test User');
+        $this->entityManager->persist($this->user);
+
+        // Create Team
+        $this->team = new Team();
+        $this->team->setName('Test Team');
+        $this->team->setSlug('test-team-' . uniqid());
+        $this->team->setOwner($this->user);
+        $this->team->setCreatedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($this->team);
+
+        // Create Team Member
+        $teamMember = new TeamMember();
+        $teamMember->setUser($this->user);
+        $teamMember->setTeam($this->team);
+        $teamMember->setRole(TeamMember::ROLE_OWNER);
+        $this->entityManager->persist($teamMember);
+
+        // IMPORTANT: Add member to collections to ensure consistency if entities are reused in memory
+        $this->team->addMember($teamMember);
+        $this->user->addTeamMember($teamMember);
+
+        $this->entityManager->flush();
+    }
+
+    public function testIndex(): void
+    {
+        $this->client->loginUser($this->user);
+        $this->client->request('GET', '/en/employee/');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Employees');
+    }
+
+    public function testNew(): void
+    {
+        $this->client->loginUser($this->user);
+        $crawler = $this->client->request('GET', '/en/employee/new');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'New Employee');
+
+        $email = 'john.doe.' . uniqid() . '@example.com';
+
+        $form = $crawler->selectButton('Save')->form();
+        $form['employee[firstName]'] = 'John';
+        $form['employee[lastName]'] = 'Doe';
+        $form['employee[email]'] = $email;
+        $form['employee[jobTitle]'] = 'Developer';
+        $form['employee[employmentStatus]'] = 'active';
+
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/en/employee/');
+
+        // Verify it was created
+        $employee = $this->entityManager->getRepository(Employee::class)->findOneBy(['email' => $email]);
+        $this->assertNotNull($employee);
+        $this->assertEquals('John', $employee->getFirstName());
+        $this->assertEquals($this->team->getId(), $employee->getTeam()->getId());
+    }
+
+    public function testEdit(): void
+    {
+        // Reload team to ensure it's managed
+        $team = $this->entityManager->getRepository(Team::class)->find($this->team->getId());
+
+        // Create an employee first
+        $employee = new Employee();
+        $employee->setFirstName('Jane');
+        $employee->setLastName('Doe');
+        $employee->setEmail('jane.doe.' . uniqid() . '@example.com');
+        $employee->setTeam($team);
+        $employee->setJoinedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($employee);
+        $this->entityManager->flush();
+
+        $this->client->loginUser($this->user);
+        $crawler = $this->client->request('GET', '/en/employee/' . $employee->getId() . '/edit');
+
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->selectButton('Update')->form();
+        $form['employee[firstName]'] = 'Jane Updated';
+
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/en/employee/');
+
+        // Refresh employee
+        $this->entityManager->clear(); // Clear identity map to force fetch
+        $employee = $this->entityManager->getRepository(Employee::class)->find($employee->getId());
+        $this->assertEquals('Jane Updated', $employee->getFirstName());
+    }
+
+    public function testDelete(): void
+    {
+        // Reload team to ensure it's managed
+        $team = $this->entityManager->getRepository(Team::class)->find($this->team->getId());
+
+        // Create an employee first
+        $employee = new Employee();
+        $employee->setFirstName('To Delete');
+        $employee->setLastName('User');
+        $employee->setEmail('delete.me@example.com');
+        $employee->setTeam($team);
+        $employee->setJoinedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($employee);
+        $this->entityManager->flush();
+
+        $employeeId = $employee->getId();
+
+        $this->client->loginUser($this->user);
+        
+        // Simulating the delete button click which is inside a form
+        // We can request the index page and submit the form associated with the employee
+        $crawler = $this->client->request('GET', '/en/employee/');
+        $this->assertResponseIsSuccessful();
+        
+        // Find the form for this specific employee. 
+        // The form action should be /en/employee/{id}
+        $form = $crawler->filter('form[action="/en/employee/' . $employeeId . '"]')->form();
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/en/employee/');
+        
+        // Clear EntityManager to fetch fresh data
+        $this->entityManager->clear();
+        
+        $deletedEmployee = $this->entityManager->getRepository(Employee::class)->find($employeeId);
+        $this->assertNull($deletedEmployee);
+    }
+    
+    public function testAccessDeniedForOtherTeam(): void
+    {
+        // Create another user and team
+        $hasher = static::getContainer()->get(UserPasswordHasherInterface::class);
+        $otherUser = new User();
+        $otherUser->setEmail('other_user_' . uniqid() . '@example.com');
+        $otherUser->setPassword($hasher->hashPassword($otherUser, 'password'));
+        $otherUser->setName('Other User');
+        $this->entityManager->persist($otherUser);
+        
+        $otherTeam = new Team();
+        $otherTeam->setName('Other Team');
+        $otherTeam->setSlug('other-team-' . uniqid());
+        $otherTeam->setOwner($otherUser);
+        $otherTeam->setCreatedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($otherTeam);
+        
+        $otherTeamMember = new TeamMember();
+        $otherTeamMember->setUser($otherUser);
+        $otherTeamMember->setTeam($otherTeam);
+        $otherTeamMember->setRole(TeamMember::ROLE_OWNER);
+        $this->entityManager->persist($otherTeamMember);
+        
+        // Create employee in original team
+        $employee = new Employee();
+        $employee->setFirstName('Original');
+        $employee->setLastName('Team Employee');
+        $employee->setTeam($this->team);
+        $employee->setJoinedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($employee);
+        
+        $this->entityManager->flush();
+        
+        // Login as other user
+        $this->client->loginUser($otherUser);
+        
+        // Try to access employee from different team
+        $this->client->request('GET', '/en/employee/' . $employee->getId());
+        $this->assertResponseStatusCodeSame(403);
+        
+        $this->client->request('GET', '/en/employee/' . $employee->getId() . '/edit');
+        $this->assertResponseStatusCodeSame(403);
+    }
+}
