@@ -1,0 +1,140 @@
+{{ form_start(form) }}
+    <div x-data="{ activeTab: 'overview' }" class="space-y-6">
+        {# Tabs Navigation #}
+        <div class="border-b border-gray-200 dark:border-gray-700">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button type="button" @click="activeTab = 'overview'" 
+                        :class="activeTab === 'overview' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    {{ 'employee.form.overview'|trans }}
+                </button>
+                <button type="button" @click="activeTab = 'personal'" 
+                        :class="activeTab === 'personal' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    {{ 'employee.form.personal_details'|trans }}
+                </button>
+                <button type="button" @click="activeTab = 'work'" 
+                        :class="activeTab === 'work' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    {{ 'employee.form.work_info'|trans }}
+                </button>
+                <button type="button" @click="activeTab = 'bank'" 
+                        :class="activeTab === 'bank' ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    {{ 'employee.form.bank_details'|trans }}
+                </button>
+            </nav>
+        </div>
+
+        {# Overview Tab #}
+        <div x-show="activeTab === 'overview'" class="space-y-6">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    {{ form_label(form.firstName, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.firstName, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                    {{ form_errors(form.firstName, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.lastName, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.lastName, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                    {{ form_errors(form.lastName, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.email, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                {{ form_widget(form.email, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                 {{ form_errors(form.email, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            </div>
+            
+            <div>
+                 {{ form_label(form.employmentStatus, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                 {{ form_widget(form.employmentStatus, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                 {{ form_errors(form.employmentStatus, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            </div>
+        </div>
+
+        {# Personal Tab #}
+        <div x-show="activeTab === 'personal'" class="space-y-6" style="display: none;">
+             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    {{ form_label(form.mobile, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.mobile, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+                 <div>
+                    {{ form_label(form.dateOfBirth, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.dateOfBirth, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+                 <div>
+                    {{ form_label(form.gender, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.gender, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+            </div>
+            <div>
+                 {{ form_label(form.address, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                 {{ form_widget(form.address, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+            </div>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    {{ form_label(form.city, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.city, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+                 <div>
+                    {{ form_label(form.country, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.country, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+            </div>
+        </div>
+        
+        {# Work Info Tab #}
+        <div x-show="activeTab === 'work'" class="space-y-6" style="display: none;">
+             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    {{ form_label(form.jobTitle, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.jobTitle, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+                 <div>
+                    {{ form_label(form.department, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.department, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+            </div>
+             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    {{ form_label(form.workType, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.workType, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+                 <div>
+                    {{ form_label(form.shift, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.shift, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+            </div>
+        </div>
+
+        {# Bank Bank Tab #}
+        <div x-show="activeTab === 'bank'" class="space-y-6" style="display: none;">
+            <div>
+                 {{ form_label(form.bankName, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                 {{ form_widget(form.bankName, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+            </div>
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    {{ form_label(form.bankIdentifierCode, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.bankIdentifierCode, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+                <div>
+                    {{ form_label(form.bankBranch, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                    {{ form_widget(form.bankBranch, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+                </div>
+            </div>
+            <div>
+                 {{ form_label(form.bankAccountNumber, null, {'label_class': 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'}) }}
+                 {{ form_widget(form.bankAccountNumber, {'attr': {'class': 'w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600'}}) }}
+            </div>
+        </div>
+
+        <div class="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
+             <a href="{{ path('app_employee_index') }}" class="btn btn-secondary mr-2 rtl:ml-2 rtl:mr-0">{{ 'employee.form.cancel'|trans }}</a>
+            <button class="btn btn-primary">{{ button_label|default('employee.form.save'|trans) }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

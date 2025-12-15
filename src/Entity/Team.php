@@ -49,9 +49,16 @@ class Team
     #[ORM\OneToOne(targetEntity: Subscription::class, mappedBy: 'team', cascade: ['persist', 'remove'])]
     private ?Subscription $subscription = null;
 
+    /**
+     * @var Collection<int, Employee>
+     */
+    #[ORM\OneToMany(mappedBy: 'team', targetEntity: Employee::class, orphanRemoval: true)]
+    private Collection $employees;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        $this->employees = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -218,5 +225,36 @@ class Team
     public function onTrial(): bool
     {
         return $this->subscription !== null && $this->subscription->onTrial();
+    }
+
+    /**
+     * @return Collection<int, Employee>
+     */
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employee $employee): static
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmployee(Employee $employee): static
+    {
+        if ($this->employees->removeElement($employee)) {
+            // set the owning side to null (unless already changed)
+            if ($employee->getTeam() === $this) {
+                // We don't set to null here because the relation is not nullable
+                // However, since orphanRemoval=true, removing it from the collection is enough
+            }
+        }
+
+        return $this;
     }
 }

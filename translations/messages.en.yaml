@@ -400,3 +400,72 @@ email:
         button: "Accept Invitation"
         expiry: "This link will expire in 7 days."
         ignore: "If you did not expect this invitation, you can ignore this email."
+
+employee:
+    title: Employees
+    manage_desc: Manage your team members and their details
+    add_new: Add New User
+    export: Export
+    search_placeholder: Search User
+    shown: Shown
+    entries: entries
+    pagination_showing: 'Showing <span class="font-medium">%count%</span> to <span class="font-medium">%end%</span> of <span class="font-medium">%total%</span> entries'
+    list:
+        name: Name
+        email: Email
+        joined_date: Date
+        department: Department
+        status: Status
+        actions: Actions
+        no_employees: No employees found.
+        add_first: Add your first employee
+    status:
+        active: Professional
+        on_leave: Applied
+        terminated: Rejected
+    form:
+        create_title: New Employee
+        create_desc: Add a new member to your team
+        edit_title: Edit Employee
+        edit_desc: Update employee information
+        personal_details: Personal Details
+        work_info: Work Info
+        bank_details: Bank Details
+        overview: Overview
+        cancel: Cancel
+        save: Save
+        update: Update
+        back_to_list: Back to List
+        view_title: Employee Details
+        view_desc: View employee information
+        delete_confirm: Are you sure you want to delete this employee?
+        labels:
+            first_name: First Name
+            last_name: Last Name
+            email: Email Address
+            job_title: Job Title
+            department: Department
+            employment_status: Employment Status
+            mobile: Mobile
+            gender: Gender
+            dob: Date of Birth
+            address: Address
+            city: City
+            country: Country
+            bank_name: Bank Name
+            swift: SWIFT/BIC
+            branch: Bank Branch
+            account_number: Bank Account Number
+            work_type: Work Type
+            shift: Shift
+    gender:
+        male: Male
+        female: Female
+        other: Other
+    work_type:
+        office: Office
+        remote: Remote
+        hybrid: Hybrid
+    shift:
+        regular: Regular
+        night: Night

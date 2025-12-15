@@ -1,0 +1,233 @@
+{% extends 'layouts/dashboard.html.twig' %}
+
+{% block title %}Employees{% endblock %}
+
+{% block dashboard_content %}
+    <div class="space-y-6">
+        {# Header Section #}
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'employee.title'|trans }}</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'employee.manage_desc'|trans }}</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
+                    <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    {{ 'employee.export'|trans }}
+                </button>
+                <a href="{{ path('app_employee_new') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    {{ 'employee.add_new'|trans }}
+                </a>
+            </div>
+        </div>
+
+        {# Table Card #}
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            {# Controls Bar #}
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ 'employee.shown'|trans }}</span>
+                    <select onchange="window.location.href = this.value" class="form-select text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        <option value="{{ path('app_employee_index', {'limit': 10, 'page': 1}) }}" {% if pager.maxPerPage == 10 %}selected{% endif %}>10</option>
+                        <option value="{{ path('app_employee_index', {'limit': 25, 'page': 1}) }}" {% if pager.maxPerPage == 25 %}selected{% endif %}>25</option>
+                        <option value="{{ path('app_employee_index', {'limit': 50, 'page': 1}) }}" {% if pager.maxPerPage == 50 %}selected{% endif %}>50</option>
+                    </select>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ 'employee.entries'|trans }}</span>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 rtl:right-0 rtl:left-auto pl-3 rtl:pr-3 rtl:pl-0 flex items-center pointer-events-none">
+                        <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <input type="text" class="py-2 pl-10 rtl:pr-10 rtl:pl-3 block w-full sm:w-64 rounded-xl border-gray-300 bg-gray-50 text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400" placeholder="{{ 'employee.search_placeholder'|trans }}">
+                </div>
+            </div>
+
+            {# Table #}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-900/50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right">
+                                <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600">
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.name'|trans }}</th>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.email'|trans }}</th>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.joined_date'|trans }}</th>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.department'|trans }}</th> {# Replaced Salary with Department as Salary is in Contract #}
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.status'|trans }}</th>
+                            <th scope="col" class="px-6 py-3 text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.actions'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+                        {% for employee in pager.currentPageResults %}
+                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">
+                                                {{ employee.firstName|first }}{{ employee.lastName|first }}
+                                            </div>
+                                        </div>
+                                        <div class="ml-4 rtl:mr-4 rtl:ml-0">
+                                            <div class="text-sm font-medium text-gray-900 dark:text-white">{{ employee.fullName }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ employee.jobTitle|default('No Role') }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.email }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.joinedAt|date('m/d/Y') }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.department|default('-') }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {% if employee.employmentStatus == 'active' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                            {{ 'employee.status.active'|trans }}
+                                        </span>
+                                    {% elseif employee.employmentStatus == 'on_leave' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                                            {{ 'employee.status.on_leave'|trans }}
+                                        </span>
+                                    {% elseif employee.employmentStatus == 'terminated' %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+                                            {{ 'employee.status.terminated'|trans }}
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400">
+                                            {{ employee.employmentStatus|capitalize }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right rtl:text-left text-sm font-medium">
+                                    <div class="relative flex justify-end" x-data="{ open: false, top: 0, left: 0 }">
+                                        <button @click="open = !open; let rect = $el.getBoundingClientRect(); top = rect.bottom; left = document.dir === 'rtl' ? rect.left : rect.right - 192;" 
+                                                @click.away="open = false" 
+                                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                            </svg>
+                                        </button>
+                                        <div x-show="open" 
+                                             x-teleport="body"
+                                             x-transition:enter="transition ease-out duration-100"
+                                             x-transition:enter-start="transform opacity-0 scale-95"
+                                             x-transition:enter-end="transform opacity-100 scale-100"
+                                             x-transition:leave="transition ease-in duration-75"
+                                             x-transition:leave-start="transform opacity-100 scale-100"
+                                             x-transition:leave-end="transform opacity-0 scale-95"
+                                             :style="`top: ${top}px; left: ${left}px`"
+                                             class="fixed z-50 w-48 rounded-lg bg-white dark:bg-gray-700 ring-1 ring-gray-200 ring-opacity-5 focus:outline-none" 
+                                             style="display: none;">
+                                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                                <a href="{{ path('app_employee_show', {'id': employee.id}) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" role="menuitem">
+                                                    <svg class="w-4 h-4 mr-3 rtl:ml-3 rtl:mr-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    {{ 'common.view'|trans }}
+                                                </a>
+                                                <a href="{{ path('app_employee_edit', {'id': employee.id}) }}" class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600" role="menuitem">
+                                                    <svg class="w-4 h-4 mr-3 rtl:ml-3 rtl:mr-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                                    </svg>
+                                                    {{ 'common.edit'|trans }}
+                                                </a>
+                                                <form method="post" action="{{ path('app_employee_delete', {'id': employee.id}) }}" onsubmit="return confirm('{{ 'employee.form.delete_confirm'|trans }}');" class="block w-full text-left rtl:text-right">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employee.id) }}">
+                                                    <button type="submit" class="flex w-full items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/50" role="menuitem">
+                                                        <svg class="w-4 h-4 mr-3 rtl:ml-3 rtl:mr-0 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                        </svg>
+                                                        {{ 'common.delete'|trans }}
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="px-6 py-10 text-center text-sm text-gray-500 dark:text-gray-400">
+                                    <div class="flex flex-col items-center justify-center">
+                                        <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                        <p>{{ 'employee.list.no_employees'|trans }}</p>
+                                        <a href="{{ path('app_employee_new') }}" class="mt-3 text-indigo-600 hover:text-indigo-500 font-medium">{{ 'employee.list.add_first'|trans }}</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {# Pagination #}
+            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                    {{ 'employee.pagination_showing'|trans({'%count%': pager.currentPageOffsetStart, '%end%': pager.currentPageOffsetEnd, '%total%': pager.nbResults})|raw }}
+                </div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    {% if pager.hasPreviousPage %}
+                        <a href="{{ path('app_employee_index', {'page': pager.previousPage, 'limit': pager.maxPerPage}) }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md rtl:rounded-l-none rtl:rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+                            <span class="sr-only">Previous</span>
+                            <svg class="h-5 w-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    {% else %}
+                         <span class="relative inline-flex items-center px-2 py-2 rounded-l-md rtl:rounded-l-none rtl:rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed dark:bg-gray-900 dark:border-gray-600 dark:text-gray-500">
+                            <span class="sr-only">Previous</span>
+                            <svg class="h-5 w-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    {% endif %}
+
+                    {% for page in 1..pager.nbPages %}
+                        {% if page == pager.currentPage %}
+                            <a href="#" aria-current="page" class="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium dark:bg-indigo-900/50 dark:border-indigo-500 dark:text-indigo-300">
+                                {{ page }}
+                            </a>
+                        {% else %}
+                            <a href="{{ path('app_employee_index', {'page': page, 'limit': pager.maxPerPage}) }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+                                {{ page }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if pager.hasNextPage %}
+                        <a href="{{ path('app_employee_index', {'page': pager.nextPage, 'limit': pager.maxPerPage}) }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md rtl:rounded-r-none rtl:rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+                            <span class="sr-only">Next</span>
+                            <svg class="h-5 w-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                     {% else %}
+                        <span class="relative inline-flex items-center px-2 py-2 rounded-r-md rtl:rounded-r-none rtl:rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed dark:bg-gray-900 dark:border-gray-600 dark:text-gray-500">
+                            <span class="sr-only">Next</span>
+                            <svg class="h-5 w-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}

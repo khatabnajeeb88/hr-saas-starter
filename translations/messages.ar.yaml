@@ -400,3 +400,72 @@ email:
         button: "قبول الدعوة"
         expiry: "سينتهي هذا الرابط خلال 7 أيام."
         ignore: "إذا لم تكن تتوقع هذه الدعوة، يمكنك تجاهل هذا البريد الإلكتروني."
+
+employee:
+    title: الموظفين
+    manage_desc: إدارة أعضاء فريقك وتفاصيلهم
+    add_new: إضافة مستخدم جديد
+    export: تصدير
+    search_placeholder: البحث عن مستخدم
+    shown: عرض
+    entries: إدخالات
+    pagination_showing: 'عرض <span class="font-medium">%count%</span> إلى <span class="font-medium">%end%</span> من <span class="font-medium">%total%</span> إدخال'
+    list:
+        name: الاسم
+        email: البريد الإلكتروني
+        joined_date: التاريخ
+        department: القسم
+        status: الحالة
+        actions: الإجراءات
+        no_employees: لم يتم العثور على موظفين.
+        add_first: أضف موظفك الأول
+    status:
+        active: محترف
+        on_leave: مطبق
+        terminated: مرفوض
+    form:
+        create_title: موظف جديد
+        create_desc: أضف عضواً جديداً إلى فريقك
+        edit_title: تعديل الموظف
+        edit_desc: تحديث معلومات الموظف
+        personal_details: التفاصيل الشخصية
+        work_info: معلومات العمل
+        bank_details: التفاصيل البنكية
+        overview: نظرة عامة
+        cancel: إلغاء
+        save: حفظ
+        update: تحديث
+        back_to_list: العودة للقائمة
+        view_title: تفاصيل الموظف
+        view_desc: عرض معلومات الموظف
+        delete_confirm: هل أنت متأكد أنك تريد حذف هذا الموظف؟
+        labels:
+            first_name: الاسم الأول
+            last_name: اسم العائلة
+            email: البريد الإلكتروني
+            job_title: المسمى الوظيفي
+            department: القسم
+            employment_status: حالة التوظيف
+            mobile: الجوال
+            gender: الجنس
+            dob: تاريخ الميلاد
+            address: العنوان
+            city: المدينة
+            country: الدولة
+            bank_name: اسم البنك
+            swift: SWIFT/BIC
+            branch: الفرع
+            account_number: رقم الحساب
+            work_type: نوع العمل
+            shift: الوردية
+    gender:
+        male: ذكر
+        female: أنثى
+        other: آخر
+    work_type:
+        office: مكتب
+        remote: عن بعد
+        hybrid: هجين
+    shift:
+        regular: عادي
+        night: ليلي

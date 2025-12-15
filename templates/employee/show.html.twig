@@ -1,0 +1,53 @@
+{% extends 'layouts/dashboard.html.twig' %}
+
+{% block title %}Employee Details{% endblock %}
+
+{% block dashboard_content %}
+    <div class="max-w-3xl mx-auto space-y-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'employee.form.view_title'|trans }}</h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.view_desc'|trans }}</p>
+            </div>
+            <div class="flex space-x-2 rtl:space-x-reverse">
+                <a href="{{ path('app_employee_index') }}" class="btn btn-secondary">{{ 'employee.form.back_to_list'|trans }}</a>
+                <a href="{{ path('app_employee_edit', {'id': employee.id}) }}" class="btn btn-primary">{{ 'employee.form.edit_title'|trans }}</a>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                    {{ employee.fullName }}
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
+                    {{ employee.jobTitle }}
+                </p>
+            </div>
+            <div>
+                <dl>
+                    <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ 'employee.form.labels.first_name'|trans }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ employee.fullName }}</dd>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ 'employee.form.labels.email'|trans }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ employee.email }}</dd>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ 'employee.form.labels.department'|trans }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ employee.department }}</dd>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ 'employee.form.labels.employment_status'|trans }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2 capitalize">{{ employee.employmentStatus }}</dd>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-900/50 px-6 py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                        <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ 'employee.list.joined_date'|trans }}</dt>
+                        <dd class="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2">{{ employee.joinedAt|date('Y-m-d H:i') }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+{% endblock %}
