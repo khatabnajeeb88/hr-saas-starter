@@ -185,6 +185,17 @@ class EmployeeType extends AbstractType
                 'label' => 'employee.form.labels.manager',
                 'required' => false,
                 'placeholder' => 'employee.form.placeholders.select_manager',
+                'query_builder' => function (\Doctrine\ORM\EntityRepository $er) use ($options) {
+                    $qb = $er->createQueryBuilder('e');
+                    $currentEmployee = $options['data'] ?? null;
+                    
+                    if ($currentEmployee instanceof Employee && $currentEmployee->getId()) {
+                        $qb->where('e.id != :id')
+                           ->setParameter('id', $currentEmployee->getId());
+                    }
+                    
+                    return $qb;
+                },
                 'attr' => ['class' => 'shadow-none py-2.5 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('employmentType', \Symfony\Bridge\Doctrine\Form\Type\EntityType::class, [

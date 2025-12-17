@@ -437,6 +437,7 @@ employee:
         edit_desc: Update employee information
         cancel: Cancel
         save: Save
+        delete: Delete
         update: Update
         back_to_list: Back to List
         view_title: Employee Details

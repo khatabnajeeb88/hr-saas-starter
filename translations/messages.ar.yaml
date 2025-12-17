@@ -437,6 +437,7 @@ employee:
         edit_desc: تحديث معلومات الموظف
         cancel: إلغاء
         save: حفظ
+        delete: حذف
         update: تحديث
         back_to_list: العودة للقائمة
         view_title: تفاصيل الموظف
