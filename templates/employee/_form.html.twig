@@ -181,7 +181,14 @@
                 </div>
                  <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                     <div>
-                        {{ form_row(form.department) }}
+                        {{ form_label(form.department) }}
+                        <div class="join w-full">
+                            {{ form_widget(form.department) }}
+                            <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button">
+                                <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
+                            </button>
+                        </div>
+                        {{ form_errors(form.department) }}
                     </div>
                     <div>
                          {{ form_row(form.manager) }}
@@ -197,7 +204,14 @@
                 </div>
                  <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                      <div>
-                         {{ form_row(form.employmentType) }}
+                        {{ form_label(form.employmentType) }}
+                        <div class="join w-full">
+                            {{ form_widget(form.employmentType) }}
+                            <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button">
+                                <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
+                            </button>
+                        </div>
+                        {{ form_errors(form.employmentType) }}
                      </div>
                      <div>
                          {{ form_row(form.employmentStatus) }}
@@ -229,11 +243,14 @@
                  </div>
 
                  <div>
-                      {{ form_row(form.experience) }}
-                 </div>
-
-                 <div>
-                     {{ form_row(form.tags) }}
+                    {{ form_label(form.tags) }}
+                    <div class="join w-full">
+                        {{ form_widget(form.tags) }}
+                        <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button">
+                            <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
+                        </button>
+                    </div>
+                    {{ form_errors(form.tags) }}
                  </div>
              </div>
         </div>
