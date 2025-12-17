@@ -441,14 +441,19 @@ employee:
         back_to_list: Back to List
         view_title: Employee Details
         view_desc: View employee information
+        edit_photo: Edit
         add_family_member: Add Family Member
         delete_confirm: Are you sure you want to delete this employee?
+        add_document: Add Document
         account_details:
             title: Account Details
             description: Basic login and identification details
         personal_info:
             title: Personal Info
             description: Basic personal details
+        address:
+            title: Address
+            description: Contact address details
         work_info:
             title: Work Info
             description: Basic work details
@@ -491,6 +496,7 @@ employee:
             contract_end_date: Contract End Date
             basic_salary: Basic Salary
             iban: IBAN
+            profile_image: Profile Image
         placeholders:
             first_name: John
             last_name: Doe
@@ -521,3 +527,15 @@ employee:
     shift:
         regular: Regular
         night: Night
+    document:
+        title: Documents
+        type: Document Type
+        number: Document Number
+        expiry: Expiry Date
+        file: Document File
+        types:
+            iqama: Iqama
+            national_id: National ID
+            passport: Passport
+            driving_license: Driving License
+            other: Other

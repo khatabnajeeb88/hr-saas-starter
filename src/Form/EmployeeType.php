@@ -7,6 +7,7 @@ use App\Entity\EmployeeTag;
 use App\Entity\EmploymentType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -20,6 +21,26 @@ class EmployeeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('profileImage', FileType::class, [
+                'label' => 'employee.form.labels.profile_image',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\File(
+                        maxSize: '5M',
+                        mimeTypes: [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        mimeTypesMessage: 'Please upload a valid image (JPEG, PNG, WEBP)'
+                    )
+                ],
+                'attr' => [
+                    'class' => 'block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100',
+                    'accept' => 'image/*'
+                ]
+            ])
             ->add('firstName', TextType::class, [
                 'label' => 'employee.form.labels.first_name',
                 'attr' => ['placeholder' => 'employee.form.placeholders.first_name', 'class' => 'shadow-none py-2.5 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md'],
@@ -216,6 +237,13 @@ class EmployeeType extends AbstractType
                 'label' => 'employee.form.labels.basic_salary',
                 'required' => false,
                 'attr' => ['class' => 'shadow-none py-2.5 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+            ])
+            ->add('documents', CollectionType::class, [
+                'entry_type' => EmployeeDocumentType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'label' => false,
             ])
         ;
     }

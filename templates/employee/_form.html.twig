@@ -5,7 +5,7 @@
         
         {# Tab Navigation #}
         <div class="border-b border-gray-200 dark:border-gray-700">
-            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
                 <button type="button" 
                         @click="activeTab = 'personal'"
                         :class="activeTab === 'personal' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
@@ -26,18 +26,78 @@
                         class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.bank_details.title'|trans }}
                 </button>
+
+                <button type="button"
+                        @click="activeTab = 'family'"
+                        :class="activeTab === 'family' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    {{ 'employee.form.labels.family_members'|trans }}
+                </button>
+
+                <button type="button"
+                        @click="activeTab = 'documents'"
+                        :class="activeTab === 'documents' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    {{ 'employee.document.title'|trans([], 'messages') }}
+                </button>
             </nav>
         </div>
 
-        {# Section 1: Personal & Account Info #}
+        {# Section 1: Personal Info (Renamed from Account & Personal) #}
         <div x-show="activeTab === 'personal'" class="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
-            {# Account Details Sub-section #}
+            {# Personal Info Sub-section (Renamed from Account Details) #}
             <div class="space-y-6 sm:space-y-5">
                 <div>
-                     <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.account_details.title'|trans }}</h3>
-                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.account_details.description'|trans }}</p>
+                     <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.personal_info.title'|trans }}</h3>
+                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.personal_info.description'|trans }}</p>
                 </div>
                 <div class="space-y-6 sm:space-y-5">
+                    <div x-data="{ 
+                            photoName: null, 
+                            photoPreview: null,
+                            updatePreview() {
+                                const file = this.$refs.photo.files[0];
+                                if (!file) return;
+                                this.photoName = file.name;
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    this.photoPreview = e.target.result;
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        }" class="col-span-1 sm:col-span-2 flex justify-start pb-6">
+                        
+                        <div class="relative w-32 h-32 group cursor-pointer" @click="$refs.photo.click()">
+                            {# Current Profile Photo / Placeholder #}
+                            <div class="w-full h-full rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 relative">
+                                {% if employee.profileImage %}
+                                    <img x-show="!photoPreview" 
+                                         src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" 
+                                         alt="Profile photo" 
+                                         class="w-full h-full object-cover">
+                                {% else %}
+                                    <div x-show="!photoPreview" class="w-full h-full flex items-center justify-center text-gray-400">
+                                        <svg class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                                
+                                {# New Photo Preview #}
+                                <img x-show="photoPreview" :src="photoPreview" class="w-full h-full object-cover" style="display: none;">
+
+                                {# Overlay #}
+                                <div class="absolute bottom-0 w-full h-1/3 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-50 transition-opacity duration-200">
+                                    <span class="text-white text-xs font-medium">{{ 'employee.form.edit_photo'|trans([], 'messages')|default('Edit') }}</span>
+                                </div>
+                            </div>
+
+                            {# Hidden File Input #}
+                            <div class="hidden">
+                                {{ form_widget(form.profileImage, { 'attr': { 'x-ref': 'photo', '@change': 'updatePreview()' } }) }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         <div>
                             {{ form_row(form.firstName) }}
@@ -47,22 +107,18 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-1">
+
+
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         <div>
                             {{ form_row(form.email) }}
                         </div>
+                         <div>
+                            {{ form_row(form.mobile) }}
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            {# Personal Details Sub-section #}
-            <div class="pt-8 space-y-6 sm:space-y-5">
-                <div>
-                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.personal_info.title'|trans }}</h3>
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.personal_info.description'|trans }}</p>
-                </div>
-                <div class="space-y-6 sm:space-y-5">
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                          <div>
                             {{ form_row(form.nationalId) }}
                         </div>
@@ -83,7 +139,16 @@
                              {{ form_row(form.maritalStatus) }}
                         </div>
                     </div>
-                     
+                </div>
+            </div>
+
+            {# Address Sub-section (Renamed from Personal Info) #}
+            <div class="pt-8 space-y-6 sm:space-y-5">
+                <div>
+                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.address.title'|trans }}</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.address.description'|trans }}</p>
+                </div>
+                <div class="space-y-6 sm:space-y-5">
                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         <div>
                             {{ form_row(form.country) }}
@@ -96,72 +161,11 @@
                     <div>
                         {{ form_row(form.address) }}
                     </div>
-                    
-                    <div>
-                        {{ form_row(form.mobile) }}
-                    </div>
-                    
-                    <div>
-                         {{ form_row(form.experience) }}
-                    </div>
-
-                    {% set prototype_html %}
-                        <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
-                            <button type="button" 
-                                    class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
-                                    data-action="form-collection#removeCollectionElement">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                                {{ form_row(form.familyMembers.vars.prototype.name) }}
-                                {{ form_row(form.familyMembers.vars.prototype.relationship) }}
-                                {{ form_row(form.familyMembers.vars.prototype.dateOfBirth) }}
-                                {{ form_row(form.familyMembers.vars.prototype.phone) }}
-                            </div>
-                        </div>
-                    {% endset %}
-
-                    <div class="border-t border-gray-200 pt-6"
-                         data-controller="form-collection"
-                         data-form-collection-index-value="{{ form.familyMembers|length > 0 ? form.familyMembers|last.vars.name + 1 : 0 }}"
-                         data-form-collection-prototype-value="{{ prototype_html|e('html_attr') }}">
-                        
-                        <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-base font-medium text-gray-900 dark:text-gray-100">{{ 'employee.form.labels.family_members'|trans }}</h4>
-                            <button type="button"
-                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                                    data-action="form-collection#addCollectionElement">
-                                {{ 'employee.form.add_family_member'|trans([], 'messages')|default('Add Family Member') }}
-                            </button>
-                        </div>
-
-                        <div data-form-collection-target="collection" class="space-y-4">
-                            {% for memberForm in form.familyMembers %}
-                                <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
-                                    <button type="button" 
-                                            class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
-                                            data-action="form-collection#removeCollectionElement">
-                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                                        {{ form_row(memberForm.name) }}
-                                        {{ form_row(memberForm.relationship) }}
-                                        {{ form_row(memberForm.dateOfBirth) }}
-                                        {{ form_row(memberForm.phone) }}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
-         {# Section 3: Work Info #}
+         {# Section 2: Work Info #}
         <div x-show="activeTab === 'work'" class="space-y-6 sm:space-y-5">
             <div>
                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.work_info.title'|trans }}</h3>
@@ -225,12 +229,16 @@
                  </div>
 
                  <div>
+                      {{ form_row(form.experience) }}
+                 </div>
+
+                 <div>
                      {{ form_row(form.tags) }}
                  </div>
              </div>
         </div>
 
-        {# Section 4: Bank Details #}
+        {# Section 3: Bank Details #}
         <div x-show="activeTab === 'bank'" class="space-y-6 sm:space-y-5">
              <div>
                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.bank_details.title'|trans }}</h3>
@@ -254,6 +262,124 @@
                      <div>
                          {{ form_row(form.iban) }}
                     </div>
+                </div>
+            </div>
+        </div>
+
+        {# Section 4: Family Members (New Tab) #}
+        <div x-show="activeTab === 'family'" class="space-y-6 sm:space-y-5">
+            <div>
+                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.labels.family_members'|trans }}</h3>
+            </div>
+            
+            {% set prototype_family_html %}
+                <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
+                    <button type="button" 
+                            class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                            data-action="form-collection#removeCollectionElement">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        {{ form_row(form.familyMembers.vars.prototype.name) }}
+                        {{ form_row(form.familyMembers.vars.prototype.relationship) }}
+                        {{ form_row(form.familyMembers.vars.prototype.dateOfBirth) }}
+                        {{ form_row(form.familyMembers.vars.prototype.phone) }}
+                    </div>
+                </div>
+            {% endset %}
+
+            <div class=""
+                 data-controller="form-collection"
+                 data-form-collection-index-value="{{ form.familyMembers|length > 0 ? form.familyMembers|last.vars.name + 1 : 0 }}"
+                 data-form-collection-prototype-value="{{ prototype_family_html|e('html_attr') }}">
+                
+                <div class="flex items-center justify-end mb-4">
+                    <button type="button"
+                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            data-action="form-collection#addCollectionElement">
+                        {{ 'employee.form.add_family_member'|trans([], 'messages')|default('Add Family Member') }}
+                    </button>
+                </div>
+
+                <div data-form-collection-target="collection" class="space-y-4">
+                    {% for memberForm in form.familyMembers %}
+                        <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
+                            <button type="button" 
+                                    class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                                    data-action="form-collection#removeCollectionElement">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                                {{ form_row(memberForm.name) }}
+                                {{ form_row(memberForm.relationship) }}
+                                {{ form_row(memberForm.dateOfBirth) }}
+                                {{ form_row(memberForm.phone) }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {# Section 5: Documents (New Tab) #}
+        <div x-show="activeTab === 'documents'" class="space-y-6 sm:space-y-5">
+            <div>
+                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.document.title'|trans([], 'messages') }}</h3>
+            </div>
+
+            {% set prototype_docs_html %}
+                <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
+                    <button type="button" 
+                            class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                            data-action="form-collection#removeCollectionElement">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        {{ form_row(form.documents.vars.prototype.type) }}
+                        {{ form_row(form.documents.vars.prototype.documentNumber) }}
+                        {{ form_row(form.documents.vars.prototype.expiryDate) }}
+                         {{ form_row(form.documents.vars.prototype.file) }}
+                    </div>
+                </div>
+            {% endset %}
+
+            <div class=""
+                 data-controller="form-collection"
+                 data-form-collection-index-value="{{ form.documents|length > 0 ? form.documents|last.vars.name + 1 : 0 }}"
+                 data-form-collection-prototype-value="{{ prototype_docs_html|e('html_attr') }}">
+                
+                <div class="flex items-center justify-end mb-4">
+                    <button type="button"
+                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            data-action="form-collection#addCollectionElement">
+                        {{ 'employee.form.add_document'|trans([], 'messages')|default('Add Document') }}
+                    </button>
+                </div>
+
+                <div data-form-collection-target="collection" class="space-y-4">
+                    {% for docForm in form.documents %}
+                        <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
+                            <button type="button" 
+                                    class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                                    data-action="form-collection#removeCollectionElement">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                                {{ form_row(docForm.type) }}
+                                {{ form_row(docForm.documentNumber) }}
+                                {{ form_row(docForm.expiryDate) }}
+                                {{ form_row(docForm.file) }}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

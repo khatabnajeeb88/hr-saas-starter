@@ -441,14 +441,19 @@ employee:
         back_to_list: العودة للقائمة
         view_title: تفاصيل الموظف
         view_desc: عرض معلومات الموظف
+        edit_photo: تعديل
         add_family_member: إضافة فرد من العائلة
         delete_confirm: هل أنت متأكد أنك تريد حذف هذا الموظف؟
+        add_document: إضافة وثيقة
         account_details:
             title: تفاصيل الحساب
             description: التفاصيل الأساسية لتسجيل الدخول والتعريف
         personal_info:
             title: تفاصيل الشخص
             description: التفاصيل الأساسية للشخص
+        address:
+            title: العنوان
+            description: تفاصيل العنوان
         work_info:
             title: تفاصيل العمل
             description: التفاصيل الأساسية للعمل
@@ -491,6 +496,7 @@ employee:
             contract_end_date: تاريخ انتهاء العقد
             basic_salary: الراتب الأساسي
             iban: رقم الآيبان
+            profile_image: الصورة الشخصية
         placeholders:
             first_name: عبد العزيز
             last_name: محمد
@@ -521,3 +527,15 @@ employee:
     shift:
         regular: عادي
         night: ليلي
+    document:
+        title: المستندات
+        type: نوع المستند
+        number: رقم المستند
+        expiry: تاريخ انتهاء المستند
+        file: ملف المستند
+        types:
+            iqama: رقم الاقامة
+            national_id: رقم الهوية
+            passport: رقم جواز السفر
+            driving_license: رقم رخصة القيادة
+            other: آخر

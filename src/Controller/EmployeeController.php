@@ -43,7 +43,7 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_employee_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, \Symfony\Component\String\Slugger\SluggerInterface $slugger): Response
     {
         $employee = new Employee();
         
@@ -64,7 +64,22 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Handle profile image upload
+            $this->handleProfileImageUpload($form, $employee, $slugger);
+
             $entityManager->persist($employee);
+            
+            // Auto-create draft contract
+            $contract = new \App\Entity\Contract();
+            $contract->setEmployee($employee);
+            $contract->setBasicSalary($employee->getBasicSalary() ?? '0.00');
+            $contract->setStartDate($employee->getJoiningDate() ?? new \DateTimeImmutable());
+            // Default to Saudi for now, or maybe infer?
+            $contract->setType(\App\Entity\Contract::TYPE_SAUDI); 
+            $contract->setStatus(\App\Entity\Contract::STATUS_DRAFT);
+            
+            $entityManager->persist($contract);
+            
             $entityManager->flush();
 
             return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
@@ -91,7 +106,7 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_employee_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Employee $employee, EntityManagerInterface $entityManager, \Symfony\Component\String\Slugger\SluggerInterface $slugger): Response
     {
         // Security check
         $user = $this->getUser();
@@ -103,6 +118,9 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Handle profile image upload
+            $this->handleProfileImageUpload($form, $employee, $slugger);
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
@@ -129,5 +147,28 @@ class EmployeeController extends AbstractController
         }
 
         return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function handleProfileImageUpload($form, Employee $employee, \Symfony\Component\String\Slugger\SluggerInterface $slugger): void
+    {
+        /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $imageFile */
+        $imageFile = $form->get('profileImage')->getData();
+
+        if ($imageFile) {
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+            try {
+                $imageFile->move(
+                    $this->getParameter('kernel.project_dir').'/public/uploads/photos',
+                    $newFilename
+                );
+            } catch (\Symfony\Component\HttpFoundation\File\Exception\FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+
+            $employee->setProfileImage($newFilename);
+        }
     }
 }

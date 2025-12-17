@@ -12,6 +12,9 @@ class Contract
     public const TYPE_SAUDI = 'saudi';
     public const TYPE_EXPATRIATE = 'expatriate';
 
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_ACTIVE = 'active';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -23,6 +26,9 @@ class Contract
 
     #[ORM\Column(length: 50)]
     private ?string $type = null;
+
+    #[ORM\Column(length: 20)]
+    private ?string $status = self::STATUS_DRAFT;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $startDate = null;
@@ -127,6 +133,18 @@ class Contract
     public function setTransportAllowance(?string $transportAllowance): static
     {
         $this->transportAllowance = $transportAllowance;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
