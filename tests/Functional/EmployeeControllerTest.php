@@ -89,6 +89,34 @@ class EmployeeControllerTest extends WebTestCase
         $this->assertEquals($this->team->getId(), $employee->getTeam()->getId());
     }
 
+    public function testNewEmployeeContractCreation(): void
+    {
+        $this->client->loginUser($this->user);
+        $crawler = $this->client->request('GET', '/en/employee/new');
+
+        $email = 'contract.test.' . uniqid() . '@example.com';
+
+        $form = $crawler->selectButton('Save')->form();
+        $form['employee[firstName]'] = 'Contract';
+        $form['employee[lastName]'] = 'Test';
+        $form['employee[email]'] = $email;
+        $form['employee[basicSalary]'] = '5000.00';
+        $form['employee[joiningDate]'] = (new \DateTime())->format('Y-m-d');
+
+        $this->client->submit($form);
+
+        $employee = $this->entityManager->getRepository(Employee::class)->findOneBy(['email' => $email]);
+        $this->assertNotNull($employee);
+
+        // Check for contract
+        $contracts = $employee->getContracts();
+        $this->assertCount(1, $contracts);
+        
+        $contract = $contracts->first();
+        $this->assertEquals('5000.00', $contract->getBasicSalary());
+        $this->assertEquals(\App\Entity\Contract::STATUS_DRAFT, $contract->getStatus());
+    }
+
     public function testEdit(): void
     {
         // Reload team to ensure it's managed
@@ -160,6 +188,98 @@ class EmployeeControllerTest extends WebTestCase
         $this->assertNull($deletedEmployee);
     }
     
+    public function testProfileImageUpload(): void
+    {
+        $this->client->loginUser($this->user);
+        $crawler = $this->client->request('GET', '/en/employee/new');
+
+        $email = 'image.test.' . uniqid() . '@example.com';
+        
+        // Create a temporary dummy image (1x1 pixel JPEG)
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_image');
+        $base64Jpg = '/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=';
+        file_put_contents($tempFile, base64_decode($base64Jpg));
+        $newTempFile = $tempFile . '.jpg';
+        rename($tempFile, $newTempFile);
+
+        $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile(
+            $newTempFile,
+            'test.jpg',
+            'image/jpeg',
+            null,
+            true
+        );
+
+        $form = $crawler->selectButton('Save')->form();
+        $form['employee[firstName]'] = 'Image';
+        $form['employee[lastName]'] = 'Test';
+        $form['employee[email]'] = $email;
+        $form['employee[profileImage]'] = $uploadedFile;
+
+        $this->client->submit($form);
+
+        $employee = $this->entityManager->getRepository(Employee::class)->findOneBy(['email' => $email]);
+        $this->assertNotNull($employee);
+        $this->assertNotNull($employee->getProfileImage());
+        
+        // Verify file exists
+        $uploadDir = static::getContainer()->getParameter('kernel.project_dir') . '/public/uploads/photos';
+        $this->assertFileExists($uploadDir . '/' . $employee->getProfileImage());
+        
+        // Cleanup uploaded file
+        if (file_exists($uploadDir . '/' . $employee->getProfileImage())) {
+            unlink($uploadDir . '/' . $employee->getProfileImage());
+        }
+        // Cleanup temp file
+        if (file_exists($newTempFile)) {
+            unlink($newTempFile);
+        }
+    }
+
+    public function testManagerSelfExclusion(): void
+    {
+        // Reload team to ensure it's managed
+        $team = $this->entityManager->getRepository(Team::class)->find($this->team->getId());
+
+        // Create an employee
+        $employee = new Employee();
+        $employee->setFirstName('Manager');
+        $employee->setLastName('Candidate');
+        $employee->setEmail('manager.' . uniqid() . '@example.com');
+        $employee->setTeam($team);
+        $employee->setJoinedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($employee);
+        
+        // Create another employee to be a potential manager
+        $otherEmployee = new Employee();
+        $otherEmployee->setFirstName('Other');
+        $otherEmployee->setLastName('Employee');
+        $otherEmployee->setEmail('other.' . uniqid() . '@example.com');
+        $otherEmployee->setTeam($team);
+        $otherEmployee->setJoinedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($otherEmployee);
+        
+        $this->entityManager->flush();
+
+        $this->client->loginUser($this->user);
+        
+        // Go to edit page of the first employee
+        $crawler = $this->client->request('GET', '/en/employee/' . $employee->getId() . '/edit');
+        
+        $this->assertResponseIsSuccessful();
+        
+        // Check options in the manager select
+        $managerSelect = $crawler->filter('select[name="employee[manager]"]');
+        
+        // The option for the employee themselves should NOT exist
+        $selfOption = $managerSelect->filter('option[value="' . $employee->getId() . '"]');
+        $this->assertCount(0, $selfOption, 'Self should not be in manager list');
+        
+        // The option for the other employee SHOULD exist
+        $otherOption = $managerSelect->filter('option[value="' . $otherEmployee->getId() . '"]');
+        $this->assertCount(1, $otherOption, 'Other employee should be in manager list');
+    }
+
     public function testAccessDeniedForOtherTeam(): void
     {
         // Create another user and team
