@@ -1,5 +1,6 @@
 import './stimulus_bootstrap.js';
 import './js/alpine/index.js';
+import 'flyonui/flyonui';
 /*
  * Welcome to your app's main JavaScript file!
  *
