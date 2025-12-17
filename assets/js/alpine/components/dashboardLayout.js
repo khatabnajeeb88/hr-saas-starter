@@ -3,6 +3,7 @@ export default () => ({
     sidebarCollapsed: localStorage.getItem('sidebarCollapsed') === 'true',
     profileDropdown: false,
     dashboardDropdown: true,
+    employeesDropdown: false,
     workspaceDropdown: false,
     
     toggleSidebar() {

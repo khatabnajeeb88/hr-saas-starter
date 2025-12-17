@@ -13,7 +13,11 @@ menu:
     default: Default
     analytics: Analytics
     ecommerce: Ecommerce
-    employees: Employees
+    employees:
+        title: Employee
+        department: Department
+        contract: Contract
+        documents: Documents
 
 dashboard:
     title: Dashboard
