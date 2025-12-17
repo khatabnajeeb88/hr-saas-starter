@@ -441,6 +441,7 @@ employee:
         back_to_list: العودة للقائمة
         view_title: تفاصيل الموظف
         view_desc: عرض معلومات الموظف
+        add_family_member: إضافة فرد من العائلة
         delete_confirm: هل أنت متأكد أنك تريد حذف هذا الموظف؟
         account_details:
             title: تفاصيل الحساب
@@ -476,6 +477,20 @@ employee:
             national_id: رقم الهوية
             issue_date: تاريخ الإصدار
             expiry_date: تاريخ الانتهاء
+            family_members: أفراد العائلة
+            marital_status: الحالة الاجتماعية
+            experience: الخبرة
+            role: المسمى الوظيفي
+            manager: المدير المباشر
+            employment_type_entity: نوع التوظيف
+            tags: وسوم الموظف
+            work_location: موقع العمل
+            work_email: البريد الإلكتروني للعمل
+            work_phone: هاتف العمل
+            joining_date: تاريخ الانضمام
+            contract_end_date: تاريخ انتهاء العقد
+            basic_salary: الراتب الأساسي
+            iban: رقم الآيبان
         placeholders:
             first_name: عبد العزيز
             last_name: محمد
@@ -487,6 +502,14 @@ employee:
             select_gender: اختر الجنس
             select_work_type: اختر نوع العمل
             select_shift: اختر الوردية
+            select_marital_status: اختر الحالة الاجتماعية
+            select_manager: اختر المدير
+            select_employment_type: اختر نوع التوظيف
+    marital_status:
+        single: أعزب
+        married: متزوج
+        divorced: مطلق
+        widowed: أرمل
     gender:
         male: ذكر
         female: أنثى

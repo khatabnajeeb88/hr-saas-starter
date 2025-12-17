@@ -1,81 +1,168 @@
 {% form_theme form 'form/theme.html.twig' %}
 
 {{ form_start(form) }}
-    <div class="space-y-8 divide-y divide-gray-200">
+    <div x-data="{ activeTab: 'personal' }" class="space-y-6">
         
-        {# Section 1: Account Details #}
-        <div class="space-y-6 sm:space-y-5">
-            <div>
-                <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.account_details.title'|trans }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.account_details.description'|trans }}</p>
-            </div>
-            <div class="space-y-6 sm:space-y-5">
-                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                    <div>
-                        {{ form_row(form.firstName) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.lastName) }}
-                    </div>
-                </div>
+        {# Tab Navigation #}
+        <div class="border-b border-gray-200 dark:border-gray-700">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button type="button" 
+                        @click="activeTab = 'personal'"
+                        :class="activeTab === 'personal' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    {{ 'employee.form.personal_info.title'|trans }}
+                </button>
 
-                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-1">
-                    <div>
-                        {{ form_row(form.email) }}
-                    </div>
-                    {# Password field if it exists, or placeholder for design match #}
-                </div>
-            </div>
+                <button type="button"
+                        @click="activeTab = 'work'"
+                        :class="activeTab === 'work' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    {{ 'employee.form.work_info.title'|trans }}
+                </button>
+
+                <button type="button"
+                        @click="activeTab = 'bank'"
+                        :class="activeTab === 'bank' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                    {{ 'employee.form.bank_details.title'|trans }}
+                </button>
+            </nav>
         </div>
 
-        {# Section 2: Personal Info #}
-        <div class="pt-8 space-y-6 sm:space-y-5">
-            <div>
-                <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.personal_info.title'|trans }}</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.personal_info.description'|trans }}</p>
-            </div>
+        {# Section 1: Personal & Account Info #}
+        <div x-show="activeTab === 'personal'" class="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
+            {# Account Details Sub-section #}
             <div class="space-y-6 sm:space-y-5">
-                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                     <div>
-                        {{ form_row(form.nationalId) }}
-                    </div>
-                     <div class="grid grid-cols-2 gap-4">
-                        {{ form_row(form.nationalIdIssueDate) }}
-                        {{ form_row(form.nationalIdExpiryDate) }}
-                     </div>
-                </div>
-                
-                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                    <div>
-                        {{ form_row(form.dateOfBirth) }}
-                    </div>
-                    <div>
-                         {{ form_row(form.gender) }}
-                         {# Radio buttons for gender need specific styling if expanded in theme #}
-                    </div>
-                </div>
-                 
-                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                    <div>
-                        {{ form_row(form.country) }}
-                    </div>
-                     <div>
-                        {{ form_row(form.city) }}
-                    </div>
-                </div>
-
                 <div>
-                    {{ form_row(form.address) }}
+                     <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.account_details.title'|trans }}</h3>
+                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.account_details.description'|trans }}</p>
                 </div>
-                
-                 <div>
-                    {{ form_row(form.mobile) }}
+                <div class="space-y-6 sm:space-y-5">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <div>
+                            {{ form_row(form.firstName) }}
+                        </div>
+                        <div>
+                            {{ form_row(form.lastName) }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-1">
+                        <div>
+                            {{ form_row(form.email) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Personal Details Sub-section #}
+            <div class="pt-8 space-y-6 sm:space-y-5">
+                <div>
+                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.personal_info.title'|trans }}</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.personal_info.description'|trans }}</p>
+                </div>
+                <div class="space-y-6 sm:space-y-5">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                         <div>
+                            {{ form_row(form.nationalId) }}
+                        </div>
+                         <div class="grid grid-cols-2 gap-4">
+                            {{ form_row(form.nationalIdIssueDate) }}
+                            {{ form_row(form.nationalIdExpiryDate) }}
+                         </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+                        <div>
+                            {{ form_row(form.dateOfBirth) }}
+                        </div>
+                        <div>
+                             {{ form_row(form.gender) }}
+                        </div>
+                        <div>
+                             {{ form_row(form.maritalStatus) }}
+                        </div>
+                    </div>
+                     
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <div>
+                            {{ form_row(form.country) }}
+                        </div>
+                         <div>
+                            {{ form_row(form.city) }}
+                        </div>
+                    </div>
+
+                    <div>
+                        {{ form_row(form.address) }}
+                    </div>
+                    
+                    <div>
+                        {{ form_row(form.mobile) }}
+                    </div>
+                    
+                    <div>
+                         {{ form_row(form.experience) }}
+                    </div>
+
+                    {% set prototype_html %}
+                        <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
+                            <button type="button" 
+                                    class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                                    data-action="form-collection#removeCollectionElement">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                                {{ form_row(form.familyMembers.vars.prototype.name) }}
+                                {{ form_row(form.familyMembers.vars.prototype.relationship) }}
+                                {{ form_row(form.familyMembers.vars.prototype.dateOfBirth) }}
+                                {{ form_row(form.familyMembers.vars.prototype.phone) }}
+                            </div>
+                        </div>
+                    {% endset %}
+
+                    <div class="border-t border-gray-200 pt-6"
+                         data-controller="form-collection"
+                         data-form-collection-index-value="{{ form.familyMembers|length > 0 ? form.familyMembers|last.vars.name + 1 : 0 }}"
+                         data-form-collection-prototype-value="{{ prototype_html|e('html_attr') }}">
+                        
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-base font-medium text-gray-900 dark:text-gray-100">{{ 'employee.form.labels.family_members'|trans }}</h4>
+                            <button type="button"
+                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                                    data-action="form-collection#addCollectionElement">
+                                {{ 'employee.form.add_family_member'|trans([], 'messages')|default('Add Family Member') }}
+                            </button>
+                        </div>
+
+                        <div data-form-collection-target="collection" class="space-y-4">
+                            {% for memberForm in form.familyMembers %}
+                                <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
+                                    <button type="button" 
+                                            class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
+                                            data-action="form-collection#removeCollectionElement">
+                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                                        {{ form_row(memberForm.name) }}
+                                        {{ form_row(memberForm.relationship) }}
+                                        {{ form_row(memberForm.dateOfBirth) }}
+                                        {{ form_row(memberForm.phone) }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
          {# Section 3: Work Info #}
-        <div class="pt-8 space-y-6 sm:space-y-5">
+        <div x-show="activeTab === 'work'" class="space-y-6 sm:space-y-5">
             <div>
                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.work_info.title'|trans }}</h3>
             </div>
@@ -85,7 +172,15 @@
                         {{ form_row(form.jobTitle) }}
                     </div>
                     <div>
+                        {{ form_row(form.employeeRole) }}
+                    </div>
+                </div>
+                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                    <div>
                         {{ form_row(form.department) }}
+                    </div>
+                    <div>
+                         {{ form_row(form.manager) }}
                     </div>
                 </div>
                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
@@ -96,14 +191,47 @@
                         {{ form_row(form.shift) }}
                     </div>
                 </div>
+                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                     <div>
+                         {{ form_row(form.employmentType) }}
+                     </div>
+                     <div>
+                         {{ form_row(form.employmentStatus) }}
+                     </div>
+                 </div>
+
+                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+                     <div>
+                         {{ form_row(form.workEmail) }}
+                     </div>
+                     <div>
+                         {{ form_row(form.workPhone) }}
+                     </div>
+                     <div>
+                         {{ form_row(form.workLocation) }}
+                     </div>
+                 </div>
+
+                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+                     <div>
+                         {{ form_row(form.joiningDate) }}
+                     </div>
+                     <div>
+                         {{ form_row(form.contractEndDate) }}
+                     </div>
+                     <div>
+                         {{ form_row(form.basicSalary) }}
+                     </div>
+                 </div>
+
                  <div>
-                    {{ form_row(form.employmentStatus) }}
-                </div>
+                     {{ form_row(form.tags) }}
+                 </div>
              </div>
         </div>
 
         {# Section 4: Bank Details #}
-        <div class="pt-8 space-y-6 sm:space-y-5">
+        <div x-show="activeTab === 'bank'" class="space-y-6 sm:space-y-5">
              <div>
                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.bank_details.title'|trans }}</h3>
             </div>
@@ -119,8 +247,13 @@
                          {{ form_row(form.bankBranch) }}
                     </div>
                 </div>
-                 <div>
-                     {{ form_row(form.bankAccountNumber) }}
+                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                     <div>
+                         {{ form_row(form.bankAccountNumber) }}
+                    </div>
+                     <div>
+                         {{ form_row(form.iban) }}
+                    </div>
                 </div>
             </div>
         </div>

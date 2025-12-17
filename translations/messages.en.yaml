@@ -441,6 +441,7 @@ employee:
         back_to_list: Back to List
         view_title: Employee Details
         view_desc: View employee information
+        add_family_member: Add Family Member
         delete_confirm: Are you sure you want to delete this employee?
         account_details:
             title: Account Details
@@ -476,6 +477,20 @@ employee:
             national_id: National ID / Iqama
             issue_date: Issue Date
             expiry_date: Expiry Date
+            family_members: Family Members
+            marital_status: Marital Status
+            experience: Experience
+            role: Employee Role
+            manager: Reporting Manager
+            employment_type_entity: Employment Type
+            tags: Employee Tags
+            work_location: Work Location
+            work_email: Work Email
+            work_phone: Work Phone
+            joining_date: Joining Date
+            contract_end_date: Contract End Date
+            basic_salary: Basic Salary
+            iban: IBAN
         placeholders:
             first_name: John
             last_name: Doe
@@ -487,6 +502,14 @@ employee:
             select_gender: Select Gender
             select_work_type: Select Work Type
             select_shift: Select Shift
+            select_marital_status: Select Marital Status
+            select_manager: Select Manager
+            select_employment_type: Select Employment Type
+    marital_status:
+        single: Single
+        married: Married
+        divorced: Divorced
+        widowed: Widowed
     gender:
         male: Male
         female: Female

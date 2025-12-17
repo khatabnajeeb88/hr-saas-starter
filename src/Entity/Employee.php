@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Employee
 {
     #[ORM\Id]
@@ -101,12 +102,70 @@ class Employee
     #[ORM\JoinColumn(nullable: false)]
     private ?Team $team = null;
 
+    // New Fields
+    #[ORM\Column(length: 50, unique: true, nullable: true)]
+    private ?string $badgeId = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $experience = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $maritalStatus = null;
+
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: FamilyMember::class, cascade: ['persist', 'remove'])]
+    private Collection $familyMembers;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $employeeRole = null;
+
+    #[ORM\ManyToOne(targetEntity: self::class)]
+    private ?self $manager = null;
+
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    private ?EmploymentType $employmentType = null;
+
+    #[ORM\ManyToMany(targetEntity: EmployeeTag::class, inversedBy: 'employees')]
+    private Collection $tags;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $workLocation = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $workEmail = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $workPhone = null;
+
+    #[ORM\Column(type: 'date_immutable', nullable: true)]
+    private ?\DateTimeImmutable $joiningDate = null;
+
+    #[ORM\Column(type: 'date_immutable', nullable: true)]
+    private ?\DateTimeImmutable $contractEndDate = null;
+
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
+    private ?string $basicSalary = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $iban = null;
+
     public function __construct()
     {
         $this->joinedAt = new \DateTimeImmutable();
         $this->contracts = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->requests = new ArrayCollection();
+        $this->familyMembers = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setBadgeIdValue(): void
+    {
+        if ($this->badgeId === null) {
+             // Simple unique ID generation relative to time to avoid collisions in a simple way
+             // In a real app with high concurrency, a DB sequence or UUID is better.
+             $this->badgeId = 'EMP-' . strtoupper(substr(uniqid(), -6));
+        }
     }
 
     // ... Getters and Setters ...
@@ -475,6 +534,198 @@ class Employee
             }
         }
 
+        return $this;
+    }
+
+    public function getBadgeId(): ?string
+    {
+        return $this->badgeId;
+    }
+
+    public function setBadgeId(?string $badgeId): static
+    {
+        $this->badgeId = $badgeId;
+        return $this;
+    }
+
+    public function getExperience(): ?string
+    {
+        return $this->experience;
+    }
+
+    public function setExperience(?string $experience): static
+    {
+        $this->experience = $experience;
+        return $this;
+    }
+
+    public function getMaritalStatus(): ?string
+    {
+        return $this->maritalStatus;
+    }
+
+    public function setMaritalStatus(?string $maritalStatus): static
+    {
+        $this->maritalStatus = $maritalStatus;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FamilyMember>
+     */
+    public function getFamilyMembers(): Collection
+    {
+        return $this->familyMembers;
+    }
+
+    public function addFamilyMember(FamilyMember $familyMember): static
+    {
+        if (!$this->familyMembers->contains($familyMember)) {
+            $this->familyMembers->add($familyMember);
+            $familyMember->setEmployee($this);
+        }
+        return $this;
+    }
+
+    public function removeFamilyMember(FamilyMember $familyMember): static
+    {
+        if ($this->familyMembers->removeElement($familyMember)) {
+            if ($familyMember->getEmployee() === $this) {
+                $familyMember->setEmployee(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getEmployeeRole(): ?string
+    {
+        return $this->employeeRole;
+    }
+
+    public function setEmployeeRole(?string $employeeRole): static
+    {
+        $this->employeeRole = $employeeRole;
+        return $this;
+    }
+
+    public function getManager(): ?self
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?self $manager): static
+    {
+        $this->manager = $manager;
+        return $this;
+    }
+
+    public function getEmploymentType(): ?EmploymentType
+    {
+        return $this->employmentType;
+    }
+
+    public function setEmploymentType(?EmploymentType $employmentType): static
+    {
+        $this->employmentType = $employmentType;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EmployeeTag>
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(EmployeeTag $tag): static
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags->add($tag);
+        }
+        return $this;
+    }
+
+    public function removeTag(EmployeeTag $tag): static
+    {
+        $this->tags->removeElement($tag);
+        return $this;
+    }
+
+    public function getWorkLocation(): ?string
+    {
+        return $this->workLocation;
+    }
+
+    public function setWorkLocation(?string $workLocation): static
+    {
+        $this->workLocation = $workLocation;
+        return $this;
+    }
+
+    public function getWorkEmail(): ?string
+    {
+        return $this->workEmail;
+    }
+
+    public function setWorkEmail(?string $workEmail): static
+    {
+        $this->workEmail = $workEmail;
+        return $this;
+    }
+
+    public function getWorkPhone(): ?string
+    {
+        return $this->workPhone;
+    }
+
+    public function setWorkPhone(?string $workPhone): static
+    {
+        $this->workPhone = $workPhone;
+        return $this;
+    }
+
+    public function getJoiningDate(): ?\DateTimeImmutable
+    {
+        return $this->joiningDate;
+    }
+
+    public function setJoiningDate(?\DateTimeImmutable $joiningDate): static
+    {
+        $this->joiningDate = $joiningDate;
+        return $this;
+    }
+
+    public function getContractEndDate(): ?\DateTimeImmutable
+    {
+        return $this->contractEndDate;
+    }
+
+    public function setContractEndDate(?\DateTimeImmutable $contractEndDate): static
+    {
+        $this->contractEndDate = $contractEndDate;
+        return $this;
+    }
+
+    public function getBasicSalary(): ?string
+    {
+        return $this->basicSalary;
+    }
+
+    public function setBasicSalary(?string $basicSalary): static
+    {
+        $this->basicSalary = $basicSalary;
+        return $this;
+    }
+
+    public function getIban(): ?string
+    {
+        return $this->iban;
+    }
+
+    public function setIban(?string $iban): static
+    {
+        $this->iban = $iban;
         return $this;
     }
 }
