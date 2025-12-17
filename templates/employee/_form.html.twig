@@ -389,7 +389,7 @@
     <div class="pt-5">
         <div class="flex justify-end gap-3">
             <a href="{{ path('app_employee_index') }}" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ 'employee.form.cancel'|trans }}</a>
-            <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-purple-600 py-2 px-4 text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ 'employee.form.save'|trans }}</button>
+            <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-purple-600 py-2 px-4 text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ button_label|default('employee.form.save'|trans) }}</button>
         </div>
     </div>
 {{ form_end(form) }}
