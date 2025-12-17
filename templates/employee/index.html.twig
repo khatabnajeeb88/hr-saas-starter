@@ -1,6 +1,6 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Employees{% endblock %}
+{% block title %}{{ 'employee.title'|trans }}{% endblock %}
 
 {% block dashboard_content %}
     <div class="space-y-6">
@@ -73,7 +73,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
+                                        <div class="shrink-0 h-10 w-10">
                                             <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">
                                                 {{ employee.firstName|first }}{{ employee.lastName|first }}
                                             </div>

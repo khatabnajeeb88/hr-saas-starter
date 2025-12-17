@@ -13,11 +13,13 @@ menu:
     default: الافتراضي
     analytics: تحليلات
     ecommerce: تجارة الإلكترونية
+    applications_management: إدارة التطبيقات
     employees:
         title: الموظفين
         department: الأقسام
         contract: العقود
         documents: المستندات
+        employees_management: إدارة الموظفين
 
 dashboard:
     title: لوحة التحكم
