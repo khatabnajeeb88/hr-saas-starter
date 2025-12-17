@@ -24,6 +24,28 @@ class DepartmentController extends AbstractController
         ]);
     }
 
+    #[Route('/create/ajax', name: 'app_department_create_ajax', methods: ['POST'])]
+    public function createAjax(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'] ?? null;
+
+        if (!$name) {
+            return $this->json(['error' => 'Name is required'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $department = new Department();
+        $department->setName($name);
+
+        $entityManager->persist($department);
+        $entityManager->flush();
+
+        return $this->json([
+            'id' => $department->getId(),
+            'name' => $department->getName(),
+        ]);
+    }
+
     #[Route('/new', name: 'app_department_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

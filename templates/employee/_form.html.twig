@@ -184,7 +184,7 @@
                         {{ form_label(form.department) }}
                         <div class="join w-full">
                             {{ form_widget(form.department) }}
-                            <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button">
+                            <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="createDepartmentModal" data-overlay="#createDepartmentModal">
                                 <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
                             </button>
                         </div>
@@ -409,4 +409,45 @@
             <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-purple-600 py-2 px-4 text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ button_label|default('employee.form.save'|trans) }}</button>
         </div>
     </div>
+    {# Create Department Modal #}
+    <div id="createDepartmentModal" 
+         class="overlay modal overlay-open:opacity-100 hidden overlay-open:duration-300 modal-middle" 
+         role="dialog" 
+         tabindex="-1"
+         data-controller="create-department"
+         data-create-department-create-url-value="{{ path('app_department_create_ajax') }}">
+        <div class="modal-dialog overlay-open:opacity-100">
+            <div class="modal-content bg-white dark:bg-gray-800">
+                <div class="modal-header">
+                    <h3 class="modal-title text-gray-700 dark:text-gray-300">{{ 'department.form.create_title'|trans([], 'messages')|default('Create Department') }}</h3>
+                    <button type="button" class="btn btn-text text-gray-400 dark:text-gray-600 btn-circle btn-sm absolute end-3 top-3" aria-label="Close" data-overlay="#createDepartmentModal">
+                        <span class="icon-[tabler--x] size-4"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                {{ 'department.form.name'|trans([], 'messages')|default('Department Name') }}
+                            </label>
+                            <input type="text" 
+                                   id="newDepartmentName" 
+                                   class="input bg-white text-gray-700 dark:text-gray-300 dark:bg-gray-700 block w-full border-gray-300 shadow-none focus:border-purple-500 focus:ring-purple-500 sm:text-sm dark:border-gray-600 rounded-md"
+                                   data-create-department-target="input">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-soft btn-secondary text-gray-400 dark:text-gray-600 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600" data-overlay="#createDepartmentModal">{{ 'department.form.cancel'|trans([], 'messages')|default('Cancel') }}</button>
+                    <button type="button" 
+                            class="btn btn-primary text-white dark:text-gray-900" 
+                            id="saveNewDepartment"
+                            data-action="click->create-department#create">
+                        {{ 'department.form.create'|trans([], 'messages')|default('Create') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {{ form_end(form) }}

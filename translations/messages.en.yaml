@@ -19,7 +19,7 @@ menu:
         department: Department
         contract: Contract
         documents: Documents
-        employees_management: Employees Management
+        employees_management: Employees
 
 dashboard:
     title: Dashboard
@@ -540,3 +540,10 @@ employee:
             passport: Passport
             driving_license: Driving License
             other: Other
+
+department:
+    form:
+        create_title: Create Department
+        name: Department Name
+        cancel: Cancel
+        create: Create

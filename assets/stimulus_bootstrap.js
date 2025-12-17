@@ -14,6 +14,7 @@ context.keys().forEach((key) => {
 
     const controllerName = fileName
         .replace('_controller.js', '')
+        .replace(/_/g, '-')
         .replace(/\//g, '--');
         
     app.register(controllerName, context(key).default);

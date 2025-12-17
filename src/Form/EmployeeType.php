@@ -82,7 +82,7 @@ class EmployeeType extends AbstractType
                 'label' => 'employee.form.labels.department',
                 'required' => false,
                 'placeholder' => 'employee.form.placeholders.select_department',
-                'attr' => ['class' => 'join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
+                'attr' => ['class' => 'sf-select join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
             ])
             ->add('employmentStatus', ChoiceType::class, [
                 'label' => 'employee.form.labels.employment_status',
@@ -92,7 +92,7 @@ class EmployeeType extends AbstractType
                     'employee.status.terminated' => 'terminated',
                     'employee.status.on_leave' => 'on_leave',
                 ],
-                'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+                'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             // Personal
             ->add('mobile', TextType::class, ['label' => 'employee.form.labels.mobile', 'required' => false, 'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']])
@@ -104,7 +104,7 @@ class EmployeeType extends AbstractType
                     'employee.gender.female' => 'Female',
                 ],
                 'required' => false,
-                'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+                'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('dateOfBirth', null, [
                 'label' => 'employee.form.labels.dob',
@@ -122,12 +122,7 @@ class EmployeeType extends AbstractType
                     'employee.marital_status.widowed' => 'widowed',
                 ],
                 'required' => false,
-                'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
-            ])
-            ->add('experience', TextareaType::class, [
-                'label' => 'employee.form.labels.experience',
-                'required' => false,
-                'attr' => ['rows' => 3, 'class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+                'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('address', TextType::class, ['label' => 'employee.form.labels.address', 'required' => false, 'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']])
             ->add('city', TextType::class, ['label' => 'employee.form.labels.city', 'required' => false, 'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']])
@@ -162,7 +157,7 @@ class EmployeeType extends AbstractType
                     'employee.work_type.hybrid' => 'hybrid',
                 ],
                 'required' => false,
-                'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+                'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('shift', ChoiceType::class, [
                 'label' => 'employee.form.labels.shift',
@@ -172,7 +167,7 @@ class EmployeeType extends AbstractType
                     'employee.shift.night' => 'night',
                 ],
                 'required' => false,
-                'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+                'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('employeeRole', TextType::class, [
                 'label' => 'employee.form.labels.role',
@@ -196,7 +191,7 @@ class EmployeeType extends AbstractType
                     
                     return $qb;
                 },
-                'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+                'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('employmentType', \Symfony\Bridge\Doctrine\Form\Type\EntityType::class, [
                 'class' => EmploymentType::class,
@@ -204,7 +199,7 @@ class EmployeeType extends AbstractType
                 'label' => 'employee.form.labels.employment_type_entity',
                 'required' => false,
                 'placeholder' => 'employee.form.placeholders.select_employment_type',
-                'attr' => ['class' => 'join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
+                'attr' => ['class' => 'sf-select join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
             ])
             ->add('tags', \Symfony\Bridge\Doctrine\Form\Type\EntityType::class, [
                 'class' => EmployeeTag::class,

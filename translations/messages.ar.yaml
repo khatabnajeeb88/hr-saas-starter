@@ -540,3 +540,10 @@ employee:
             passport: رقم جواز السفر
             driving_license: رقم رخصة القيادة
             other: آخر
+
+department:
+    form:
+        create_title: إنشاء قسم
+        name: اسم القسم
+        cancel: إلغاء
+        create: إنشاء
