@@ -31,8 +31,8 @@ class Employee
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $jobTitle = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $department = null;
+    #[ORM\ManyToOne(inversedBy: 'employees')]
+    private ?Department $department = null;
 
     #[ORM\Column(length: 50)]
     private ?string $employmentStatus = 'active';
@@ -43,6 +43,15 @@ class Employee
     // Personal Details
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $mobile = null;
+
+    #[ORM\Column(length: 50, nullable: true, unique: true)]
+    private ?string $nationalId = null;
+
+    #[ORM\Column(type: 'date_immutable', nullable: true)]
+    private ?\DateTimeImmutable $nationalIdIssueDate = null;
+
+    #[ORM\Column(type: 'date_immutable', nullable: true)]
+    private ?\DateTimeImmutable $nationalIdExpiryDate = null;
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $gender = null;
@@ -79,8 +88,11 @@ class Employee
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $shift = null; // e.g., 'regular', 'night'
 
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeContract::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Contract::class, cascade: ['persist', 'remove'])]
     private Collection $contracts;
+
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeDocument::class, cascade: ['persist', 'remove'])]
+    private Collection $documents;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeRequest::class, cascade: ['persist', 'remove'])]
     private Collection $requests;
@@ -93,14 +105,114 @@ class Employee
     {
         $this->joinedAt = new \DateTimeImmutable();
         $this->contracts = new ArrayCollection();
+        $this->documents = new ArrayCollection();
         $this->requests = new ArrayCollection();
     }
+
+    // ... Getters and Setters ...
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    public function getNationalId(): ?string
+    {
+        return $this->nationalId;
+    }
+
+    public function setNationalId(?string $nationalId): static
+    {
+        $this->nationalId = $nationalId;
+        return $this;
+    }
+
+    public function getNationalIdIssueDate(): ?\DateTimeImmutable
+    {
+        return $this->nationalIdIssueDate;
+    }
+
+    public function setNationalIdIssueDate(?\DateTimeImmutable $nationalIdIssueDate): static
+    {
+        $this->nationalIdIssueDate = $nationalIdIssueDate;
+        return $this;
+    }
+
+    public function getNationalIdExpiryDate(): ?\DateTimeImmutable
+    {
+        return $this->nationalIdExpiryDate;
+    }
+
+    public function setNationalIdExpiryDate(?\DateTimeImmutable $nationalIdExpiryDate): static
+    {
+        $this->nationalIdExpiryDate = $nationalIdExpiryDate;
+        return $this;
+    }
+
+    public function getDepartment(): ?Department
+    {
+        return $this->department;
+    }
+
+    public function setDepartment(?Department $department): static
+    {
+        $this->department = $department;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Contract>
+     */
+    public function getContracts(): Collection
+    {
+        return $this->contracts;
+    }
+
+    public function addContract(Contract $contract): static
+    {
+        if (!$this->contracts->contains($contract)) {
+            $this->contracts->add($contract);
+            $contract->setEmployee($this);
+        }
+        return $this;
+    }
+
+    public function removeContract(Contract $contract): static
+    {
+        if ($this->contracts->removeElement($contract)) {
+            if ($contract->getEmployee() === $this) {
+                $contract->setEmployee(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EmployeeDocument>
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(EmployeeDocument $document): static
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents->add($document);
+            $document->setEmployee($this);
+        }
+        return $this;
+    }
+
+    public function removeDocument(EmployeeDocument $document): static
+    {
+        if ($this->documents->removeElement($document)) {
+            if ($document->getEmployee() === $this) {
+                $document->setEmployee(null);
+            }
+        }
+        return $this;
+    }
     public function getFirstName(): ?string
     {
         return $this->firstName;
@@ -150,18 +262,6 @@ class Employee
     public function setJobTitle(?string $jobTitle): static
     {
         $this->jobTitle = $jobTitle;
-
-        return $this;
-    }
-
-    public function getDepartment(): ?string
-    {
-        return $this->department;
-    }
-
-    public function setDepartment(?string $department): static
-    {
-        $this->department = $department;
 
         return $this;
     }
@@ -346,35 +446,7 @@ class Employee
         return $this;
     }
 
-    /**
-     * @return Collection<int, EmployeeContract>
-     */
-    public function getContracts(): Collection
-    {
-        return $this->contracts;
-    }
 
-    public function addContract(EmployeeContract $contract): static
-    {
-        if (!$this->contracts->contains($contract)) {
-            $this->contracts->add($contract);
-            $contract->setEmployee($this);
-        }
-
-        return $this;
-    }
-
-    public function removeContract(EmployeeContract $contract): static
-    {
-        if ($this->contracts->removeElement($contract)) {
-            // set the owning side to null (unless already changed)
-            if ($contract->getEmployee() === $this) {
-                $contract->setEmployee(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, EmployeeRequest>

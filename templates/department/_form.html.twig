@@ -1,0 +1,32 @@
+{% form_theme form 'form/theme.html.twig' %}
+
+{{ form_start(form) }}
+    <div class="space-y-6">
+        <div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">Department Details</h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">Manage department structure and leadership.</p>
+        </div>
+        
+        <div class="space-y-6">
+             <div>
+                {{ form_row(form.name) }}
+            </div>
+
+            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                <div>
+                    {{ form_row(form.parent) }}
+                </div>
+                <div>
+                     {{ form_row(form.manager) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-5">
+        <div class="flex justify-end">
+            <a href="{{ path('app_department_index') }}" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-none hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">Cancel</a>
+            <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-purple-600 py-2 px-4 text-sm font-medium text-white shadow-none hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ button_label|default('Save') }}</button>
+        </div>
+    </div>
+{{ form_end(form) }}

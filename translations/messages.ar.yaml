@@ -13,6 +13,7 @@ menu:
     default: الافتراضي
     analytics: تحليلات
     ecommerce: تجارة الإلكترونية
+    employees: الموظفين
 
 dashboard:
     title: لوحة التحكم
@@ -428,10 +429,6 @@ employee:
         create_desc: أضف عضواً جديداً إلى فريقك
         edit_title: تعديل الموظف
         edit_desc: تحديث معلومات الموظف
-        personal_details: التفاصيل الشخصية
-        work_info: معلومات العمل
-        bank_details: التفاصيل البنكية
-        overview: نظرة عامة
         cancel: إلغاء
         save: حفظ
         update: تحديث
@@ -439,6 +436,18 @@ employee:
         view_title: تفاصيل الموظف
         view_desc: عرض معلومات الموظف
         delete_confirm: هل أنت متأكد أنك تريد حذف هذا الموظف؟
+        account_details:
+            title: تفاصيل الحساب
+            description: التفاصيل الأساسية لتسجيل الدخول والتعريف
+        personal_info:
+            title: تفاصيل الشخص
+            description: التفاصيل الأساسية للشخص
+        work_info:
+            title: تفاصيل العمل
+            description: التفاصيل الأساسية للعمل
+        bank_details:
+            title: تفاصيل البنك
+            description: التفاصيل الأساسية للبنك
         labels:
             first_name: الاسم الأول
             last_name: اسم العائلة
@@ -458,6 +467,20 @@ employee:
             account_number: رقم الحساب
             work_type: نوع العمل
             shift: الوردية
+            national_id: رقم الهوية
+            issue_date: تاريخ الإصدار
+            expiry_date: تاريخ الانتهاء
+        placeholders:
+            first_name: عبد العزيز
+            last_name: محمد
+            email: abdulaziz.mohamed@company.com
+            job_title: مهندس برمجيات
+            national_id: "123456789"
+            select_department: اختر القسم
+            select_status: اختر حالة التوظيف
+            select_gender: اختر الجنس
+            select_work_type: اختر نوع العمل
+            select_shift: اختر الوردية
     gender:
         male: ذكر
         female: أنثى

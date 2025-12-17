@@ -20,7 +20,7 @@
     {% include 'components/dashboard/sidebar/workspace_selector.html.twig' %}
     {# Toggle Button #}
     <button @click="toggleSidebarCollapse()" 
-            class="absolute top-6 ltr:-right-3 rtl:-left-3 z-50 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full p-1 text-slate-500 hover:text-purple-600 transition-colors shadow-sm hidden lg:flex items-center justify-center group">
+            class="absolute top-6 ltr:-right-3 rtl:-left-3 z-50 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full p-1 text-slate-500 hover:text-purple-600 transition-colors shadow-none hidden lg:flex items-center justify-center group">
         <svg class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 rtl:rotate-180" :class="{'rotate-180': sidebarCollapsed}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
         </svg>

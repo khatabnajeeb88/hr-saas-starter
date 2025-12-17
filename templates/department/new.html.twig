@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Department{% endblock %}
+
+{% block body %}
+    <div class="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="flex-1 min-w-0">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Create New Department</h2>
+            </div>
+        </div>
+
+        <div class="mt-8 bg-white shadow overflow-hidden sm:rounded-lg p-6">
+            {{ include('department/_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

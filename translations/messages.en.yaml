@@ -13,6 +13,7 @@ menu:
     default: Default
     analytics: Analytics
     ecommerce: Ecommerce
+    employees: Employees
 
 dashboard:
     title: Dashboard
@@ -428,10 +429,6 @@ employee:
         create_desc: Add a new member to your team
         edit_title: Edit Employee
         edit_desc: Update employee information
-        personal_details: Personal Details
-        work_info: Work Info
-        bank_details: Bank Details
-        overview: Overview
         cancel: Cancel
         save: Save
         update: Update
@@ -439,6 +436,18 @@ employee:
         view_title: Employee Details
         view_desc: View employee information
         delete_confirm: Are you sure you want to delete this employee?
+        account_details:
+            title: Account Details
+            description: Basic login and identification details
+        personal_info:
+            title: Personal Info
+            description: Basic personal details
+        work_info:
+            title: Work Info
+            description: Basic work details
+        bank_details:
+            title: Bank Details
+            description: Basic bank details
         labels:
             first_name: First Name
             last_name: Last Name
@@ -458,6 +467,20 @@ employee:
             account_number: Bank Account Number
             work_type: Work Type
             shift: Shift
+            national_id: National ID / Iqama
+            issue_date: Issue Date
+            expiry_date: Expiry Date
+        placeholders:
+            first_name: John
+            last_name: Doe
+            email: john.doe@company.com
+            job_title: Software Engineer
+            national_id: "123456789"
+            select_department: Select Department
+            select_status: Select Employment Status
+            select_gender: Select Gender
+            select_work_type: Select Work Type
+            select_shift: Select Shift
     gender:
         male: Male
         female: Female

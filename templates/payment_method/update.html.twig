@@ -60,20 +60,20 @@
                 <div>
                     <label for="cardholder_name" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.cardholder_name'|trans }}</label>
                     <input type="text" id="cardholder_name" name="cardholder_name" required
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                 </div>
 
                 <div>
                     <label for="card_number" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.card_number'|trans }}</label>
                     <input type="text" id="card_number" name="card_number" required maxlength="19" placeholder="1234 5678 9012 3456"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-nonef ocus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                 </div>
 
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <label for="expiry_month" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.month'|trans }}</label>
                         <select id="expiry_month" name="expiry_month" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                             <option value="">MM</option>
                             {% for month in 1..12 %}
                                 <option value="{{ '%02d'|format(month) }}">{{ '%02d'|format(month) }}</option>
@@ -83,7 +83,7 @@
                     <div>
                         <label for="expiry_year" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.year'|trans }}</label>
                         <select id="expiry_year" name="expiry_year" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                             <option value="">YYYY</option>
                             {% for year in 'now'|date('Y')..'now'|date('Y') + 10 %}
                                 <option value="{{ year }}">{{ year }}</option>
@@ -93,7 +93,7 @@
                     <div>
                         <label for="cvv" class="block text-sm font-medium text-gray-700">{{ 'payment_method.form.cvv'|trans }}</label>
                         <input type="text" id="cvv" name="cvv" required maxlength="4" placeholder="123"
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border">
                     </div>
                 </div>
 
