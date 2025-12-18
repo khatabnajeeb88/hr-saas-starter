@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
-@plugin "flyonui";
+@plugin "daisyui";
 @plugin "@iconify/tailwind4";
-@import "../../node_modules/flyonui/variants.css";
 
 @config "../../tailwind.config.js";
 

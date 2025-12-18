@@ -14,7 +14,7 @@
     {% endif %}
         <div x-show="!sidebarCollapsed">
             <h3 class="font-semibold text-slate-900 dark:text-slate-100 text-sm">{{ user.name|default('Mitchell Johnson') }}</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ user.email|default('flyonui@mitchell') }}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ user.email|default('user@example.com') }}</p>
         </div>
     </div>
     
@@ -44,7 +44,7 @@
             </svg>
         </div>
         <div class="text-start" x-show="!sidebarCollapsed">
-            <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">FlyonUI</p>
+            <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">SaaS Starter</p>
         </div>
     </div>
 </div>

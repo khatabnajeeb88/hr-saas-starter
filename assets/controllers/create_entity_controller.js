@@ -74,10 +74,12 @@ export default class extends Controller {
     }
 
     closeModal() {
-        // FlyonUI close logic
-        // We can simulate a click on the close button which has the data-overlay attribute pointing to this modal
-        const modalId = this.element.id;
-        const closeBtn = this.element.querySelector(`[data-overlay="#${modalId}"]`);
-        if (closeBtn) closeBtn.click();
+        if (this.element.tagName === 'DIALOG') {
+            this.element.close();
+        } else {
+             // Fallback or previous logic if needed, but for now we assume DIALOG
+             // If we need to support non-dialog, we might need a different approach
+             this.element.classList.add('hidden'); // Simple fallback?
+        }
     }
 }
