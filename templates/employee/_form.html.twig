@@ -394,6 +394,14 @@
                                 {{ form_row(docForm.documentNumber) }}
                                 {{ form_row(docForm.expiryDate) }}
                                 {{ form_row(docForm.file) }}
+                                {% if docForm.vars.data.file %}
+                                    <div class="flex items-center mt-6">
+                                        <a href="{{ asset('uploads/documents/' ~ docForm.vars.data.file) }}" target="_blank" class="text-purple-600 hover:text-purple-900 text-sm font-medium flex items-center">
+                                            <span class="icon-[tabler--eye] mr-1"></span>
+                                            {{ 'employee.document.view'|trans([], 'messages')|default('View Document') }}
+                                        </a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     {% endfor %}

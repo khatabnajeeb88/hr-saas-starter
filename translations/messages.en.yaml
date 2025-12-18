@@ -540,6 +540,7 @@ employee:
             passport: Passport
             driving_license: Driving License
             other: Other
+        view: View Document
 
 department:
     form:
@@ -561,3 +562,10 @@ tag:
         name: Tag Name
         cancel: Cancel
         create: Create
+
+family_member:
+    form:
+        name: Name
+        relationship: Relationship
+        date_of_birth: Date of Birth
+        phone: Phone

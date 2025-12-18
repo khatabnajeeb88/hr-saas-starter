@@ -540,6 +540,7 @@ employee:
             passport: رقم جواز السفر
             driving_license: رقم رخصة القيادة
             other: آخر
+        view: عرض المستند
 
 department:
     form:
@@ -561,3 +562,10 @@ tag:
         name: اسم الوسم
         cancel: إلغاء
         create: إنشاء
+
+family_member:
+    form:
+        name: الاسم
+        relationship: صلة القرابة
+        date_of_birth: تاريخ الميلاد
+        phone: رقم الهاتف

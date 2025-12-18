@@ -55,7 +55,7 @@ class EmployeeDocumentType extends AbstractType
                         mimeTypesMessage: 'Please upload a valid PDF or Image document'
                     )
                 ],
-                'attr' => ['class' => 'block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100']
+                'attr' => ['class' => 'block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100', 'accept' => '.pdf,.jpg,.jpeg,.png']
             ])
         ;
     }

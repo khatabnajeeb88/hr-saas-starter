@@ -95,7 +95,7 @@ class Employee
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Contract::class, cascade: ['persist', 'remove'])]
     private Collection $contracts;
 
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeDocument::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeDocument::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $documents;
 
     #[ORM\OneToMany(mappedBy: 'employee', targetEntity: EmployeeRequest::class, cascade: ['persist', 'remove'])]
@@ -115,7 +115,7 @@ class Employee
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $maritalStatus = null;
 
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: FamilyMember::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: FamilyMember::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $familyMembers;
 
     #[ORM\Column(length: 255, nullable: true)]
