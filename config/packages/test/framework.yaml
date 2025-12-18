@@ -1,0 +1,12 @@
+framework:
+    test: true
+    session:
+        storage_factory_id: session.storage.factory.mock_file
+    
+    # Enable CSRF service so it can be injected (fixing Twig error)
+    csrf_protection: true
+    
+    # Disable automatic form CSRF protection entirely for tests
+    form:
+        csrf_protection: 
+            enabled: false

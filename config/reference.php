@@ -889,13 +889,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     enable_profiler?: bool, // Whether or not to enable the profiler collector to calculate and visualize migration status. This adds some queries overhead. // Default: false
  *     transactional?: bool, // Whether or not to wrap migrations in a single transaction. // Default: true
  * }
- * @psalm-type DebugConfig = array{
- *     max_items?: int, // Max number of displayed items past the first level, -1 means no limit. // Default: 2500
- *     min_depth?: int, // Minimum tree depth to clone all the items, 1 is default. // Default: 1
- *     max_string_length?: int, // Max length of displayed strings, -1 means no limit. // Default: -1
- *     dump_destination?: scalar|null, // A stream URL where dumps should be written to. // Default: null
- *     theme?: "dark"|"light", // Changes the color of the dump() output when rendered directly on the templating. "dark" (default) or "light". // Default: "dark"
- * }
  * @psalm-type TwigConfig = array{
  *     form_themes?: list<scalar|null>,
  *     globals?: array<string, array{ // Default: []
@@ -939,16 +932,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  * @psalm-type StimulusConfig = array{
  *     controller_paths?: list<scalar|null>,
  *     controllers_json?: scalar|null, // Default: "%kernel.project_dir%/assets/controllers.json"
- * }
- * @psalm-type TurboConfig = array{
- *     broadcast?: bool|array{
- *         enabled?: bool, // Default: true
- *         entity_template_prefixes?: list<scalar|null>,
- *         doctrine_orm?: bool|array{ // Enable the Doctrine ORM integration
- *             enabled?: bool, // Default: true
- *         },
- *     },
- *     default_transport?: scalar|null, // Default: "default"
  * }
  * @psalm-type TwigExtraConfig = array{
  *     cache?: bool|array{
@@ -1477,11 +1460,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         },
  *     }>,
  * }
- * @psalm-type MakerConfig = array{
- *     root_namespace?: scalar|null, // Default: "App"
- *     generate_final_classes?: bool, // Default: true
- *     generate_final_entities?: bool, // Default: false
- * }
  * @psalm-type SymfonycastsResetPasswordConfig = array{
  *     request_password_repository: scalar|null, // A class that implements ResetPasswordRequestRepositoryInterface - usually your ResetPasswordRequestRepository.
  *     lifetime?: int, // The length of time in seconds that a password reset request is valid for after it is created. // Default: 3600
@@ -1910,6 +1888,28 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         not_valid_current_page?: "to_http_not_found"|"custom", // Default: "to_http_not_found"
  *     },
  * }
+ * @psalm-type DebugConfig = array{
+ *     max_items?: int, // Max number of displayed items past the first level, -1 means no limit. // Default: 2500
+ *     min_depth?: int, // Minimum tree depth to clone all the items, 1 is default. // Default: 1
+ *     max_string_length?: int, // Max length of displayed strings, -1 means no limit. // Default: -1
+ *     dump_destination?: scalar|null, // A stream URL where dumps should be written to. // Default: null
+ *     theme?: "dark"|"light", // Changes the color of the dump() output when rendered directly on the templating. "dark" (default) or "light". // Default: "dark"
+ * }
+ * @psalm-type TurboConfig = array{
+ *     broadcast?: bool|array{
+ *         enabled?: bool, // Default: true
+ *         entity_template_prefixes?: list<scalar|null>,
+ *         doctrine_orm?: bool|array{ // Enable the Doctrine ORM integration
+ *             enabled?: bool, // Default: true
+ *         },
+ *     },
+ *     default_transport?: scalar|null, // Default: "default"
+ * }
+ * @psalm-type MakerConfig = array{
+ *     root_namespace?: scalar|null, // Default: "App"
+ *     generate_final_classes?: bool, // Default: true
+ *     generate_final_entities?: bool, // Default: false
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1919,7 +1919,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     doctrine_migrations?: DoctrineMigrationsConfig,
  *     twig?: TwigConfig,
  *     stimulus?: StimulusConfig,
- *     turbo?: TurboConfig,
  *     twig_extra?: TwigExtraConfig,
  *     security?: SecurityConfig,
  *     monolog?: MonologConfig,
@@ -1994,7 +1993,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         twig?: TwigConfig,
  *         web_profiler?: WebProfilerConfig,
  *         stimulus?: StimulusConfig,
- *         turbo?: TurboConfig,
  *         twig_extra?: TwigExtraConfig,
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
