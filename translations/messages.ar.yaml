@@ -547,3 +547,17 @@ department:
         name: اسم القسم
         cancel: إلغاء
         create: إنشاء
+
+employment_type:
+    form:
+        create_title: إنشاء نوع توظيف
+        name: اسم نوع التوظيف
+        cancel: إلغاء
+        create: إنشاء
+
+tag:
+    form:
+        create_title: إنشاء وسم
+        name: اسم الوسم
+        cancel: إلغاء
+        create: إنشاء

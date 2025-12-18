@@ -3,11 +3,12 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
     static targets = ["input", "status", "modal"];
     static values = {
-        createUrl: String
+        createUrl: String,
+        selectId: String
     }
 
     connect() {
-        console.log('Create Department Controller connected');
+        console.log('Create Entity Controller connected');
     }
 
     async create(event) {
@@ -48,7 +49,7 @@ export default class extends Controller {
                 input.value = '';
                 // Optional: Show success notification
             } else {
-                console.error('Error creating department:', data.error);
+                console.error('Error creating entity:', data.error);
                 // Optional: Show error notification
             }
         } catch (error) {
@@ -60,7 +61,11 @@ export default class extends Controller {
     }
 
     updateSelect(id, name) {
-        const select = document.querySelector('#employee_department'); // Assuming standard ID
+        if (!this.hasSelectIdValue) {
+             console.error('No select ID provided');
+             return;
+        }
+        const select = document.querySelector(`#${this.selectIdValue}`);
         if (select) {
             const option = new Option(name, id, true, true);
             select.add(option);
@@ -70,9 +75,9 @@ export default class extends Controller {
 
     closeModal() {
         // FlyonUI close logic
-        // We can simulate a click on the close button or use the HSOverlay API if available globaly
-        // Or simply remove the open classes if we want to handle it manually, but reusing the trigger is safer
-        const closeBtn = this.element.querySelector('[data-overlay="#createDepartmentModal"]');
+        // We can simulate a click on the close button which has the data-overlay attribute pointing to this modal
+        const modalId = this.element.id;
+        const closeBtn = this.element.querySelector(`[data-overlay="#${modalId}"]`);
         if (closeBtn) closeBtn.click();
     }
 }

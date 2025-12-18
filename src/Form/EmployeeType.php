@@ -201,15 +201,15 @@ class EmployeeType extends AbstractType
                 'placeholder' => 'employee.form.placeholders.select_employment_type',
                 'attr' => ['class' => 'sf-select join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
             ])
-            ->add('tags', \Symfony\Bridge\Doctrine\Form\Type\EntityType::class, [
-                'class' => EmployeeTag::class,
-                'choice_label' => 'name',
-                'label' => 'employee.form.labels.tags',
-                'multiple' => true,
-                'expanded' => false,
-                'required' => false,
-                'attr' => ['class' => 'join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
-            ])
+            // ->add('tags', \Symfony\Bridge\Doctrine\Form\Type\EntityType::class, [
+            //     'class' => EmployeeTag::class,
+            //     'choice_label' => 'name',
+            //     'label' => 'employee.form.labels.tags',
+            //     'multiple' => true,
+            //     'expanded' => false,
+            //     'required' => false,
+            //     'attr' => ['class' => 'sf-select join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
+            // ])
             ->add('workLocation', TextType::class, [
                 'label' => 'employee.form.labels.work_location',
                 'required' => false,

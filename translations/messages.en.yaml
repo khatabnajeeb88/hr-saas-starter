@@ -547,3 +547,17 @@ department:
         name: Department Name
         cancel: Cancel
         create: Create
+
+employment_type:
+    form:
+        create_title: Create Employment Type
+        name: Employment Type Name
+        cancel: Cancel
+        create: Create
+
+tag:
+    form:
+        create_title: Create Tag
+        name: Tag Name
+        cancel: Cancel
+        create: Create
