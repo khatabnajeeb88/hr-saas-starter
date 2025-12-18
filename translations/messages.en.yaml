@@ -274,6 +274,9 @@ common:
     export: Export
     bulk_update: Bulk Update
     actions_button: Actions
+    filters: Filters
+    close: Close
+    apply: Apply
     enabled: Enabled
     disabled: Disabled
 

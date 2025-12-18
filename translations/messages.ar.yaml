@@ -274,6 +274,9 @@ common:
     export: تصدير
     bulk_update: تحديث جماعي
     actions_button: إجراءات
+    filters: تصفية
+    close: إغلاق
+    apply: تطبيق
     enabled: مفعل
     disabled: معطل
 

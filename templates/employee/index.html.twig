@@ -39,6 +39,13 @@
                         </div>
                     </div>
                 </div>
+                <button type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-none hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700" 
+                aria-haspopup="dialog" aria-expanded="false" aria-controls="filterModal" data-overlay="#filterModal">
+                    <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                    </svg>
+                    {{ 'common.filters'|trans }}
+                </button>
                 <a href="{{ path('app_employee_new') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg shadow-none hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -272,6 +279,26 @@
                         </span>
                     {% endif %}
                 </nav>
+            </div>
+        </div>
+    </div>
+
+    <div id="filterModal" class="overlay modal overlay-open:opacity-100 hidden overlay-open:duration-300 modal-middle" role="dialog" tabindex="-1">
+        <div class="modal-dialog overlay-open:opacity-100">
+            <div class="modal-content bg-white dark:bg-gray-800">
+                <div class="modal-header">
+                    <h3 class="modal-title">{{ 'common.filters'|trans }}</h3>
+                    <button type="button" class="btn btn-text btn-circle btn-sm absolute right-3 top-3" aria-label="Close" data-overlay="#filterModal">
+                        <span class="icon-[tabler--x] size-5"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Filter options will be placed here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-soft btn-secondary" data-overlay="#filterModal">{{ 'common.close'|trans }}</button>
+                    <button type="button" class="btn btn-primary">{{ 'common.apply'|trans }}</button>
+                </div>
             </div>
         </div>
     </div>
