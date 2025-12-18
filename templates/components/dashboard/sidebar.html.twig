@@ -1,22 +1,26 @@
 {# Main Sidebar Component #}
 {# Parameters: user (User entity), currentRoute (string) #}
 
-<div class="fixed inset-y-0 start-0 bg-white dark:bg-slate-800 border-e border-slate-200 dark:border-slate-700 transform transition-all duration-200 ease-in-out lg:translate-x-0 z-40 flex flex-col w-64 lg:w-64" 
+<div class="h-full bg-base-200 w-16 [.drawer-toggle:checked~.drawer-side_&]:w-64 transition-all duration-300 ease-in-out flex flex-col relative group" 
      id="sidebar">
-    
-    {# User Profile Card (Top) #}
-    {% include 'components/dashboard/sidebar/user_profile.html.twig' with {'user': user} %}
 
-    {# Navigation Menu #}
-    {% include 'components/dashboard/sidebar/navigation.html.twig' with {'currentRoute': currentRoute} %}
+    {# Inner Content Wrapper #}
+    <div class="flex-1 flex flex-col w-full bg-white dark:bg-slate-800 border-e border-slate-200 dark:border-slate-700">
+        {# User Profile Card (Top) #}
+        {% include 'components/dashboard/sidebar/user_profile.html.twig' with {'user': user} %}
     
-    {# Workspace Selector (Bottom) #}
-    {% include 'components/dashboard/sidebar/workspace_selector.html.twig' %}
-    {# Toggle Button #}
-    <button id="sidebar-toggle" 
-            class="absolute top-6 ltr:-right-3 rtl:-left-3 z-50 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full p-1 text-slate-500 hover:text-purple-600 transition-colors shadow-none hidden lg:flex items-center justify-center group">
-        <svg class="w-4 h-4 transition-transform duration-200 group-hover:scale-110 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {# Navigation Menu #}
+        {% include 'components/dashboard/sidebar/navigation.html.twig' with {'currentRoute': currentRoute} %}
+        
+        {# Workspace Selector (Bottom) #}
+        {% include 'components/dashboard/sidebar/workspace_selector.html.twig' %}
+    </div>
+
+    {# Toggle Button (Label for Checkbox) #}
+    <label for="dashboard-drawer" 
+            class="absolute top-6 ltr:-right-3 rtl:-left-3 z-50 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full p-1 text-slate-500 hover:text-purple-600 transition-colors shadow-sm hidden lg:flex items-center justify-center cursor-pointer">
+        <svg class="w-4 h-4 transition-transform duration-300 peer-checked:rotate-180 rtl:peer-checked:rotate-0 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
         </svg>
-    </button>
+    </label>
 </div>

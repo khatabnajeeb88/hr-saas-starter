@@ -1,18 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-600 dark:text-slate-300" dir="{{ app.request.locale == 'ar' ? 'rtl' : 'ltr' }}">
-    {# Sidebar Component #}
-    {% include 'components/dashboard/sidebar.html.twig' with {
-        'user': app.user,
-        'currentRoute': app.request.attributes.get('_route')
-    } %}
+<div class="drawer lg:drawer-open group">
+    <input id="dashboard-drawer" type="checkbox" class="drawer-toggle" checked />
     
-    {# Mobile Overlay #}
-    <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden hidden"></div>
-
-    {# Main Content #}
-    <div id="main-content" class="transition-all duration-200 min-h-screen flex flex-col lg:ms-64">
+    {# Drawer Content (Navbar + Page) #}
+    <div class="drawer-content flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-all duration-300">
+        {# Navbar Component #}
+        {% include 'components/dashboard/navbar.html.twig' %}
+        
         {% if is_granted('IS_IMPERSONATOR') %}
             <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 sticky top-0 z-50 flex justify-between items-center" role="alert">
                 <div>
@@ -25,9 +21,6 @@
             </div>
         {% endif %}
 
-        {# Navbar Component #}
-        {% include 'components/dashboard/navbar.html.twig' %}
-
         {# Page Content #}
         <main class="flex-1 p-6">
             {% block dashboard_content %}{% endblock %}
@@ -35,6 +28,15 @@
         
         {# Footer Component #}
         {% include 'components/dashboard/footer.html.twig' %}
+    </div>
+
+    {# Drawer Side (Sidebar) #}
+    <div class="drawer-side z-50 lg:overflow-visible">
+        <label for="dashboard-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        {% include 'components/dashboard/sidebar.html.twig' with {
+            'user': app.user,
+            'currentRoute': app.request.attributes.get('_route')
+        } %}
     </div>
 </div>
 

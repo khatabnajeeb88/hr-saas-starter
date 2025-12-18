@@ -4,93 +4,37 @@ $(function() {
     console.log('Dashboard JS loaded');
     // Sidebar Toggle Logic
     const $sidebar = $('#sidebar');
-    const $mainContent = $('#main-content');
-    const $sidebarToggle = $('#sidebar-toggle');
     const $mobileOverlay = $('#mobile-overlay');
     const $body = $('body');
     
-    // Check local storage for collapsed state
-    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-    if (isCollapsed) {
-        $sidebar.addClass('w-20').removeClass('w-64');
-        $mainContent.addClass('lg:ms-20').removeClass('lg:ms-64');
-        $sidebarToggle.find('svg').addClass('rotate-180');
+    // Sidebar Persistence Logic
+    const $drawerToggle = $('#dashboard-drawer');
+    const storageKey = 'sidebar-expanded';
+
+    // 1. Restore state on load
+    const storedState = localStorage.getItem(storageKey);
+    // Default to true (expanded) if not set, otherwise parse user preference
+    // If storedState is null, we treat it as true (default)
+    if (storedState === null || storedState === 'true') {
+        $drawerToggle.prop('checked', true);
+    } else {
+        $drawerToggle.prop('checked', false);
     }
 
-
-
-    const $logoWrapper = $('#user-profile-logo-wrapper');
-    const $logoInner = $('#user-profile-logo-inner');
-    
-    function updateSidebarState(isCollapsed) {
-        if (isCollapsed) {
-            // Collapse
-            $sidebar.addClass('w-20').removeClass('w-64');
-            $mainContent.addClass('lg:ms-20').removeClass('lg:ms-64');
-            $sidebarToggle.find('svg').addClass('rotate-180');
-            
-            // Hide text elements
-            $sidebar.find('.sidebar-text').addClass('hidden');
-            
-            // Logo specific updates
-            if ($logoWrapper.length) {
-                $logoWrapper.removeClass('justify-start p-4').addClass('justify-center p-2');
-                $logoInner.removeClass('gap-3').addClass('gap-0');
-            }
-        } else {
-            // Expand
-            $sidebar.removeClass('w-20').addClass('w-64');
-            $mainContent.removeClass('lg:ms-20').addClass('lg:ms-64');
-            $sidebarToggle.find('svg').removeClass('rotate-180');
-            
-            // Show text elements that were hidden
-            $sidebar.find('.sidebar-text').removeClass('hidden');
-             
-            // Logo specific updates
-            if ($logoWrapper.length) {
-                $logoWrapper.addClass('justify-start p-4').removeClass('justify-center p-2');
-                $logoInner.addClass('gap-3').removeClass('gap-0');
-            }
-        }
-    }
-
-    // Initial check
-    updateSidebarState(isCollapsed);
-    console.log('Sidebar state initialized. Collapsed:', isCollapsed);
-
-    $(document).on('click', '#sidebar-toggle', function() {
-        console.log('Sidebar toggle clicked');
-        const $sidebar = $('#sidebar'); // Re-select in case of DOM update
-        const currentlyCollapsed = $sidebar.hasClass('w-20');
-        const newState = !currentlyCollapsed;
-        
-        updateSidebarState(newState);
-        localStorage.setItem('sidebarCollapsed', newState.toString());
+    // 2. Save state on change
+    $drawerToggle.on('change', function() {
+        const isExpanded = $(this).is(':checked');
+        localStorage.setItem(storageKey, isExpanded);
     });
 
     // Mobile Menu Logic
-    const $mobileToggle = $('#mobile-menu-toggle'); 
+    // We can keep specific mobile helpers if needed, but DaisyUI drawer handles overlay clicks automatically via the label.
+    // However, if there are custom mobile triggers, we might need them. 
+    // The new HTML uses a label for #dashboard-drawer which handles mobile toggle too.
+    // So most of this can be removed or simplified if we use the checkbox for everything.
     
-    $mobileToggle.on('click', function() {
-        window.openSidebar();
-    });
-
-    // Function to open mobile sidebar
-    window.openSidebar = function() {
-        $sidebar.removeClass('-translate-x-full').addClass('translate-x-0');
-        $mobileOverlay.removeClass('hidden');
-    }
-
-    // Function to close mobile sidebar
-    window.closeSidebar = function() {
-        $sidebar.addClass('-translate-x-full').removeClass('translate-x-0');
-        $mobileOverlay.addClass('hidden');
-    }
-
-    $mobileOverlay.on('click', function() {
-        window.closeSidebar();
-    });
-
+    // For now, removing manual overlay logic as DaisyUI handles it.
+     
     // Dropdown Logic (for sidebar and other components)
     $(document).on('click', '[data-toggle="dropdown"]', function(e) {
         e.stopPropagation();
