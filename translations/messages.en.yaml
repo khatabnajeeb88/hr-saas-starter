@@ -419,8 +419,9 @@ employee:
     pagination_showing: 'Showing <span class="font-medium">%count%</span> to <span class="font-medium">%end%</span> of <span class="font-medium">%total%</span> entries'
     list:
         name: Name
-        email: Email
-        joined_date: Date
+        mobile: Mobile
+        badge_id: Badge ID
+        job_position: Job Position
         department: Department
         status: Status
         actions: Actions

@@ -419,17 +419,18 @@ employee:
     pagination_showing: 'عرض <span class="font-medium">%count%</span> إلى <span class="font-medium">%end%</span> من <span class="font-medium">%total%</span> إدخال'
     list:
         name: الاسم
-        email: البريد الإلكتروني
-        joined_date: التاريخ
+        mobile: الجوال
+        badge_id: المعرف الوظيفي
+        job_position: المسمى الوظيفي
         department: القسم
         status: الحالة
         actions: الإجراءات
         no_employees: لم يتم العثور على موظفين.
         add_first: أضف موظفك الأول
     status:
-        active: محترف
-        on_leave: مطبق
-        terminated: مرفوض
+        active: منشط
+        on_leave: اجازة
+        terminated: منتهي
     form:
         create_title: موظف جديد
         create_desc: أضف عضواً جديداً إلى فريقك

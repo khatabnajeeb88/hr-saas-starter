@@ -55,12 +55,13 @@
                     <thead class="bg-gray-50 dark:bg-gray-900/50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left rtl:text-right">
-                                <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 bg-white dark:bg-gray-700 dark:border-gray-600">
                             </th>
                             <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.name'|trans }}</th>
-                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.email'|trans }}</th>
-                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.joined_date'|trans }}</th>
-                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.department'|trans }}</th> {# Replaced Salary with Department as Salary is in Contract #}
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.mobile'|trans }}</th>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.badge_id'|trans }}</th>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.job_position'|trans }}</th>
+                            <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.department'|trans }}</th>
                             <th scope="col" class="px-6 py-3 text-left rtl:text-right text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.status'|trans }}</th>
                             <th scope="col" class="px-6 py-3 text-right rtl:text-left text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400">{{ 'employee.list.actions'|trans }}</th>
                         </tr>
@@ -69,29 +70,36 @@
                         {% for employee in pager.currentPageResults %}
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600">
+                                    <input type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 bg-white dark:bg-gray-700 dark:border-gray-600">
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="shrink-0 h-10 w-10">
-                                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">
-                                                {{ employee.firstName|first }}{{ employee.lastName|first }}
-                                            </div>
+                                            {% if employee.profileImage %}
+                                                <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" alt="{{ employee.fullName }}">
+                                            {% else %}
+                                                <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">
+                                                    {{ employee.firstName|first }}{{ employee.lastName|first }}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                         <div class="ml-4 rtl:mr-4 rtl:ml-0">
                                             <div class="text-sm font-medium text-gray-900 dark:text-white">{{ employee.fullName }}</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ employee.jobTitle|default('No Role') }}</div>
+                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ employee.email }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.email }}</div>
+                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.mobile|default('-') }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.joinedAt|date('m/d/Y') }}</div>
+                                    <div class="text-sm text-gray-500 dark:text-white"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">{{ employee.badgeId|default('-') }}</span></div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.department|default('-') }}</div>
+                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.jobTitle|default('-') }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900 dark:text-white">{{ employee.department.name|default('-') }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     {% if employee.employmentStatus == 'active' %}
