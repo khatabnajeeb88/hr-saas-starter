@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-600 dark:text-slate-300" dir="{{ app.request.locale == 'ar' ? 'rtl' : 'ltr' }}" x-data="dashboardLayout">
+<div class="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-600 dark:text-slate-300" dir="{{ app.request.locale == 'ar' ? 'rtl' : 'ltr' }}">
     {# Sidebar Component #}
     {% include 'components/dashboard/sidebar.html.twig' with {
         'user': app.user,
@@ -9,11 +9,10 @@
     } %}
     
     {# Mobile Overlay #}
-    <div x-show="sidebarOpen" @click="closeSidebar()" x-transition.opacity class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden hidden"></div>
 
     {# Main Content #}
-    <div class="transition-all duration-200 min-h-screen flex flex-col"
-         :class="sidebarCollapsed ? 'lg:ms-20' : 'lg:ms-64'">
+    <div id="main-content" class="transition-all duration-200 min-h-screen flex flex-col lg:ms-64">
         {% if is_granted('IS_IMPERSONATOR') %}
             <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 sticky top-0 z-50 flex justify-between items-center" role="alert">
                 <div>

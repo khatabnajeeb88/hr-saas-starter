@@ -5,36 +5,44 @@
     {# Dashboard Dropdown #}
     <a href="{{ path('app_dashboard') }}" class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors group mb-1 {% if currentRoute == 'app_dashboard' %}bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200{% endif %}"
        :class="{'justify-center': sidebarCollapsed}">
-        <svg class="w-5 h-5 {% if currentRoute == 'app_dashboard' %}text-purple-600{% else %}text-slate-400 group-hover:text-slate-500{% endif %} shrink-0" :class="{'me-0': sidebarCollapsed, 'me-3': !sidebarCollapsed}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 {% if currentRoute == 'app_dashboard' %}text-purple-600{% else %}text-slate-400 group-hover:text-slate-500{% endif %} shrink-0 me-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
-        <span x-show="!sidebarCollapsed">{{ 'menu.dashboard'|trans }}</span>
+        <span class="sidebar-text">{{ 'menu.dashboard'|trans }}</span>
     </a>
 
     {# APPLICATIONS Section #}
-    <div class="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-3 mt-6" x-show="!sidebarCollapsed">{{ 'menu.applications_management'|trans }}</div>
+    <div class="sidebar-text text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2 px-3 mt-6">{{ 'menu.applications_management'|trans }}</div>
     
     {# EMPLOYEES Dropdown #}
-    <div class="mb-1" x-init="employeesDropdown = {{ (currentRoute starts with 'app_employee' or currentRoute starts with 'app_department') ? 'true' : 'false' }}">
-        <button @click="if(!sidebarCollapsed) employeesDropdown = !employeesDropdown" class="w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
-                :class="{'justify-center': sidebarCollapsed, 'justify-between': !sidebarCollapsed}">
+    <details class="group collapse mb-1 rounded-lg p-0" {{ (currentRoute starts with 'app_employee' or currentRoute starts with 'app_department') ? 'open' : '' }}>
+        <summary class="collapse-title min-h-0 flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
             <div class="flex items-center gap-3">
                 <svg class="w-5 h-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
-                <span x-show="!sidebarCollapsed">{{'menu.employees.employees_management'|trans }}</span>
+                <span class="sidebar-text">{{'menu.employees.employees_management'|trans }}</span>
             </div>
-            <svg class="w-4 h-4 transition-transform" x-show="!sidebarCollapsed" :class="{'rotate-180': employeesDropdown}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {# DaisyUI collapse-arrow adds its own arrow, so we might not need this manual SVG depending on preference. 
+               However, to match exact style, we might disable collapse-arrow or customize. 
+               If we use collapse-arrow, we remove this SVG. 
+               If we KEEP this SVG, we shouldn't use collapse-arrow class. 
+               User asked for "down animation". collapse class gives animation. collapse-arrow gives arrow. 
+               Let's try WITHOUT collapse-arrow first to keep exact icon style, but ADD collapse for animation. 
+            #}
+            <svg class="sidebar-text w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
-        </button>
+        </summary>
         
-        <div x-show="employeesDropdown && !sidebarCollapsed" x-collapse class="mt-1 ms-8 space-y-1">
-            <a href="{{ path('app_employee_index') }}" class="block px-3 py-2 text-sm rounded-lg {% if currentRoute starts with 'app_employee' %}bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 font-medium{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800{% endif %}">
-                {{'menu.employees.title'|trans }}
-            </a>
+        <div class="collapse-content p-0">
+            <div class="mt-1 ms-8 space-y-1 pb-1">
+                <a href="{{ path('app_employee_index') }}" class="block px-3 py-2 text-sm rounded-lg {% if currentRoute starts with 'app_employee' %}bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 font-medium{% else %}text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800{% endif %}">
+                    {{'menu.employees.title'|trans }}
+                </a>
+            </div>
         </div>
-    </div>
+    </details>
     
 
 
