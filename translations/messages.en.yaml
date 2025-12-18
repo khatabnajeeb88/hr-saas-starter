@@ -269,6 +269,11 @@ common:
     view: View
     download: Download
     archive: Archive
+    unarchive: Un-archive
+    import: Import
+    export: Export
+    bulk_update: Bulk Update
+    actions_button: Actions
     enabled: Enabled
     disabled: Disabled
 

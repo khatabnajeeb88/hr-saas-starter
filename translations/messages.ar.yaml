@@ -269,6 +269,11 @@ common:
     view: عرض
     download: تحميل
     archive: أرشفة
+    unarchive: إلغاء الأرشفة
+    import: استيراد
+    export: تصدير
+    bulk_update: تحديث جماعي
+    actions_button: إجراءات
     enabled: مفعل
     disabled: معطل
 
