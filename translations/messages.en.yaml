@@ -268,6 +268,7 @@ common:
     edit: Edit
     view: View
     download: Download
+    archive: Archive
     enabled: Enabled
     disabled: Disabled
 
@@ -431,6 +432,7 @@ employee:
         active: Professional
         on_leave: Applied
         terminated: Rejected
+        archived: Archived
     form:
         create_title: New Employee
         create_desc: Add a new member to your team
@@ -446,6 +448,7 @@ employee:
         edit_photo: Edit
         add_family_member: Add Family Member
         delete_confirm: Are you sure you want to delete this employee?
+        archive_confirm: Are you sure you want to archive this employee?
         add_document: Add Document
         account_details:
             title: Account Details

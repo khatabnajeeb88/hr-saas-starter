@@ -91,6 +91,7 @@ class EmployeeType extends AbstractType
                     'employee.status.active' => 'active',
                     'employee.status.terminated' => 'terminated',
                     'employee.status.on_leave' => 'on_leave',
+                    'employee.status.archived' => 'archived',
                 ],
                 'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])

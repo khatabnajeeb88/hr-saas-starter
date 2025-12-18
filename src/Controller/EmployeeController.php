@@ -155,6 +155,23 @@ class EmployeeController extends AbstractController
         return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/{id}/archive', name: 'app_employee_archive', methods: ['POST'])]
+    public function archive(Request $request, Employee $employee, EntityManagerInterface $entityManager): Response
+    {
+        // Security check
+        $user = $this->getUser();
+        if (!$employee->getTeam()->hasMember($user)) {
+             throw $this->createAccessDeniedException();
+        }
+
+        if ($this->isCsrfTokenValid('archive'.$employee->getId(), $request->request->get('_token'))) {
+            $employee->setEmploymentStatus('archived');
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_employee_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     private function handleDocumentUploads($form, Employee $employee, \Symfony\Component\String\Slugger\SluggerInterface $slugger): void
     {
         $documents = $form->get('documents');

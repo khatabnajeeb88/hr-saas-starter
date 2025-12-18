@@ -268,6 +268,7 @@ common:
     edit: تعديل
     view: عرض
     download: تحميل
+    archive: أرشفة
     enabled: مفعل
     disabled: معطل
 
@@ -431,6 +432,7 @@ employee:
         active: منشط
         on_leave: اجازة
         terminated: منتهي
+        archived: مؤرشف
     form:
         create_title: موظف جديد
         create_desc: أضف عضواً جديداً إلى فريقك
@@ -446,6 +448,7 @@ employee:
         edit_photo: تعديل
         add_family_member: إضافة فرد من العائلة
         delete_confirm: هل أنت متأكد أنك تريد حذف هذا الموظف؟
+        archive_confirm: هل أنت متأكد أنك تريد أرشفة هذا الموظف؟
         add_document: إضافة وثيقة
         account_details:
             title: تفاصيل الحساب
