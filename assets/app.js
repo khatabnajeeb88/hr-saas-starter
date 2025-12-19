@@ -1,5 +1,5 @@
 import './stimulus_bootstrap.js';
-// import './js/alpine/index.js';
+
 import './js/dashboard.js';
 /*
  * Welcome to your app's main JavaScript file!

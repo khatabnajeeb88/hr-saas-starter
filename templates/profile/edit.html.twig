@@ -84,119 +84,84 @@
 
     <!-- API Tokens Section -->
     <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6 mt-6"
-         x-data="{
-            tokens: [],
-            loading: false,
-            showCreateModal: false,
-            showSuccessModal: false,
-            newToken: null,
-            form: { description: '' },
-            
-            async init() {
-                this.loading = true;
-                this.tokens = await (await fetch('{{ path('app_profile_api_tokens_list') }}')).json();
-                this.loading = false;
-            },
-            
-            async createToken() {
-                if (!this.form.description) return;
-                
-                const response = await fetch('{{ path('app_profile_api_tokens_create') }}', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(this.form)
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    this.tokens.push(data);
-                    this.newToken = data.token;
-                    this.showCreateModal = false;
-                    this.showSuccessModal = true;
-                    this.form.description = '';
-                }
-            },
-            
-            async revokeToken(id) {
-                if (!confirm('{{ 'api_tokens.delete_confirm'|trans }}')) return;
-                
-                await fetch(`/profile/api-tokens/${id}`, { method: 'DELETE' });
-                this.tokens = this.tokens.filter(t => t.id !== id);
-            },
-            
-            copyToken() {
-                navigator.clipboard.writeText(this.newToken);
-            }
-         }"
+         data-controller="api-tokens"
+         data-api-tokens-list-url-value="{{ path('app_profile_api_tokens_list') }}"
+         data-api-tokens-create-url-value="{{ path('app_profile_api_tokens_create') }}"
+         data-api-tokens-copied-text-value="{{ 'api_tokens.copied'|trans }}"
+         data-api-tokens-copy-text-value="{{ 'api_tokens.copy'|trans }}"
     >
         <div class="flex items-center justify-between mb-4">
             <div>
                 <h2 class="text-xl font-bold">{{ 'api_tokens.title'|trans }}</h2>
                 <p class="text-sm text-gray-600">{{ 'api_tokens.description'|trans }}</p>
             </div>
-            <button @click="showCreateModal = true" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 text-sm">
+            <button data-action="click->api-tokens#openCreateModal" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 text-sm">
                 {{ 'api_tokens.create_btn'|trans }}
             </button>
         </div>
 
-        <div x-show="loading" class="text-center py-4 text-gray-500">
+        <div data-api-tokens-target="loading" class="text-center py-4 text-gray-500">
             {{ 'dashboard.loading'|trans }}
         </div>
 
-        <div x-show="!loading && tokens.length === 0" class="text-center py-6 text-gray-500 bg-gray-50 rounded border border-dashed border-gray-300">
+        <div data-api-tokens-target="empty" class="hidden text-center py-6 text-gray-500 bg-gray-50 rounded border border-dashed border-gray-300">
             {{ 'api_tokens.empty'|trans }}
         </div>
 
-        <div x-show="!loading && tokens.length > 0" class="space-y-4">
-            <template x-for="token in tokens" :key="token.id">
-                <div class="flex items-center justify-between p-4 border rounded hover:bg-gray-50">
-                    <div>
-                        <div class="font-medium" x-text="token.description"></div>
-                        <div class="text-xs text-gray-500 font-mono mt-1">
-                            <span class="bg-gray-100 px-1 rounded" x-text="token.maskedToken"></span>
-                        </div>
-                        <div class="text-xs text-gray-400 mt-1">
-                            {{ 'api_tokens.created'|trans }}: <span x-text="new Date(token.createdAt).toLocaleDateString()"></span>
-                            <span x-show="token.lastUsedAt">
-                                • {{ 'api_tokens.last_used'|trans }}: <span x-text="new Date(token.lastUsedAt).toLocaleDateString()"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <button @click="revokeToken(token.id)" class="text-red-600 hover:text-red-900 text-sm px-3 py-1 border border-red-200 rounded hover:bg-red-50">
-                        {{ 'api_tokens.delete'|trans }}
-                    </button>
-                </div>
-            </template>
+        <div data-api-tokens-target="list" class="space-y-4">
+            {# Tokens will be injected here #}
         </div>
 
+        <template data-api-tokens-target="template">
+            <div class="flex items-center justify-between p-4 border rounded hover:bg-gray-50" data-token-item>
+                <div>
+                    <div class="font-medium" data-token-description></div>
+                    <div class="text-xs text-gray-500 font-mono mt-1">
+                        <span class="bg-gray-100 px-1 rounded" data-token-masked></span>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">
+                        {{ 'api_tokens.created'|trans }}: <span data-token-created></span>
+                        <span data-token-last-used-container>
+                            • {{ 'api_tokens.last_used'|trans }}: <span data-token-last-used></span>
+                        </span>
+                    </div>
+                </div>
+                <button data-action="click->api-tokens#revoke" 
+                        data-confirm="{{ 'api_tokens.delete_confirm'|trans }}"
+                        class="text-red-600 hover:text-red-900 text-sm px-3 py-1 border border-red-200 rounded hover:bg-red-50">
+                    {{ 'api_tokens.delete'|trans }}
+                </button>
+            </div>
+        </template>
+
         <!-- Create Token Modal -->
-        <div x-show="showCreateModal" style="display: none; background-color: rgba(17, 24, 39, 0.75);" class="fixed inset-0 top-0 left-0 w-full h-full flex items-center justify-center z-[9999]">
-            <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4" @click.away="showCreateModal = false">
+        <div data-api-tokens-target="createModal" style="display: none; background-color: rgba(17, 24, 39, 0.75);" class="fixed inset-0 top-0 left-0 w-full h-full flex items-center justify-center z-[9999]">
+            <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                 <h3 class="text-lg font-bold mb-4">{{ 'api_tokens.create_btn'|trans }}</h3>
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ 'api_tokens.name_label'|trans }}</label>
-                    <input type="text" x-model="form.description" class="w-full border rounded p-2" placeholder="{{ 'api_tokens.name_placeholder'|trans }}">
+                    <input type="text" data-api-tokens-target="description" class="w-full border rounded p-2" placeholder="{{ 'api_tokens.name_placeholder'|trans }}">
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button @click="showCreateModal = false" class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                    <button data-action="click->api-tokens#closeCreateModal" class="px-4 py-2 text-gray-600 hover:text-gray-800">
                         {{ 'common.cancel'|trans }}
                     </button>
-                    <button @click="createToken()" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                    <button data-action="click->api-tokens#create" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
                         {{ 'common.save'|trans }}
                     </button>
                 </div>
             </div>
         </div>
 
-        <div x-show="showSuccessModal" style="display: none; background-color: rgba(17, 24, 39, 0.75);" class="fixed inset-0 top-0 left-0 w-full h-full flex items-center justify-center z-[9999]"
-             x-data="{ copied: false }">
-            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden relative" @click.away="showSuccessModal = false">
-                <button @click="showSuccessModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+        <!-- Success Modal -->
+        <div data-api-tokens-target="successModal" style="display: none; background-color: rgba(17, 24, 39, 0.75);" class="fixed inset-0 top-0 left-0 w-full h-full flex items-center justify-center z-[9999]">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 overflow-hidden relative">
+                <button data-action="click->api-tokens#closeSuccessModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
 
                 <div class="p-6 text-center">
-                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-fchange_password_linkull bg-green-100 mb-4">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
                         <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
@@ -206,24 +171,20 @@
                     <p class="text-sm text-gray-500 mb-6">{{ 'api_tokens.new_token_msg'|trans }}</p>
                     
                     <div class="relative mb-6">
-                        <div class="bg-slate-100 p-4 rounded-lg border border-slate-200 font-mono text-sm break-all text-slate-600 select-all overflow-auto" x-text="newToken"></div>
+                        <div class="bg-slate-100 p-4 rounded-lg border border-slate-200 font-mono text-sm break-all text-slate-600 select-all overflow-auto" data-api-tokens-target="newToken"></div>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button @click="
-                                navigator.clipboard.writeText(newToken);
-                                copied = true;
-                                setTimeout(() => copied = false, 2000);
-                            " 
-                            class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-none text-sm font-medium text-white transition-all duration-200 w-full sm:w-auto"
-                            :class="copied ? 'bg-green-600 hover:bg-green-700' : 'bg-indigo-600 hover:bg-indigo-700'"
+                        <button data-action="click->api-tokens#copyToken" 
+                            data-api-tokens-target="copyButton"
+                            class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-none text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 w-full sm:w-auto"
                         >
-                            <svg x-show="!copied" class="mr-2 -ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                            <svg x-show="copied" style="display: none;" class="mr-2 -ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                            <span x-text="copied ? '{{ 'api_tokens.copied'|trans }}' : '{{ 'api_tokens.copy'|trans }}'"></span>
+                            <svg data-api-tokens-target="copyIcon" class="mr-2 -ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            <svg data-api-tokens-target="checkIcon" class="hidden mr-2 -ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span data-api-tokens-target="copyText">{{ 'api_tokens.copy'|trans }}</span>
                         </button>
                         
-                        <button @click="showSuccessModal = false" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none w-full sm:w-auto">
+                        <button data-action="click->api-tokens#closeSuccessModal" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none w-full sm:w-auto">
                             {{ 'api_tokens.close'|trans }}
                         </button>
                     </div>

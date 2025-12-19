@@ -1,42 +1,47 @@
 {% form_theme form 'form/theme.html.twig' %}
 
 {{ form_start(form) }}
-    <div x-data="{ activeTab: 'personal' }" class="space-y-6">
+    <div data-controller="tabs" data-tabs-active-class="border-purple-500 text-purple-600 dark:text-purple-400" class="space-y-6">
         
         {# Tab Navigation #}
         <div class="border-b border-gray-200 dark:border-gray-700">
             <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
                 <button type="button" 
-                        @click="activeTab = 'personal'"
-                        :class="activeTab === 'personal' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        data-action="click->tabs#switch"
+                        data-tabs-target="tab"
+                        data-tab-value="personal"
                         class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.personal_info.title'|trans }}
                 </button>
 
                 <button type="button"
-                        @click="activeTab = 'work'"
-                        :class="activeTab === 'work' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        data-action="click->tabs#switch"
+                        data-tabs-target="tab"
+                        data-tab-value="work"
                         class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.work_info.title'|trans }}
                 </button>
 
                 <button type="button"
-                        @click="activeTab = 'bank'"
-                        :class="activeTab === 'bank' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        data-action="click->tabs#switch"
+                        data-tabs-target="tab"
+                        data-tab-value="bank"
                         class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.bank_details.title'|trans }}
                 </button>
 
                 <button type="button"
-                        @click="activeTab = 'family'"
-                        :class="activeTab === 'family' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        data-action="click->tabs#switch"
+                        data-tabs-target="tab"
+                        data-tab-value="family"
                         class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.labels.family_members'|trans }}
                 </button>
 
                 <button type="button"
-                        @click="activeTab = 'documents'"
-                        :class="activeTab === 'documents' ? 'border-purple-500 text-purple-600 dark:text-purple-400' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'"
+                        data-action="click->tabs#switch"
+                        data-tabs-target="tab"
+                        data-tab-value="documents"
                         class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.document.title'|trans([], 'messages') }}
                 </button>
@@ -44,7 +49,8 @@
         </div>
 
         {# Section 1: Personal Info (Renamed from Account & Personal) #}
-        <div x-show="activeTab === 'personal'" class="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
+        {# Section 1: Personal Info (Renamed from Account & Personal) #}
+        <div data-tabs-target="panel" data-tab-value="personal" class="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
             {# Personal Info Sub-section (Renamed from Account Details) #}
             <div class="space-y-6 sm:space-y-5">
                 <div>
@@ -52,40 +58,30 @@
                      <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.personal_info.description'|trans }}</p>
                 </div>
                 <div class="space-y-6 sm:space-y-5">
-                    <div x-data="{ 
-                            photoName: null, 
-                            photoPreview: null,
-                            updatePreview() {
-                                const file = this.$refs.photo.files[0];
-                                if (!file) return;
-                                this.photoName = file.name;
-                                const reader = new FileReader();
-                                reader.onload = (e) => {
-                                    this.photoPreview = e.target.result;
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        }" class="col-span-1 sm:col-span-2 flex justify-start pb-6">
+                    <div class="col-span-1 sm:col-span-2 flex justify-start pb-6">
                         
-                        <div class="relative w-32 h-32 group cursor-pointer" @click="$refs.photo.click()">
+                        <div class="relative w-32 h-32 group cursor-pointer" data-controller="image-preview" onclick="this.querySelector('input').click()">
                             {# Current Profile Photo / Placeholder #}
                             <div class="w-full h-full rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 relative">
                                 {% if employee.profileImage %}
-                                    <img x-show="!photoPreview" 
+                                    <img data-image-preview-target="preview" 
                                          src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" 
                                          alt="Profile photo" 
                                          class="w-full h-full object-cover">
+                                    <div data-image-preview-target="placeholder" class="hidden w-full h-full flex items-center justify-center text-gray-400">
+                                        <svg class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                    </div>
                                 {% else %}
-                                    <div x-show="!photoPreview" class="w-full h-full flex items-center justify-center text-gray-400">
+                                    <img data-image-preview-target="preview" class="hidden w-full h-full object-cover">
+                                    <div data-image-preview-target="placeholder" class="w-full h-full flex items-center justify-center text-gray-400">
                                         <svg class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                         </svg>
                                     </div>
                                 {% endif %}
                                 
-                                {# New Photo Preview #}
-                                <img x-show="photoPreview" :src="photoPreview" class="w-full h-full object-cover" style="display: none;">
-
                                 {# Overlay #}
                                 <div class="absolute bottom-0 w-full h-1/3 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-50 transition-opacity duration-200">
                                     <span class="text-white text-xs font-medium">{{ 'employee.form.edit_photo'|trans([], 'messages')|default('Edit') }}</span>
@@ -94,7 +90,7 @@
 
                             {# Hidden File Input #}
                             <div class="hidden">
-                                {{ form_widget(form.profileImage, { 'attr': { 'x-ref': 'photo', '@change': 'updatePreview()' } }) }}
+                                {{ form_widget(form.profileImage, { 'attr': { 'data-image-preview-target': 'input', 'data-action': 'change->image-preview#update' } }) }}
                             </div>
                         </div>
                     </div>
@@ -166,7 +162,7 @@
         </div>
 
          {# Section 2: Work Info #}
-        <div x-show="activeTab === 'work'" class="space-y-6 sm:space-y-5">
+        <div data-tabs-target="panel" data-tab-value="work" class="hidden space-y-6 sm:space-y-5">
             <div>
                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.work_info.title'|trans }}</h3>
             </div>
@@ -256,7 +252,7 @@
         </div>
 
         {# Section 3: Bank Details #}
-        <div x-show="activeTab === 'bank'" class="space-y-6 sm:space-y-5">
+        <div data-tabs-target="panel" data-tab-value="bank" class="hidden space-y-6 sm:space-y-5">
              <div>
                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.bank_details.title'|trans }}</h3>
             </div>
@@ -284,7 +280,7 @@
         </div>
 
         {# Section 4: Family Members (New Tab) #}
-        <div x-show="activeTab === 'family'" class="space-y-6 sm:space-y-5">
+        <div data-tabs-target="panel" data-tab-value="family" class="hidden space-y-6 sm:space-y-5">
             <div>
                  <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.labels.family_members'|trans }}</h3>
             </div>
@@ -343,7 +339,7 @@
         </div>
 
         {# Section 5: Documents (New Tab) #}
-        <div x-show="activeTab === 'documents'" class="space-y-6 sm:space-y-5">
+        <div data-tabs-target="panel" data-tab-value="documents" class="hidden space-y-6 sm:space-y-5">
             <div>
                  <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.document.title'|trans([], 'messages') }}</h3>
             </div>
