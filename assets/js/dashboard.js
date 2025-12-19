@@ -11,15 +11,7 @@ $(function() {
     const $drawerToggle = $('#dashboard-drawer');
     const storageKey = 'sidebar-expanded';
 
-    // 1. Restore state on load
-    const storedState = localStorage.getItem(storageKey);
-    // Default to true (expanded) if not set, otherwise parse user preference
-    // If storedState is null, we treat it as true (default)
-    if (storedState === null || storedState === 'true') {
-        $drawerToggle.prop('checked', true);
-    } else {
-        $drawerToggle.prop('checked', false);
-    }
+    // 1. Restore state on load - MOVED to inline script in dashboard.html.twig to prevent FOUC
 
     // 2. Save state on change
     $drawerToggle.on('change', function() {

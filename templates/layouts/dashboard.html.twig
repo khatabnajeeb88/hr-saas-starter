@@ -3,6 +3,17 @@
 {% block body %}
 <div class="drawer lg:drawer-open group">
     <input id="dashboard-drawer" type="checkbox" class="drawer-toggle" checked />
+    <script>
+        (function() {
+            try {
+                const savedState = localStorage.getItem('sidebar-expanded');
+                // Default is true (checked). If savedState is explicitly 'false', uncheck it.
+                if (savedState === 'false') {
+                    document.getElementById('dashboard-drawer').checked = false;
+                }
+            } catch (e) {}
+        })();
+    </script>
     
     {# Drawer Content (Navbar + Page) #}
     <div class="drawer-content flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-all duration-300">
