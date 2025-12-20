@@ -1,7 +1,7 @@
 {% form_theme form 'form/theme.html.twig' %}
 
 {{ form_start(form) }}
-    <div data-controller="tabs" data-tabs-active-class="border-purple-500 text-purple-600 dark:text-purple-400" class="space-y-6">
+    <div data-controller="tabs" data-tabs-active-class="border-b-2 border-purple-500 text-purple-600 dark:text-purple-400" class="space-y-6">
         
         {# Tab Navigation #}
         <div class="border-b border-gray-200 dark:border-gray-700">
@@ -10,7 +10,7 @@
                         data-action="click->tabs#switch"
                         data-tabs-target="tab"
                         data-tab-value="personal"
-                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.personal_info.title'|trans }}
                 </button>
 
@@ -18,7 +18,7 @@
                         data-action="click->tabs#switch"
                         data-tabs-target="tab"
                         data-tab-value="work"
-                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.work_info.title'|trans }}
                 </button>
 
@@ -26,7 +26,7 @@
                         data-action="click->tabs#switch"
                         data-tabs-target="tab"
                         data-tab-value="bank"
-                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.bank_details.title'|trans }}
                 </button>
 
@@ -34,7 +34,7 @@
                         data-action="click->tabs#switch"
                         data-tabs-target="tab"
                         data-tab-value="family"
-                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.form.labels.family_members'|trans }}
                 </button>
 
@@ -42,7 +42,7 @@
                         data-action="click->tabs#switch"
                         data-tabs-target="tab"
                         data-tab-value="documents"
-                        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200">
+                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
                     {{ 'employee.document.title'|trans([], 'messages') }}
                 </button>
             </nav>

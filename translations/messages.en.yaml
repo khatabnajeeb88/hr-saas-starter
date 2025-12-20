@@ -553,6 +553,70 @@ employee:
             driving_license: Driving License
             other: Other
         view: View Document
+    show:
+        title: Employee Details
+        overview: Overview
+        personal_info:
+            title: Personal Information
+            full_name: Full Name
+            email: Email
+            phone: Phone
+            address: Address
+            city: City
+            country: Country
+            date_of_birth: Date of Birth
+            gender: Gender
+            national_id: National ID
+            issue_date: Issue Date
+            expiry_date: Expiry Date
+            marital_status: Marital Status
+            
+        financial:
+            title: Financial Information
+            bank_name: Bank Name
+            iban: IBAN
+            account_number: Account Number
+            swift_bic_code: Swift/BIC Code
+            branch: Branch
+        documents:
+            title: Documents
+            no_documents: No documents uploaded.
+            download: Download
+        family_members:
+            title: Family Members
+            no_family_members: No family members recorded.
+        contract:
+            title: Contract
+            no_contract: No contract recorded.
+            start_date: Start Date
+            end_date: End Date
+            type: Type
+            status: Status
+            salary: Salary
+            duration: Duration
+            basic_salary: Basic Salary
+            allowance: Allowance
+            deductions: Deductions
+            total_salary: Total Salary
+            housing_allowance: Housing Allowance
+            transport_allowance: Transport Allowance
+            allowances: Allowances
+            total: Total
+            to: To
+        employment_details:
+            title: Employment Details
+            joined_date: Joined Date
+            work_email: Work Email
+            work_location: Work Location
+            work_phone: Work Phone
+        contact_address:
+            title: Contact Address
+            address: Address
+            city: City
+            country: Country
+            email: Email
+            phone: Phone
+            mobile: Mobile
 
 department:
     form:

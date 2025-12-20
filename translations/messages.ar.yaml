@@ -437,7 +437,7 @@ employee:
         no_employees: لم يتم العثور على موظفين.
         add_first: أضف موظفك الأول
     status:
-        active: منشط
+        active: نشط
         on_leave: اجازة
         terminated: منتهي
         archived: مؤرشف
@@ -553,6 +553,71 @@ employee:
             driving_license: رقم رخصة القيادة
             other: آخر
         view: عرض المستند
+    show:
+        title: عرض الموظف
+        overview: ملخص
+        personal_info:
+            title: معلومات الشخصية
+            full_name: الاسم الكامل
+            email: البريد الإلكتروني
+            phone: الهاتف
+            address: العنوان
+            city: المدينة
+            country: الدولة
+            date_of_birth: تاريخ الميلاد
+            gender: الجنس
+            national_id: رقم الهوية
+            issue_date: تاريخ الإصدار
+            expiry_date: تاريخ الانتهاء
+            marital_status: الحالة الاجتماعية
+            
+        financial:
+            title: معلومات المالية
+            bank_name: اسم البنك
+            iban: IBAN
+            account_number: رقم الحساب
+            swift_bic_code: رمز SWIFT / BIC
+            branch: الفرع
+        documents:
+            title: المستندات
+            no_documents: لم يتم تحميل أي مستندات.
+            download: تحميل
+        family_members:
+            title: عائلة
+            no_family_members: لم يتم تسجيل أي عائلة.
+        contract:
+            title: عقد العمل
+            no_contract: لم يتم تسجيل أي عقد.
+            start_date: تاريخ البدء
+            end_date: تاريخ الانتهاء
+            type: نوع العقد
+            status: حالة العقد
+            salary: الراتب
+            duration: مدة العقد
+            basic_salary: الراتب الأساسي
+            allowance: المزايا
+            deductions: الخصومات
+            total_salary: إجمالي الراتب
+            ongoing: مستمر
+            housing_allowance: مزايا الإقامة
+            transport_allowance: مزايا النقل
+            allowances: المزايا
+            total: إجمالي
+            to: إلى
+        employment_details:
+            title: معلومات التوظيف
+            joined_date: تاريخ الانضمام
+            work_email: البريد الإلكتروني للعمل
+            work_location: موقع العمل
+            work_phone: هاتف العمل
+        contact_address:
+            title: العنوان
+            address: العنوان
+            city: المدينة
+            country: الدولة
+            email: البريد الإلكتروني
+            phone: الهاتف
+            mobile: الجوال
 
 department:
     form:
