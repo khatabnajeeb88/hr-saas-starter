@@ -279,6 +279,10 @@ common:
     apply: Apply
     enabled: Enabled
     disabled: Disabled
+    yes: Yes
+    no: No
+    clear: Clear
+    all: All
 
 flash:
     error:
@@ -420,6 +424,15 @@ email:
 employee:
     title: Employees
     manage_desc: Manage your team members and their details
+    personal_info: Personal Info
+    work_info: Work Info
+    name: Name
+    email: Email
+    mobile: Mobile
+    search_name_placeholder: Search by name...
+    search_email_placeholder: Search by email...
+    search_mobile_placeholder: Search by mobile...
+    search_job_placeholder: Search job title...
     add_new: Add New User
     export: Export
     search_placeholder: Search User

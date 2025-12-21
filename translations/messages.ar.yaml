@@ -279,6 +279,10 @@ common:
     apply: تطبيق
     enabled: مفعل
     disabled: معطل
+    yes: نعم
+    no: لا
+    clear: مسح
+    all: الكل
 
 flash:
     error:
@@ -420,6 +424,15 @@ email:
 employee:
     title: الموظفين
     manage_desc: إدارة أعضاء فريقك وتفاصيلهم
+    personal_info: المعلومات الشخصية
+    work_info: معلومات العمل
+    name: الاسم
+    email: البريد الإلكتروني
+    mobile: رقم الجوال
+    search_name_placeholder: البحث بالاسم...
+    search_email_placeholder: البحث بالبريد الإلكتروني...
+    search_mobile_placeholder: البحث برقم الجوال...
+    search_job_placeholder: البحث بالمسمى الوظيفي...
     add_new: إضافة مستخدم جديد
     export: تصدير
     search_placeholder: البحث عن مستخدم

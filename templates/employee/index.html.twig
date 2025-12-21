@@ -19,6 +19,87 @@
 				<p class="text-sm text-gray-500 dark:text-gray-400">{{ 'employee.manage_desc'|trans }}</p>
 			</div>
 			<div class="flex items-center gap-3">
+				{% set active_filters_count = filters|filter(v => v is not empty)|length %}
+
+				<div class="dropdown dropdown-end">
+					<div tabindex="0" role="button" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-none hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 relative">
+						<svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+						</svg>
+						{{ 'common.filters'|trans }}
+						{% if active_filters_count > 0 %}
+							<span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/4 -translate-y-1/2 bg-red-600 rounded-full">{{ active_filters_count }}</span>
+						{% endif %}
+					</div>
+
+					<div tabindex="0" class="dropdown-content z-10 menu p-4 shadow bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-box w-[600px] mt-2">
+						<form
+							action="{{ path('app_employee_index') }}" method="get" class="space-y-4">
+							{# Preserve limit if set #}
+							{% if app.request.query.get('limit') %}
+								<input type="hidden" name="limit" value="{{ app.request.query.get('limit') }}">
+							{% endif %}
+
+							<div
+								class="grid grid-cols-1 md:grid-cols-2 gap-6">
+								{# Personal Info Section #}
+								<div class="space-y-3">
+									<h3 class="font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-600 pb-1">{{ 'employee.personal_info'|trans|default('Personal Info') }}</h3>
+									<div>
+										<label for="filter_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ 'employee.name'|trans|default('Name') }}</label>
+										<input type="text" id="filter_name" name="name" value="{{ filters.name }}" class="input input-sm input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="{{ 'employee.search_name_placeholder'|trans|default('Search by name...') }}">
+									</div>
+									<div>
+										<label for="filter_email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ 'employee.email'|trans|default('Email') }}</label>
+										<input type="text" id="filter_email" name="email" value="{{ filters.email }}" class="input input-sm input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="{{ 'employee.search_email_placeholder'|trans|default('Search by email...') }}">
+									</div>
+									<div>
+										<label for="filter_mobile" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ 'employee.mobile'|trans|default('Mobile') }}</label>
+										<input type="text" id="filter_mobile" name="mobile" value="{{ filters.mobile }}" class="input input-sm input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="{{ 'employee.search_mobile_placeholder'|trans|default('Search by mobile...') }}">
+									</div>
+								</div>
+
+								{# Work Info Section #}
+								<div class="space-y-3">
+									<h3 class="font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-600 pb-1">{{ 'employee.work_info'|trans|default('Work Info') }}</h3>
+									<div>
+										<label for="filter_job_search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ 'employee.list.job_position'|trans }}</label>
+										<input type="text" id="filter_job_search" name="job_search" value="{{ filters.job_search }}" class="input input-sm input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="{{ 'employee.search_job_placeholder'|trans|default('Search job title...') }}">
+									</div>
+
+									<div>
+										<label for="filter_department" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ 'employee.list.department'|trans }}</label>
+										<select id="filter_department" name="department_id" class="select select-sm select-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+											<option value="">{{ 'common.all'|trans }}</option>
+											{% for department in departments %}
+												<option value="{{ department.id }}" {% if filters.department_id == department.id %} selected {% endif %}>{{ department.name }}</option>
+											{% endfor %}
+										</select>
+									</div>
+
+									<div>
+										<label for="filter_status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ 'employee.list.status'|trans }}</label>
+										<select id="filter_status" name="status" class="select select-sm select-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+											<option value="">{{ 'common.all'|trans }}</option>
+											<option value="active" {% if filters.status == 'active' %} selected {% endif %}>{{ 'employee.status.active'|trans }}</option>
+											<option value="on_leave" {% if filters.status == 'on_leave' %} selected {% endif %}>{{ 'employee.status.on_leave'|trans }}</option>
+											<option value="terminated" {% if filters.status == 'terminated' %} selected {% endif %}>{{ 'employee.status.terminated'|trans }}</option>
+											<option value="archived" {% if filters.status == 'archived' %} selected {% endif %}>{{ 'employee.status.archived'|trans }}</option>
+										</select>
+									</div>
+
+
+								</div>
+							</div>
+
+							<div class="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-gray-700 mt-2">
+								<a href="{{ path('app_employee_index') }}" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ 'common.clear'|trans }}</a>
+								<button type="submit" class="btn btn-primary btn-sm">{{ 'common.apply'|trans }}</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
 				<div class="dropdown dropdown-end">
 					<div tabindex="0" role="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
 						{{ 'common.actions_button'|trans }}
@@ -44,12 +125,7 @@
 						</li>
 					</ul>
 				</div>
-				<button type="button" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-none hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700" onclick="filterModal.showModal()">
-					<svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
-					</svg>
-					{{ 'common.filters'|trans }}
-				</button>
+
 				<a href="{{ path('app_employee_new') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg shadow-none hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
 					<svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -249,7 +325,7 @@
 				</div>
 				<nav class="relative z-0 inline-flex rounded-md shadow-none -space-x-px" aria-label="Pagination">
 					{% if pager.hasPreviousPage %}
-						<a href="{{ path('app_employee_index', {'page': pager.previousPage, 'limit': pager.maxPerPage}) }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md rtl:rounded-l-none rtl:rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+						<a href="{{ path('app_employee_index', {'page': pager.previousPage, 'limit': pager.maxPerPage}|merge(filters|filter(v => v is not empty))) }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md rtl:rounded-l-none rtl:rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
 							<span class="sr-only">Previous</span>
 							<svg class="h-5 w-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
 								<path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -270,14 +346,14 @@
 								{{ page }}
 							</a>
 						{% else %}
-							<a href="{{ path('app_employee_index', {'page': page, 'limit': pager.maxPerPage}) }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+							<a href="{{ path('app_employee_index', {'page': page, 'limit': pager.maxPerPage}|merge(filters|filter(v => v is not empty))) }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
 								{{ page }}
 							</a>
 						{% endif %}
 					{% endfor %}
 
 					{% if pager.hasNextPage %}
-						<a href="{{ path('app_employee_index', {'page': pager.nextPage, 'limit': pager.maxPerPage}) }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md rtl:rounded-r-none rtl:rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
+						<a href="{{ path('app_employee_index', {'page': pager.nextPage, 'limit': pager.maxPerPage}|merge(filters|filter(v => v is not empty))) }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md rtl:rounded-r-none rtl:rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
 							<span class="sr-only">Next</span>
 							<svg class="h-5 w-5 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
 								<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
@@ -295,26 +371,5 @@
 			</div>
 		</div>
 	</div>
-
-	<dialog id="filterModal" class="modal">
-		<div class="modal-box bg-white dark:bg-gray-800">
-			<h3 class="font-bold text-lg mb-4">{{ 'common.filters'|trans }}</h3>
-
-			<form method="dialog">
-				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-			</form>
-
-			<div class="py-4">
-				<p>Filter options will be placed here.</p>
-			</div>
-
-			<div class="modal-action">
-				<form method="dialog">
-					<button class="btn btn-ghost">{{ 'common.close'|trans }}</button>
-				</form>
-				<button type="button" class="btn btn-primary">{{ 'common.apply'|trans }}</button>
-			</div>
-		</div>
-	</dialog>
 	{% include 'employee/_export_modal.html.twig' %}
 {% endblock %}

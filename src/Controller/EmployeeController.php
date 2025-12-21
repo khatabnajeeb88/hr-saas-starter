@@ -24,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class EmployeeController extends AbstractController
 {
     #[Route('/', name: 'app_employee_index', methods: ['GET'])]
-    public function index(Request $request, EmployeeRepository $employeeRepository): Response
+    public function index(Request $request, EmployeeRepository $employeeRepository, \App\Repository\DepartmentRepository $departmentRepository): Response
     {
         // Default to first team for now if not specified
         /** @var \App\Entity\User $user */
@@ -42,6 +42,46 @@ class EmployeeController extends AbstractController
              $queryBuilder->andWhere('1 = 0');
         }
 
+        // Filters
+        $filters = [
+            'name' => $request->query->get('name'),
+            'email' => $request->query->get('email'),
+            'mobile' => $request->query->get('mobile'),
+            'job_search' => $request->query->get('job_search'),
+            'department_id' => $request->query->get('department_id'),
+            'status' => $request->query->get('status'),
+        ];
+
+        if (!empty($filters['name'])) {
+            $queryBuilder->andWhere('(e.firstName LIKE :name OR e.lastName LIKE :name)')
+                ->setParameter('name', '%' . $filters['name'] . '%');
+        }
+
+        if (!empty($filters['email'])) {
+            $queryBuilder->andWhere('e.email LIKE :email')
+                ->setParameter('email', '%' . $filters['email'] . '%');
+        }
+
+        if (!empty($filters['mobile'])) {
+            $queryBuilder->andWhere('e.mobile LIKE :mobile')
+                ->setParameter('mobile', '%' . $filters['mobile'] . '%');
+        }
+
+        if (!empty($filters['job_search'])) {
+            $queryBuilder->andWhere('e.jobTitle LIKE :jobSearch')
+                ->setParameter('jobSearch', '%' . $filters['job_search'] . '%');
+        }
+
+        if (!empty($filters['department_id'])) {
+            $queryBuilder->andWhere('e.department = :departmentId')
+                ->setParameter('departmentId', $filters['department_id']);
+        }
+
+        if (!empty($filters['status'])) {
+            $queryBuilder->andWhere('e.employmentStatus = :status')
+                ->setParameter('status', $filters['status']);
+        }
+
         $adapter = new \Pagerfanta\Doctrine\ORM\QueryAdapter($queryBuilder);
         $pagerfanta = new \Pagerfanta\Pagerfanta($adapter);
 
@@ -51,8 +91,13 @@ class EmployeeController extends AbstractController
         $pagerfanta->setMaxPerPage($limit);
         $pagerfanta->setCurrentPage($page);
 
+        // Fetch departments for filter dropdown
+        $departments = $departmentRepository->findAll();
+
         return $this->render('employee/index.html.twig', [
             'pager' => $pagerfanta,
+            'departments' => $departments,
+            'filters' => $filters,
         ]);
     }
 
