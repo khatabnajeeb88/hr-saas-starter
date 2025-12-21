@@ -56,7 +56,7 @@
 
 		{# Table Card #}
 		<div
-			class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+			class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700" data-controller="checkbox" data-checkbox-message-value="{{ 'employee.selected_count'|trans }}" data-checkbox-total-count-value="{{ pager.nbResults }}">
 			{# Controls Bar #}
 			<div class="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 				<div class="flex items-center gap-2">
@@ -67,6 +67,7 @@
 						<option value="{{ path('app_employee_index', {'limit': 50, 'page': 1}) }}" {% if pager.maxPerPage == 50 %} selected {% endif %}>50</option>
 					</select>
 					<span class="text-sm text-gray-600 dark:text-gray-400">{{ 'employee.entries'|trans }}</span>
+					<span class="hidden ml-2 text-sm font-medium text-indigo-600 dark:text-indigo-400" data-checkbox-target="count"></span>
 				</div>
 				<div class="relative">
 					<div class="absolute inset-y-0 left-0 rtl:right-0 rtl:left-auto pl-3 rtl:pr-3 rtl:pl-0 flex items-center pointer-events-none">
@@ -79,8 +80,8 @@
 			</div>
 
 			{# Table #}
-			<div class="overflow-visible" data-controller="checkbox">
-				<table class="table table-zebra min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+			<div class="overflow-visible">
+				<table class="table min-w-full divide-y divide-gray-200 dark:divide-gray-700">
 					<thead class="bg-gray-50 dark:bg-gray-900/50">
 						<tr>
 							<th scope="col" class="px-6 py-3 text-left rtl:text-right">
@@ -112,7 +113,7 @@
 					</thead>
 					<tbody class="">
 						{% for employee in pager.currentPageResults %}
-							<tr class="">
+							<tr class="hover:bg-gray-50 dark:hover:bg-gray-900/50">
 								<td class="px-6 py-4 whitespace-nowrap">
 									<input type="checkbox" value="{{ employee.id }}" class="checkbox border border-gray-300 shadow-none text-gray-600 dark:text-gray-400" data-checkbox-target="row" data-action="change->checkbox#toggle">
 								</td>

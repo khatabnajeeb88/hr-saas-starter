@@ -429,6 +429,7 @@ employee:
     select_visible: إختيار المرئي
     select_all: إختيار الكل
     select_none: إلغاء التحديد
+    selected_count: 'تم تحديد %count%'
     list:
         name: الاسم
         mobile: الجوال

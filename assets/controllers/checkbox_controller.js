@@ -1,13 +1,16 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ['row', 'header'];
+    static targets = ['row', 'header', 'count'];
+    static values = { message: String, totalCount: Number };
 
     connect() {
+        this.isAllSelected = false;
         this.updateHeaderState();
     }
 
     selectVisible() {
+        this.isAllSelected = false;
         this.rowTargets.forEach(checkbox => {
             checkbox.checked = true;
         });
@@ -17,7 +20,8 @@ export default class extends Controller {
 
     selectAll() {
         // Logically select all (frontend only for now)
-        this.selectVisible();
+        this.selectVisible(); // Visually check all on page
+        this.isAllSelected = true;
         // Here you would typically set a hidden input or state to indicate "all pages selected"
         // for subsequent form submissions.
         this.updateHeaderState();
@@ -36,6 +40,7 @@ export default class extends Controller {
     }
 
     deselectAll() {
+        this.isAllSelected = false;
         this.rowTargets.forEach(checkbox => {
             checkbox.checked = false;
         });
@@ -44,17 +49,24 @@ export default class extends Controller {
     }
 
     toggle(event) {
+        this.isAllSelected = false;
         this.updateHeaderState();
     }
 
     updateHeaderState() {
         const hasRows = this.rowTargets.length > 0;
         const allChecked = hasRows && this.rowTargets.every(checkbox => checkbox.checked);
+        let checkedCount = this.rowTargets.filter(checkbox => checkbox.checked).length;
+        
+        if (this.isAllSelected && this.hasTotalCountValue) {
+            checkedCount = this.totalCountValue;
+        }
         
         console.log('Update Header State:', { 
             rows: this.rowTargets.length, 
-            allChecked, 
-            firstChecked: this.rowTargets[0]?.checked 
+            checkedCount,
+            allChecked,
+            isAllSelected: this.isAllSelected
         });
 
         if (this.hasHeaderTarget) {
@@ -62,6 +74,15 @@ export default class extends Controller {
             if (headerCheckbox) {
                 headerCheckbox.checked = allChecked;
                 headerCheckbox.indeterminate = false;
+            }
+        }
+
+        if (this.hasCountTarget) {
+            if (checkedCount > 0) {
+                this.countTarget.textContent = this.messageValue.replace('%count%', checkedCount);
+                this.countTarget.classList.remove('hidden');
+            } else {
+                this.countTarget.classList.add('hidden');
             }
         }
     }

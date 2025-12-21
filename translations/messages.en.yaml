@@ -429,6 +429,7 @@ employee:
     select_visible: Select visible
     select_all: Select all
     select_none: Unselect all
+    selected_count: '%count% selected'
     list:
         name: Name
         mobile: Mobile
