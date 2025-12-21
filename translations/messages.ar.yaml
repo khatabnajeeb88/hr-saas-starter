@@ -431,6 +431,21 @@ employee:
     select_none: إلغاء التحديد
     selected_count: 'تم تحديد %count%'
     import_button: 'استيراد الموظفين'
+    export_modal:
+        title: 'تصدير الموظفين'
+        select_columns: 'حدد الأعمدة المراد تصديرها:'
+        columns:
+            full_name: 'الاسم الكامل'
+            email: 'البريد الإلكتروني'
+            mobile: 'الجوال'
+            job_title: 'المسمى الوظيفي'
+            department: 'القسم'
+            status: 'حالة التوظيف'
+            joining_date: 'تاريخ الانضمام'
+            basic_salary: 'الراتب الأساسي'
+            iban: 'IBAN'
+            national_id: 'رقم الهوية'
+            badge_id: 'رقم الشارة'
     import_title: 'استيراد الموظفين'
     import_desc: 'تحميل ملف CSV أو Excel لاستيراد الموظفين بالجملة.'
     import_instructions:

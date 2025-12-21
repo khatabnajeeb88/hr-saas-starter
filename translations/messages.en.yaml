@@ -431,6 +431,21 @@ employee:
     select_none: Unselect all
     selected_count: '%count% selected'
     import_button: 'Import Employees'
+    export_modal:
+        title: 'Export Employees'
+        select_columns: 'Select columns to export:'
+        columns:
+            full_name: 'Full Name'
+            email: 'Email'
+            mobile: 'Mobile'
+            job_title: 'Job Title'
+            department: 'Department'
+            status: 'Employment Status'
+            joining_date: 'Joining Date'
+            basic_salary: 'Basic Salary'
+            iban: 'IBAN'
+            national_id: 'National ID'
+            badge_id: 'Badge ID'
     import_title: 'Import Employees'
     import_desc: 'Upload a CSV or Excel file to bulk import employees.'
     import_instructions:

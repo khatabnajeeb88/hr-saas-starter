@@ -1,0 +1,51 @@
+<dialog id="export_modal" class="modal">
+	<div class="modal-box w-11/12 max-w-2xl bg-white dark:bg-gray-800">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-500 dark:text-gray-400">✕</button>
+		</form>
+
+		<h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4">{{ 'employee.export_modal.title'|trans }}</h3>
+
+		<form action="{{ path('app_employee_export') }}" method="POST" onsubmit="setTimeout(() => export_modal.close(), 100)">
+			<input type="hidden" name="ids" id="export_ids" value="">
+			<input type="hidden" name="include_all" id="export_include_all" value="0">
+
+			<div class="space-y-4">
+				<p class="text-sm text-gray-600 dark:text-gray-400">{{ 'employee.export_modal.select_columns'|trans }}</p>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					{% set columns = {
+                        'fullName': 'employee.export_modal.columns.full_name',
+                        'email': 'employee.export_modal.columns.email',
+                        'mobile': 'employee.export_modal.columns.mobile',
+                        'jobTitle': 'employee.export_modal.columns.job_title',
+                        'department': 'employee.export_modal.columns.department',
+                        'employmentStatus': 'employee.export_modal.columns.status',
+                        'joinedAt': 'employee.export_modal.columns.joining_date',
+                        'basicSalary': 'employee.export_modal.columns.basic_salary',
+                        'iban': 'employee.export_modal.columns.iban',
+                        'nationalId': 'employee.export_modal.columns.national_id',
+                        'badgeId': 'employee.export_modal.columns.badge_id'
+                    } %}
+
+					{% for key, label in columns %}
+						<div class="form-control">
+							<label class="label cursor-pointer justify-start gap-3">
+								<input type="checkbox" name="columns[]" value="{{ key }}" checked class="checkbox checkbox-sm border-gray-300 dark:border-gray-600 checkbox-primary">
+								<span class="label-text text-gray-700 dark:text-gray-300">{{ label|trans }}</span>
+							</label>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			<div class="modal-action">
+				<button type="button" class="btn btn-ghost" onclick="export_modal.close()">{{ 'common.cancel'|trans }}</button>
+				<button type="submit" class="btn btn-primary">{{ 'common.export'|trans }}</button>
+			</div>
+		</form>
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>{{ 'common.close'|trans }}</button>
+	</form>
+</dialog>

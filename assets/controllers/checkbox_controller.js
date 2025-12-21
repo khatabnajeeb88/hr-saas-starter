@@ -5,6 +5,7 @@ export default class extends Controller {
     static values = { message: String, totalCount: Number };
 
     connect() {
+        console.log('Checkbox controller connected');
         this.isAllSelected = false;
         this.updateHeaderState();
     }
@@ -46,6 +47,46 @@ export default class extends Controller {
         });
         this.updateHeaderState();
         this.closeDropdown();
+    }
+
+    export(event) {
+        console.log('Export action triggered');
+        event.preventDefault();
+        this.closeDropdown();
+
+        const checkedRows = this.rowTargets.filter(checkbox => checkbox.checked);
+        const ids = checkedRows.map(checkbox => checkbox.value);
+        
+        const idsInput = document.getElementById('export_ids');
+        const includeAllInput = document.getElementById('export_include_all');
+        const modal = document.getElementById('export_modal');
+
+        console.log('Export elements check:', {
+            idsInput: !!idsInput,
+            includeAllInput: !!includeAllInput,
+            modal: !!modal,
+            modalElement: modal
+        });
+
+        if (idsInput && includeAllInput && modal) {
+            idsInput.value = ids.join(',');
+            
+            // Export all if:
+            // 1. "Select All" (global) was clicked (isAllSelected is true)
+            // 2. OR No specific rows are selected (User requirement: "If no record is selected then export all")
+            if (this.isAllSelected || ids.length === 0) {
+                includeAllInput.value = '1';
+                // If we are exporting all because none are selected, clear manual IDs to be safe, 
+                // although backend should prioritize include_all if set.
+                 if (ids.length === 0) {
+                     idsInput.value = ''; 
+                 }
+            } else {
+                includeAllInput.value = '0';
+            }
+
+            modal.showModal();
+        }
     }
 
     toggle(event) {

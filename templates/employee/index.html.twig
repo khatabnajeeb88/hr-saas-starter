@@ -6,7 +6,7 @@
 
 {% block dashboard_content %}
 	<div
-		class="space-y-6">
+		class="space-y-6" data-controller="checkbox" data-checkbox-message-value="{{ 'employee.selected_count'|trans }}" data-checkbox-total-count-value="{{ pager.nbResults }}">
 		{# Header Section #}
 		<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 			<div>
@@ -26,7 +26,7 @@
 							<a href="{{ path('app_employee_import') }}" class="p-0">{{ 'common.import'|trans }}</a>
 						</li>
 						<li class="p-2 hover:bg-gray-50 dark:hover:bg-gray-900/50">
-							<a href="#" class="p-0">{{ 'common.export'|trans }}</a>
+							<a href="#" class="p-0" data-action="click->checkbox#export">{{ 'common.export'|trans }}</a>
 						</li>
 						<li class="p-2 hover:bg-gray-50 dark:hover:bg-gray-900/50">
 							<a href="#" class="p-0">{{ 'common.archive'|trans }}</a>
@@ -56,7 +56,7 @@
 
 		{# Table Card #}
 		<div
-			class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700" data-controller="checkbox" data-checkbox-message-value="{{ 'employee.selected_count'|trans }}" data-checkbox-total-count-value="{{ pager.nbResults }}">
+			class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
 			{# Controls Bar #}
 			<div class="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 				<div class="flex items-center gap-2">
@@ -311,4 +311,5 @@
 			</div>
 		</div>
 	</dialog>
+	{% include 'employee/_export_modal.html.twig' %}
 {% endblock %}

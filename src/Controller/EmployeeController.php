@@ -8,6 +8,10 @@ use App\Form\EmployeeImportType;
 use App\Repository\EmployeeRepository;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,14 +26,21 @@ class EmployeeController extends AbstractController
     #[Route('/', name: 'app_employee_index', methods: ['GET'])]
     public function index(Request $request, EmployeeRepository $employeeRepository): Response
     {
-        // Default to first team for now if not specified (TODO: Add team selector support)
+        // Default to first team for now if not specified
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
+        $team = $user->getTeamMembers()->first()?->getTeam();
         
-        // Create a query builder instead of fetching all result
-        // TODO: Refine this to filter by specific team from context
         $queryBuilder = $employeeRepository->createQueryBuilder('e')
             ->orderBy('e.joinedAt', 'DESC');
+
+        if ($team) {
+            $queryBuilder->andWhere('e.team = :team')
+                ->setParameter('team', $team);
+        } else {
+             // If no team, user shouldn't see any employees (or maybe all if super admin? stick to secure default)
+             $queryBuilder->andWhere('1 = 0');
+        }
 
         $adapter = new \Pagerfanta\Doctrine\ORM\QueryAdapter($queryBuilder);
         $pagerfanta = new \Pagerfanta\Pagerfanta($adapter);
@@ -137,6 +148,109 @@ class EmployeeController extends AbstractController
         $response = new Response($content);
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="employees_sample.csv"');
+
+        return $response;
+    }
+
+    #[Route('/export', name: 'app_employee_export', methods: ['POST'])]
+    public function export(Request $request, EmployeeRepository $employeeRepository, \Symfony\Contracts\Translation\TranslatorInterface $translator): Response
+    {
+        $user = $this->getUser();
+        /** @var \App\Entity\User $user */
+        $team = $user->getTeamMembers()->first()?->getTeam(); // Assuming active team context or first team
+
+        if (!$team) {
+            $this->addFlash('error', 'You must belong to a team to export employees.');
+            return $this->redirectToRoute('app_employee_index');
+        }
+
+        $includeAll = $request->request->get('include_all') === '1';
+        $idsStr = $request->request->get('ids');
+        $selectedColumns = $request->request->all()['columns'] ?? [];
+
+        if ($includeAll) {
+             // Fetch all for the team
+             $employees = $employeeRepository->findBy(['team' => $team], ['joinedAt' => 'DESC']);
+        } else {
+             $ids = array_filter(explode(',', $idsStr));
+             if (empty($ids)) {
+                  // Fallback to all if something weird happened (though js handles logic)
+                  $employees = $employeeRepository->findBy(['team' => $team], ['joinedAt' => 'DESC']);
+             } else {
+                  $employees = $employeeRepository->findBy(['id' => $ids, 'team' => $team]);
+             }
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        // Define available columns mapping
+        $columnMap = [
+            'fullName' => ['label' => 'Full Name', 'getter' => 'getFullName'],
+            'email' => ['label' => 'Email', 'getter' => 'getEmail'],
+            'mobile' => ['label' => 'Mobile', 'getter' => 'getMobile'],
+            'jobTitle' => ['label' => 'Job Title', 'getter' => 'getJobTitle'],
+            'department' => ['label' => 'Department', 'getter' => function(Employee $e) { return $e->getDepartment()?->getName(); }],
+            'employmentStatus' => ['label' => 'Employment Status', 'getter' => 'getEmploymentStatus'],
+            'joinedAt' => ['label' => 'Joining Date', 'getter' => function(Employee $e) { return $e->getJoinedAt()?->format('Y-m-d'); }],
+            'basicSalary' => ['label' => 'Basic Salary', 'getter' => 'getBasicSalary'],
+            'iban' => ['label' => 'IBAN', 'getter' => 'getIban'],
+            'nationalId' => ['label' => 'National ID', 'getter' => 'getNationalId'],
+            'badgeId' => ['label' => 'Badge ID', 'getter' => 'getBadgeId'],
+        ];
+
+        // Filter valid columns
+        $activeColumns = [];
+        foreach ($selectedColumns as $colKey) {
+            if (isset($columnMap[$colKey])) {
+                $activeColumns[$colKey] = $columnMap[$colKey];
+            }
+        }
+        
+        // Default to all columns if none selected? Or just names? Let's default to Name only if empty.
+        if (empty($activeColumns)) {
+            $activeColumns['fullName'] = $columnMap['fullName'];
+        }
+
+        // Write Headers
+        $colIndex = 1;
+        foreach ($activeColumns as $key => $config) {
+            $sheet->setCellValue(Coordinate::stringFromColumnIndex($colIndex) . '1', $translator->trans($config['label']));
+            $colIndex++;
+        }
+
+        // Write Data
+        $rowIndex = 2;
+        foreach ($employees as $employee) {
+            $colIndex = 1;
+            foreach ($activeColumns as $key => $config) {
+                $value = '';
+                $getter = $config['getter'];
+                if (is_callable($getter)) {
+                    $value = $getter($employee);
+                } else {
+                    $value = $employee->$getter();
+                }
+                $sheet->setCellValue(Coordinate::stringFromColumnIndex($colIndex) . $rowIndex, $value);
+                $colIndex++;
+            }
+            $rowIndex++;
+        }
+        
+        // Auto-size columns
+        foreach (range('A', $sheet->getHighestColumn()) as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        
+        $response = new StreamedResponse(function() use ($writer) {
+            $writer->save('php://output');
+        });
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="employees_export_'.date('Y-m-d_H-i').'.xlsx"');
+        $response->headers->set('Cache-Control', 'max-age=0');
 
         return $response;
     }
