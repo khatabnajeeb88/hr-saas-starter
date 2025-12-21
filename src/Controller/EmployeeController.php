@@ -255,6 +255,93 @@ class EmployeeController extends AbstractController
         return $response;
     }
 
+
+
+    private function getBulkEmployees(Request $request, EmployeeRepository $employeeRepository): array
+    {
+        $user = $this->getUser();
+        /** @var \App\Entity\User $user */
+        $team = $user->getTeamMembers()->first()?->getTeam();
+
+        if (!$team) {
+            return [];
+        }
+
+        $includeAll = $request->request->get('include_all') === '1';
+        $idsStr = $request->request->get('ids');
+
+        if ($includeAll) {
+             return $employeeRepository->findBy(['team' => $team]);
+        }
+        
+        $ids = array_filter(explode(',', $idsStr));
+        if (empty($ids)) {
+             return [];
+        }
+
+        return $employeeRepository->findBy(['id' => $ids, 'team' => $team]);
+    }
+
+    #[Route('/bulk/archive', name: 'app_employee_bulk_archive', methods: ['POST'])]
+    public function bulkArchive(Request $request, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
+    {
+        $employees = $this->getBulkEmployees($request, $employeeRepository);
+        $count = 0;
+
+        foreach ($employees as $employee) {
+            if ($employee->getEmploymentStatus() !== 'archived') {
+                $employee->setEmploymentStatus('archived');
+                $count++;
+            }
+        }
+
+        $entityManager->flush();
+        $this->addFlash('success', $count . ' employees archived successfully.');
+
+        return $this->redirectToRoute('app_employee_index');
+    }
+
+    #[Route('/bulk/unarchive', name: 'app_employee_bulk_unarchive', methods: ['POST'])]
+    public function bulkUnarchive(Request $request, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
+    {
+        $employees = $this->getBulkEmployees($request, $employeeRepository);
+        $count = 0;
+
+        foreach ($employees as $employee) {
+            if ($employee->getEmploymentStatus() === 'archived') {
+                $employee->setEmploymentStatus('active'); // Default to active or whatever previous status? simplifying to active
+                $count++;
+            }
+        }
+
+        $entityManager->flush();
+        $this->addFlash('success', $count . ' employees unarchived successfully.');
+
+        return $this->redirectToRoute('app_employee_index');
+    }
+
+    #[Route('/bulk/delete', name: 'app_employee_bulk_delete', methods: ['POST'])]
+    public function bulkDelete(Request $request, EmployeeRepository $employeeRepository, EntityManagerInterface $entityManager): Response
+    {
+        if (!$this->isCsrfTokenValid('bulk_delete', $request->request->get('_token'))) {
+            $this->addFlash('error', 'Invalid CSRF token.');
+            return $this->redirectToRoute('app_employee_index');
+        }
+
+        $employees = $this->getBulkEmployees($request, $employeeRepository);
+        $count = 0;
+
+        foreach ($employees as $employee) {
+            $entityManager->remove($employee);
+            $count++;
+        }
+
+        $entityManager->flush();
+        $this->addFlash('success', $count . ' employees deleted successfully.');
+
+        return $this->redirectToRoute('app_employee_index');
+    }
+
     #[Route('/new', name: 'app_employee_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, \Symfony\Component\String\Slugger\SluggerInterface $slugger): Response
     {

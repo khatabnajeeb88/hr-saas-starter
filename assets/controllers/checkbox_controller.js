@@ -50,8 +50,7 @@ export default class extends Controller {
     }
 
     export(event) {
-        console.log('Export action triggered');
-        event.preventDefault();
+        if (event) event.preventDefault();
         this.closeDropdown();
 
         const checkedRows = this.rowTargets.filter(checkbox => checkbox.checked);
@@ -89,6 +88,74 @@ export default class extends Controller {
         }
     }
 
+    archive(event) {
+        event.preventDefault();
+        this.submitBulkAction(event.target.dataset.url, null);
+    }
+
+    unarchive(event) {
+        event.preventDefault();
+        this.submitBulkAction(event.target.dataset.url, null);
+    }
+
+    delete(event) {
+        event.preventDefault();
+        const confirmMessage = event.target.dataset.confirm || 'Are you sure?';
+        this.submitBulkAction(event.target.dataset.url, confirmMessage, true);
+    }
+
+    submitBulkAction(url, confirmMessage = null, isDelete = false) {
+        this.closeDropdown();
+        
+        const checkedRows = this.rowTargets.filter(checkbox => checkbox.checked);
+        const ids = checkedRows.map(checkbox => checkbox.value);
+
+        if (!this.isAllSelected && ids.length === 0) {
+            alert('Please select at least one item.');
+            return;
+        }
+
+        if (confirmMessage && !confirm(confirmMessage)) {
+            return;
+        }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = url;
+        form.style.display = 'none';
+
+        const idsInput = document.createElement('input');
+        idsInput.type = 'hidden';
+        idsInput.name = 'ids';
+        idsInput.value = ids.join(',');
+        form.appendChild(idsInput);
+
+        const includeAllInput = document.createElement('input');
+        includeAllInput.type = 'hidden';
+        includeAllInput.name = 'include_all';
+        includeAllInput.value = this.isAllSelected ? '1' : '0';
+        form.appendChild(includeAllInput);
+
+        if (isDelete) {
+            // Check for existing csrf token in a meta tag or similar if available, 
+            // but since we are submitting a form, we might need to inject it.
+            // For now, let's assume the controller can handle it if we pass it, 
+            // or we might need to render it in a data attribute.
+            // Let's look for a global CSRF token if present
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            if (csrfToken) {
+                 const tokenInput = document.createElement('input');
+                 tokenInput.type = 'hidden';
+                 tokenInput.name = '_token';
+                 tokenInput.value = csrfToken;
+                 form.appendChild(tokenInput);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
     toggle(event) {
         this.isAllSelected = false;
         this.updateHeaderState();
@@ -102,13 +169,6 @@ export default class extends Controller {
         if (this.isAllSelected && this.hasTotalCountValue) {
             checkedCount = this.totalCountValue;
         }
-        
-        console.log('Update Header State:', { 
-            rows: this.rowTargets.length, 
-            checkedCount,
-            allChecked,
-            isAllSelected: this.isAllSelected
-        });
 
         if (this.hasHeaderTarget) {
             const headerCheckbox = this.headerTarget.querySelector('input[type="checkbox"]');

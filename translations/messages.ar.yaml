@@ -430,6 +430,7 @@ employee:
     select_all: إختيار الكل
     select_none: إلغاء التحديد
     selected_count: 'تم تحديد %count%'
+    bulk_delete_confirm: 'هل أنت متأكد أنك تريد حذف العنصر (العناصر) المحدد؟ لا يمكن التراجع عن هذا الإجراء.'
     import_button: 'استيراد الموظفين'
     export_modal:
         title: 'تصدير الموظفين'

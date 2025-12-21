@@ -4,6 +4,11 @@
 	{{ 'employee.title'|trans }}
 {% endblock %}
 
+{% block head_metas %}
+	{{ parent() }}
+	<meta name="csrf-token" content="{{ csrf_token('bulk_delete') }}">
+{% endblock %}
+
 {% block dashboard_content %}
 	<div
 		class="space-y-6" data-controller="checkbox" data-checkbox-message-value="{{ 'employee.selected_count'|trans }}" data-checkbox-total-count-value="{{ pager.nbResults }}">
@@ -29,13 +34,13 @@
 							<a href="#" class="p-0" data-action="click->checkbox#export">{{ 'common.export'|trans }}</a>
 						</li>
 						<li class="p-2 hover:bg-gray-50 dark:hover:bg-gray-900/50">
-							<a href="#" class="p-0">{{ 'common.archive'|trans }}</a>
+							<a href="#" class="p-0" data-action="click->checkbox#archive" data-url="{{ path('app_employee_bulk_archive') }}">{{ 'common.archive'|trans }}</a>
 						</li>
 						<li class="p-2 hover:bg-gray-50 dark:hover:bg-gray-900/50">
-							<a href="#" class="p-0">{{ 'common.unarchive'|trans }}</a>
+							<a href="#" class="p-0" data-action="click->checkbox#unarchive" data-url="{{ path('app_employee_bulk_unarchive') }}">{{ 'common.unarchive'|trans }}</a>
 						</li>
 						<li class="p-2 hover:bg-gray-50 dark:hover:bg-gray-900/50">
-							<a href="#" class="text-red-600 dark:text-red-400 p-0">{{ 'common.delete'|trans }}</a>
+							<a href="#" class="text-red-600 dark:text-red-400 p-0" data-action="click->checkbox#delete" data-url="{{ path('app_employee_bulk_delete') }}" data-confirm="{{ 'employee.bulk_delete_confirm'|trans }}">{{ 'common.delete'|trans }}</a>
 						</li>
 					</ul>
 				</div>
