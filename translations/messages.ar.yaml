@@ -426,6 +426,9 @@ employee:
     shown: عرض
     entries: إدخالات
     pagination_showing: 'عرض <span class="font-medium">%count%</span> إلى <span class="font-medium">%end%</span> من <span class="font-medium">%total%</span> إدخال'
+    select_visible: إختيار المرئي
+    select_all: إختيار الكل
+    select_none: إلغاء التحديد
     list:
         name: الاسم
         mobile: الجوال

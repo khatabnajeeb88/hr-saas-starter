@@ -426,6 +426,9 @@ employee:
     shown: Shown
     entries: entries
     pagination_showing: 'Showing <span class="font-medium">%count%</span> to <span class="font-medium">%end%</span> of <span class="font-medium">%total%</span> entries'
+    select_visible: Select visible
+    select_all: Select all
+    select_none: Unselect all
     list:
         name: Name
         mobile: Mobile
