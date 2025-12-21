@@ -430,6 +430,31 @@ employee:
     select_all: Select all
     select_none: Unselect all
     selected_count: '%count% selected'
+    import_button: 'Import Employees'
+    import_title: 'Import Employees'
+    import_desc: 'Upload a CSV or Excel file to bulk import employees.'
+    import_instructions:
+        title: 'Instructions'
+        file_format: 'File format must be CSV or Excel.'
+        first_row_header: 'The first row should be the header (it will be skipped).'
+        columns_order: 'Columns must be in the following order:'
+        columns:
+            first_name: 'First Name'
+            last_name: 'Last Name'
+            email: 'Email (optional)'
+            mobile: 'Mobile (optional)'
+            national_id: 'National ID (optional)'
+            job_title: 'Job Title (optional)'
+            basic_salary: 'Basic Salary (optional)'
+            joining_date: 'Joining Date (YYYY-MM-DD)'
+        download_sample_csv: 'Download Sample CSV'
+
+    import:
+        attach_documents: 'Attach Documents'
+        drag_drop_here: 'Drag and Drop here'
+        browse_files: 'Browse files'
+        accepted_file_types: 'Accepted File Types : .csv, .xlsx, .xls'
+        or: 'or'
     list:
         name: Name
         mobile: Mobile

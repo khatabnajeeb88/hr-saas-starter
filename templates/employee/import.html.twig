@@ -1,0 +1,87 @@
+{% extends 'layouts/dashboard.html.twig' %}
+
+{% block title %}
+	{{ 'employee.import_title'|trans }}
+{% endblock %}
+
+{% block dashboard_content %}
+	<div class="max-w-4xl mx-auto space-y-6">
+		<div>
+			<h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'employee.import_title'|trans }}</h1>
+			<p class="text-sm text-gray-500 dark:text-gray-400">{{ 'employee.import_desc'|trans }}</p>
+		</div>
+
+		<div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+			<div class="mb-6">
+				<h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">{{ 'employee.import_instructions.title'|trans }}</h3>
+				<ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
+					<li>{{ 'employee.import_instructions.file_format'|trans }}</li>
+					<li>{{ 'employee.import_instructions.first_row_header'|trans }}</li>
+					<li>{{ 'employee.import_instructions.columns_order'|trans }}
+						<ol class="list-decimal list-inside ml-4 mt-1">
+							<li>{{ 'employee.import_instructions.columns.first_name'|trans }}</li>
+							<li>{{ 'employee.import_instructions.columns.last_name'|trans }}</li>
+							<li>{{ 'employee.import_instructions.columns.email'|trans }}</li>
+							<li>{{ 'employee.import_instructions.columns.mobile'|trans }}</li>
+							<li>{{ 'employee.import_instructions.columns.national_id'|trans }}</li>
+							<li>{{ 'employee.import_instructions.columns.job_title'|trans }}</li>
+							<li>{{ 'employee.import_instructions.columns.basic_salary'|trans }}</li>
+							<li>{{ 'employee.import_instructions.columns.joining_date'|trans }}</li>
+						</ol>
+					</li>
+				</ul>
+				<div class="mt-4">
+					<a href="{{ path('app_employee_import_sample') }}" class="btn btn-outline btn-sm gap-2">
+						<svg class="h-4 w-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+						</svg>
+						{{ 'employee.import_instructions.download_sample_csv'|trans }}
+					</a>
+				</div>
+			</div>
+
+			<div class="divider"></div>
+
+			{{ form_start(form) }}
+			<div class="space-y-4" data-controller="dropzone">
+				<div class="form-control w-full">
+					<label class="label">
+						<span class="label-text">{{ 'employee.import.attach_documents'|trans }}</span>
+					</label>
+
+					<div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-indigo-400 dark:hover:border-indigo-500" data-dropzone-target="container" data-action="click->dropzone#trigger">
+						<input type="file" id="{{ form.file.vars.id }}" name="{{ form.file.vars.full_name }}" class="hidden" accept=".csv, .xlsx, .xls" data-dropzone-target="input">
+						{% do form.file.setRendered %}
+
+						<div class="flex flex-col items-center justify-center space-y-3">
+							<svg class="w-10 h-10 text-indigo-500" fill="currentColor" viewbox="0 0 20 20">
+								<path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+							</svg>
+
+							<div class="text-gray-600 dark:text-gray-300">
+								<span class="font-medium text-indigo-600 dark:text-indigo-400">{{ 'employee.import.drag_drop_here'|trans }}</span>
+								<br>
+								{{ 'employee.import.or'|trans }}
+								<br>
+								<span class="font-medium text-blue-600 dark:text-blue-400">{{ 'employee.import.browse_files'|trans }}</span>
+							</div>
+
+							<p class="text-xs text-gray-500 dark:text-gray-400">
+								{{ 'employee.import.accepted_file_types'|trans }}
+							</p>
+
+							<div class="hidden mt-2 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-full text-sm font-medium truncat max-w-xs" data-dropzone-target="filename"></div>
+						</div>
+					</div>
+					{{ form_errors(form.file) }}
+				</div>
+
+				<div class="flex items-center gap-3 mt-6">
+					<button type="submit" class="btn btn-primary">{{ 'employee.import_button'|trans }}</button>
+					<a href="{{ path('app_employee_index') }}" class="btn btn-ghost">{{ 'common.cancel'|trans }}</a>
+				</div>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}

@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Employee;
 use App\Form\EmployeeType;
+use App\Form\EmployeeImportType;
 use App\Repository\EmployeeRepository;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +43,102 @@ class EmployeeController extends AbstractController
         return $this->render('employee/index.html.twig', [
             'pager' => $pagerfanta,
         ]);
+    }
+
+    #[Route('/import', name: 'app_employee_import', methods: ['GET', 'POST'])]
+    public function import(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(EmployeeImportType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $form->get('file')->getData();
+
+            if ($file) {
+                // Check for team membership first
+                /** @var \App\Entity\User $user */
+                $user = $this->getUser();
+                $firstTeamMember = $user->getTeamMembers()->first();
+                if (!$firstTeamMember) {
+                    $this->addFlash('error', 'You must belong to a team to import employees.');
+                    return $this->redirectToRoute('app_employee_index');
+                }
+                $team = $firstTeamMember->getTeam();
+
+                $spreadsheet = IOFactory::load($file->getPathname());
+                $sheet = $spreadsheet->getActiveSheet();
+                $rows = $sheet->toArray();
+                
+                // Remove header row
+                $header = array_shift($rows);
+                
+                $successCount = 0;
+                
+                foreach ($rows as $data) {
+                    // Simple position based mapping
+                    // 0: FirstName, 1: LastName, 2: Email, 3: Mobile, 4: National ID, 5: Job Title, 6: Rate/Salary, 7: Joined At
+                    
+                    // Filter empty rows (sometimes Excel has empty rows at bottom)
+                    if (empty(array_filter($data))) continue;
+                    if (count($data) < 2) continue;
+
+                    $employee = new Employee();
+                    $employee->setTeam($team);
+                    $employee->setFirstName((string)($data[0] ?? 'Unknown'));
+                    $employee->setLastName((string)($data[1] ?? 'Unknown'));
+                    $employee->setEmail($data[2] ?? null);
+                    $employee->setMobile($data[3] ?? null);
+                    $employee->setNationalId($data[4] ?? null);
+                    $employee->setJobTitle($data[5] ?? null);
+                    $employee->setBasicSalary($data[6] ?? null);
+                    
+                    try {
+                        $dateValue = $data[7] ?? null;
+                        if ($dateValue) {
+                            if (is_numeric($dateValue)) {
+                                $joinedAt = \DateTimeImmutable::createFromMutable(Date::excelToDateTimeObject($dateValue));
+                            } else {
+                                $joinedAt = new \DateTimeImmutable($dateValue);
+                            }
+                            $employee->setJoinedAt($joinedAt);
+                        } else {
+                            $employee->setJoinedAt(new \DateTimeImmutable());
+                        }
+                    } catch (\Exception $e) {
+                        $employee->setJoinedAt(new \DateTimeImmutable());
+                    }
+
+                    $employee->setEmploymentStatus('active');
+
+                    $entityManager->persist($employee);
+                    $successCount++;
+                }
+                
+                $entityManager->flush();
+                $this->addFlash('success', "Imported $successCount employees successfully.");
+                return $this->redirectToRoute('app_employee_index');
+            }
+        }
+
+        return $this->render('employee/import.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/import/sample', name: 'app_employee_import_sample', methods: ['GET'])]
+    public function importSample(): Response
+    {
+        $csvHeader = ['First Name', 'Last Name', 'Email', 'Mobile', 'National ID', 'Job Title', 'Basic Salary', 'Joining Date (YYYY-MM-DD)'];
+        $sampleRow = ['John', 'Doe', 'john.doe@example.com', '0500000000', '1234567890', 'Software Engineer', '10000.00', date('Y-m-d')];
+
+        $content = implode(',', $csvHeader) . "\n" . implode(',', $sampleRow);
+
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="employees_sample.csv"');
+
+        return $response;
     }
 
     #[Route('/new', name: 'app_employee_new', methods: ['GET', 'POST'])]

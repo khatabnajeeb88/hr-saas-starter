@@ -430,6 +430,31 @@ employee:
     select_all: إختيار الكل
     select_none: إلغاء التحديد
     selected_count: 'تم تحديد %count%'
+    import_button: 'استيراد الموظفين'
+    import_title: 'استيراد الموظفين'
+    import_desc: 'تحميل ملف CSV أو Excel لاستيراد الموظفين بالجملة.'
+    import_instructions:
+        title: 'التعليمات'
+        file_format: 'تنسيق الملف يجب أن يكون CSV أو Excel.'
+        first_row_header: 'يجب أن يحتوي الصف الأول على العناوين (سيتم تخطيه).'
+        columns_order: 'يجب أن تكون الأعمدة بالترتيب التالي:'
+        columns:
+            first_name: 'الاسم الأول'
+            last_name: 'اسم العائلة'
+            email: 'البريد الإلكتروني (اختياري)'
+            mobile: 'الجوال (اختياري)'
+            national_id: 'رقم الهوية (اختياري)'
+            job_title: 'المسمى الوظيفي (اختياري)'
+            basic_salary: 'الراتب الأساسي (اختياري)'
+            joining_date: 'تاريخ الانضمام (YYYY-MM-DD)'
+        download_sample_csv: 'تحميل ملف نموذج'
+
+    import:
+        attach_documents: 'إرفاق المستندات'
+        drag_drop_here: 'سحب وإفلات هنا'
+        browse_files: 'تصفح الملفات'
+        accepted_file_types: 'أنواع الملفات المقبولة: .csv, .xlsx, .xls'
+        or: 'أو'
     list:
         name: الاسم
         mobile: الجوال
