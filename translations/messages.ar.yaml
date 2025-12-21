@@ -283,6 +283,7 @@ common:
     no: لا
     clear: مسح
     all: الكل
+    send: إرسال
 
 flash:
     error:
@@ -598,6 +599,19 @@ employee:
     shift:
         regular: عادي
         night: ليلي
+        expiry_date: تاريخ الانتهاء
+    actions:
+        reset_password: إعادة تعيين كلمة المرور
+        reset_password_confirm: هل أنت متأكد أنك تريد إعادة تعيين كلمة المرور لهذا الموظف؟
+        send_message: إرسال رسالة
+    message:
+        subject: الموضوع
+        content: الرسالة
+    no_email_error: هذا الموظف ليس لديه عنوان بريد إلكتروني.
+    user_not_found_error: لم يتم العثور على حساب مستخدم لهذا البريد الإلكتروني.
+    reset_password_sent: تم إرسال بريد إعادة تعيين كلمة المرور.
+    message_content_empty: الموضوع ومحتوى الرسالة مطلوبان.
+    message_sent: تم إرسال الرسالة بنجاح.
     document:
         title: المستندات
         type: نوع المستند

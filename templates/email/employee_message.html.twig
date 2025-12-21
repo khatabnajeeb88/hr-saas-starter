@@ -1,0 +1,16 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %}
+	{{ subject }}
+{% endblock %}
+
+{% block content %}
+	<h1>{{ subject }}</h1>
+	<p>{{ message|nl2br }}</p>
+
+	<hr>
+	<p>
+		Sent by:
+		{{ sender.name ?? sender.email }}
+	</p>
+{% endblock %}

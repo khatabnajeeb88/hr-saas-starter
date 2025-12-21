@@ -18,11 +18,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
+use App\Entity\User;
+use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 
 #[Route('/employee')]
 #[IsGranted('ROLE_USER')]
 class EmployeeController extends AbstractController
 {
+    public function __construct(
+        private ResetPasswordHelperInterface $resetPasswordHelper,
+        private EntityManagerInterface $entityManager
+    ) {
+    }
     #[Route('/', name: 'app_employee_index', methods: ['GET'])]
     public function index(Request $request, EmployeeRepository $employeeRepository, \App\Repository\DepartmentRepository $departmentRepository): Response
     {
@@ -580,5 +592,84 @@ class EmployeeController extends AbstractController
 
             $employee->setProfileImage($newFilename);
         }
+    }
+    #[Route('/{id}/reset-password', name: 'app_employee_reset_password', methods: ['POST'])]
+    public function resetPassword(Request $request, Employee $employee, MailerInterface $mailer, TranslatorInterface $translator): Response
+    {
+        if (!$this->isCsrfTokenValid('reset-password'.$employee->getId(), $request->request->get('_token'))) {
+            return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+        }
+
+        if (!$employee->getEmail()) {
+             $this->addFlash('error', $translator->trans('employee.no_email_error'));
+             return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+        }
+
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $employee->getEmail()]);
+
+        if (!$user) {
+             $this->addFlash('error', $translator->trans('employee.user_not_found_error'));
+             return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+        }
+
+        try {
+            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+        } catch (ResetPasswordExceptionInterface $e) {
+             $this->addFlash('error', $e->getReason());
+             return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+        }
+
+        $email = (new TemplatedEmail())
+            ->from(new Address('support@saas-starter.com', 'SaaS Starter Support'))
+            ->to((string) $user->getEmail())
+            ->subject('Your password reset request')
+            ->htmlTemplate('reset_password/email.html.twig')
+            ->context([
+                'resetToken' => $resetToken,
+            ]);
+
+        $mailer->send($email);
+
+        $this->addFlash('success', $translator->trans('employee.reset_password_sent'));
+
+        return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+    }
+
+    #[Route('/{id}/send-message', name: 'app_employee_send_message', methods: ['POST'])]
+    public function sendMessage(Request $request, Employee $employee, MailerInterface $mailer, TranslatorInterface $translator): Response
+    {
+        if (!$this->isCsrfTokenValid('send-message'.$employee->getId(), $request->request->get('_token'))) {
+             return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+        }
+
+        if (!$employee->getEmail()) {
+             $this->addFlash('error', $translator->trans('employee.no_email_error'));
+             return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+        }
+
+        $subject = $request->request->get('subject');
+        $message = $request->request->get('message');
+
+        if (empty($subject) || empty($message)) {
+             $this->addFlash('error', $translator->trans('employee.message_content_empty'));
+             return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
+        }
+
+        $email = (new TemplatedEmail())
+            ->from(new Address('support@saas-starter.com', 'SaaS Starter Support'))
+            ->to((string) $employee->getEmail())
+            ->subject($subject)
+            ->htmlTemplate('email/employee_message.html.twig')
+            ->context([
+                'subject' => $subject,
+                'message' => $message,
+                'sender' => $this->getUser(),
+            ]);
+
+        $mailer->send($email);
+
+        $this->addFlash('success', $translator->trans('employee.message_sent'));
+
+        return $this->redirectToRoute('app_employee_show', ['id' => $employee->getId()]);
     }
 }

@@ -1,327 +1,372 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}{{'employee.show.title'|trans}}{% endblock %}
+{% block title %}
+	{{'employee.show.title'|trans}}
+{% endblock %}
 
 {% block dashboard_content %}
-    <div class="max-w-7xl mx-auto space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div class="flex items-center gap-4">
-                 {% if employee.profileImage %}
-                    <div class="avatar">
-                        <div class="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                             <img src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" alt="{{ employee.fullName }}" />
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="avatar placeholder">
-                        <div class="bg-neutral text-neutral-content rounded-full w-16">
-                            <span class="text-xl">{{ employee.firstName|first }}{{ employee.lastName|first }}</span>
-                        </div>
-                    </div>
-                {% endif %}
-                <div>
-                    <h1 class="text-2xl font-bold text-base-content">{{ employee.fullName }}</h1>
-                    <p class="text-base-content/70">
-                        {{ employee.jobTitle }} 
-                        {% if employee.department %}
-                            <span class="mx-1">•</span> {{ employee.department.name }}
-                        {% endif %}
-                    </p>
-                    <div class="mt-1 flex gap-2">
-                         <span class="badge badge-{{ employee.employmentStatus == 'active' ? 'success' : 'ghost' }} badge-sm">
-                            {{ employee.employmentStatus == 'active' ? 'employee.status.active'|trans : 'employee.status.inactive'|trans }}
-                        </span>
-                        {% if employee.badgeId %}
-                            <span class="badge badge-outline badge-sm">{{ employee.badgeId }}</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="flex gap-2">
-                <a href="{{ path('app_employee_index') }}" class="btn btn-ghost">{{ 'employee.form.back_to_list'|trans }}</a>
-                <a href="{{ path('app_employee_edit', {'id': employee.id}) }}" class="btn btn-primary">
-                    <span class="icon-[tabler--pencil] size-5"></span>
-                    {{ 'employee.form.edit_title'|trans }}
-                </a>
-            </div>
-        </div>
+	<div
+		class="max-w-7xl mx-auto space-y-6">
+		<!-- Header -->
+		<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+			<div class="flex items-center gap-4">
+				{% if employee.profileImage %}
+					<div class="avatar">
+						<div class="mask mask-squircle w-24">
+							<img src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" alt="{{ employee.fullName }}"/>
+						</div>
+					</div>
+				{% else %}
+					<div class="avatar placeholder">
+						<div class="bg-neutral text-neutral-content rounded-full w-16">
+							<span class="text-xl">{{ employee.firstName|first }}{{ employee.lastName|first }}</span>
+						</div>
+					</div>
+				{% endif %}
+				<div>
+					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ employee.fullName }}</h1>
+					<p class="text-gray-600 dark:text-white/70">
+						{{ employee.jobTitle }}
+						{% if employee.department %}
+							<span class="mx-1">•</span>
+							{{ employee.department.name }}
+						{% endif %}
+					</p>
+					<div class="mt-1 flex gap-2">
+						<span class="badge badge-{{ employee.employmentStatus == 'active' ? 'success' : 'ghost' }} badge-sm text-gray-300 dark:text-white">
+							{{ employee.employmentStatus == 'active' ? 'employee.status.active'|trans : 'employee.status.inactive'|trans }}
+						</span>
+						{% if employee.badgeId %}
+							<span class="badge badge-outline badge-sm">{{ employee.badgeId }}</span>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="flex gap-2">
+				<div class="dropdown dropdown-end">
+					<div tabindex="0" role="button" class="btn btn-primary">
+						{{ 'common.actions_button'|trans }}
+						<span class="icon-[tabler--chevron-down] block size-4"></span>
+					</div>
+					<ul tabindex="0" class="dropdown-content z-10 menu p-2 shadow bg-base-100 rounded-box w-52">
+						<li>
+							<a href="{{ path('app_employee_edit', {'id': employee.id}) }}">
+								<span class="icon-[tabler--pencil] size-4"></span>
+								{{ 'employee.form.edit_title'|trans }}
+							</a>
+						</li>
+						<li>
+							<button onclick="send_message_modal.showModal()">
+								<span class="icon-[tabler--mail] size-4"></span>
+								{{ 'employee.actions.send_message'|trans }}
+							</button>
+						</li>
+						<li>
+							<form method="post" action="{{ path('app_employee_reset_password', {'id': employee.id}) }}" onsubmit="return confirm('{{ 'employee.actions.reset_password_confirm'|trans }}');" class="block w-full">
+								<input type="hidden" name="_token" value="{{ csrf_token('reset-password' ~ employee.id) }}">
+								<button type="submit" class="flex items-center gap-2 w-full text-left">
+									<span class="icon-[tabler--lock-refresh] size-4"></span>
+									{{ 'employee.actions.reset_password'|trans }}
+								</button>
+							</form>
+						</li>
+					</ul>
+				</div>
+				<a href="{{ path('app_employee_index') }}" class="btn btn-ghost">{{ 'employee.form.back_to_list'|trans }}</a>
+			</div>
+		</div>
 
-        <!-- Tabs Navigation -->
-        <div data-controller="tabs" data-tabs-active-class="border-b-2 border-purple-500 text-purple-600 dark:text-purple-400">
-            <div class="border-b border-gray-200 dark:border-gray-700 mb-6">
-                <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
-                    <button type="button" 
-                            data-action="click->tabs#switch"
-                            data-tabs-target="tab"
-                            data-tab-value="overview" 
-                            class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                        {{ 'employee.show.overview'|trans }}
-                    </button>
-                    <button type="button" 
-                            data-action="click->tabs#switch"
-                            data-tabs-target="tab"
-                            data-tab-value="contract" 
-                            class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                        {{ 'employee.show.contract.title'|trans }}
-                    </button>
-                    <button type="button" 
-                            data-action="click->tabs#switch"
-                            data-tabs-target="tab"
-                            data-tab-value="financial" 
-                            class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                        {{ 'employee.show.financial.title'|trans }}
-                    </button>
-                    <button type="button" 
-                            data-action="click->tabs#switch"
-                            data-tabs-target="tab"
-                            data-tab-value="family" 
-                            class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                        {{ 'employee.show.family_members.title'|trans }}
-                    </button>
-                    <button type="button" 
-                            data-action="click->tabs#switch"
-                            data-tabs-target="tab"
-                            data-tab-value="documents" 
-                            class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                        {{ 'employee.show.documents.title'|trans }}
-                    </button>
-                </nav>
-            </div>
+		<!-- Send Message Modal -->
+		<dialog id="send_message_modal" class="modal">
+			<div class="modal-box bg-white dark:bg-gray-800">
+				<form method="dialog">
+					<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+				</form>
+				<h3 class="font-bold text-lg mb-4 text-gray-900 dark:text-white">{{ 'employee.actions.send_message'|trans }}</h3>
+				<form method="post" action="{{ path('app_employee_send_message', {'id': employee.id}) }}" class="space-y-4">
+					<input type="hidden" name="_token" value="{{ csrf_token('send-message' ~ employee.id) }}">
 
-            <!-- Tab Panels -->
-            <div data-tabs-target="panel" data-tab-value="overview" class="bg-white rounded-box p-6">
-                <div class="grid grid-cols-1 md:grid-cols-1 gap-8">
-                     <!-- Personal Info -->
-                    <div class="space-y-4">
-                        <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
-                            <span class="icon-[tabler--user] text-primary"></span>
-                            {{ 'employee.show.personal_info.title'|trans }}
-                        </h3>
-                        <dl class="">
-                            <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.personal_info.full_name'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2">{{ employee.fullName }}</dd>
-                            </div>
-                            <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.personal_info.gender'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2 capitalize">{{ employee.gender|default('-') }}</dd>
-                            </div>
-                             <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.personal_info.date_of_birth'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2">{{ employee.dateOfBirth ? employee.dateOfBirth|date('Y-m-d') : '-' }}</dd>
-                            </div>
-                            <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.personal_info.national_id'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2">{{ employee.nationalId|default('-') }}</dd>
-                            </div>
-                             <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.personal_info.marital_status'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2 capitalize">{{ employee.maritalStatus|default('-') }}</dd>
-                            </div>
-                        </dl>
-                    </div>
+					<div>
+						<label class="label">
+							<span class="label-text">{{ 'employee.message.subject'|trans }}</span>
+						</label>
+						<input type="text" name="subject" class="input input-bordered w-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700" required/>
+					</div>
 
-                    <!-- Contact & Address -->
-                     <div class="space-y-4">
-                        <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
-                             <span class="icon-[tabler--address-book] text-primary"></span>
-                            {{ 'employee.show.contact_address.title'|trans }}
-                        </h3>
-                        <dl class="">
-                            <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.contact_address.email'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2">{{ employee.email|default('-') }}</dd>
-                            </div>
-                             <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.contact_address.mobile'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2">{{ employee.mobile|default('-') }}</dd>
-                            </div>
-                            <div class="py-3 grid grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.contact_address.address'|trans }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2">
-                                    {{ employee.address|default('-') }}<br>
-                                    {% if employee.city or employee.country %}
-                                        {{ employee.city }}, {{ employee.country }}
-                                    {% endif %}
-                                </dd>
-                            </div>
-                        </dl>
-                    </div>
+					<div>
+						<label class="label">
+							<span class="label-text">{{ 'employee.message.content'|trans }}</span>
+						</label>
+						<textarea name="message" class="textarea textarea-bordered w-full h-32 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-700" required></textarea>
+					</div>
 
-                    <!-- Employment Details -->
-                    <div class="space-y-4 md:col-span-2">
-                        <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
-                            <span class="icon-[tabler--briefcase] text-primary"></span>
-                            {{ 'employee.show.employment_details.title'|trans }}
-                        </h3>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0">
-                            <dl class="">
-                                <div class="py-3 grid grid-cols-3 gap-4">
-                                    <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.employment_details.joined_date'|trans }}</dt>
-                                    <dd class="text-sm text-gray-900 col-span-2">{{ employee.joinedAt|date('Y-m-d') }}</dd>
-                                </div>
-                                <div class="py-3 grid grid-cols-3 gap-4">
-                                    <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.employment_details.work_email'|trans }}</dt>
-                                    <dd class="text-sm text-gray-900 col-span-2">{{ employee.workEmail|default('-') }}</dd>
-                                </div>
-                            </dl>
-                             <dl class="">
-                                 <div class="py-3 grid grid-cols-3 gap-4">
-                                    <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.employment_details.work_location'|trans }}</dt>
-                                    <dd class="text-sm text-gray-900 col-span-2">{{ employee.workLocation|default('-') }}</dd>
-                                </div>
-                                <div class="py-3 grid grid-cols-3 gap-4">
-                                    <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.employment_details.work_phone'|trans }}</dt>
-                                    <dd class="text-sm text-gray-900 col-span-2">{{ employee.workPhone|default('-') }}</dd>
-                                </div>
-                            </dl>
-                         </div>
-                    </div>
-                </div>
-            </div>
+					<div class="modal-action">
+						<button type="submit" class="btn btn-primary">{{ 'common.send'|trans }}</button>
+					</div>
+				</form>
+			</div>
+		</dialog>
 
-            <div data-tabs-target="panel" data-tab-value="contract" class="bg-white rounded-box p-6 hidden">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg text-gray-900">{{ 'employee.show.contract.title'|trans }}</h3>
-                </div>
-                
-                {% if employee.contracts is empty %}
-                    <div class="text-center py-10 text-gray-500">
-                        <span class="icon-[tabler--file-off] size-10 mb-2"></span>
-                        <p>{{ 'employee.show.contract.no_contract'|trans }}</p>
-                    </div>
-                {% else %}
-                    <div class="overflow-x-auto">
-                        <table class="table text-gray-900">
-                            <thead>
-                                <tr class="text-gray-500">
-                                    <th>{{ 'employee.show.contract.status'|trans }}</th>
-                                    <th>{{ 'employee.show.contract.type'|trans }}</th>
-                                    <th>{{ 'employee.show.contract.duration'|trans }}</th>
-                                    <th>{{ 'employee.show.contract.basic_salary'|trans }}</th>
-                                    <th>{{ 'employee.show.contract.allowances'|trans }}</th>
-                                    <th>{{ 'employee.show.contract.total'|trans }}</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for contract in employee.contracts %}
-                                    <tr class="{{ contract.status == 'active' ? 'bg-gray-50' : '' }}">
-                                        <td>
-                                            <div class="badge badge-{{ contract.status == 'active' ? 'success' : 'ghost' }} badge-sm">
-                                                {{ contract.status|capitalize }}
-                                            </div>
-                                        </td>
-                                        <td class="capitalize">{{ contract.type }}</td>
-                                        <td>
-                                            <div class="text-sm">{{ contract.startDate|date('Y-m-d') }}</div>
-                                            <div class="text-xs text-gray-500">
-                                                {{ 'employee.show.contract.to'|trans }} {{ contract.endDate ? contract.endDate|date('Y-m-d') : 'employee.show.contract.ongoing'|trans }}
-                                            </div>
-                                        </td>
-                                        <td>{{ contract.basicSalary|number_format(2) }}</td>
-                                        <td>
-                                            <div class="text-xs">
-                                                {{ 'employee.show.contract.housing_allowance'|trans }}: {{ contract.housingAllowance|number_format(2) }}<br>
-                                                {{ 'employee.show.contract.transport_allowance'|trans }}: {{ contract.transportAllowance|number_format(2) }}
-                                            </div>
-                                        </td>
-                                        <td class="font-medium">{{ contract.totalSalary|number_format(2) }}</td>
-                                        <td>
-                                            <button class="btn btn-square btn-ghost btn-sm">
-                                                <span class="icon-[tabler--eye] text-lg text-gray-500 hover:text-white"></span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endif %}
-            </div>
+		<!-- Tabs Navigation -->
+		<div data-controller="tabs" data-tabs-active-class="border-b-2 border-purple-500 text-purple-600 dark:text-purple-400">
+			<div class="border-b border-gray-200 dark:border-gray-700 mb-6">
+				<nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
+					<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="overview" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+						{{ 'employee.show.overview'|trans }}
+					</button>
+					<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="contract" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+						{{ 'employee.show.contract.title'|trans }}
+					</button>
+					<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="financial" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+						{{ 'employee.show.financial.title'|trans }}
+					</button>
+					<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="family" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+						{{ 'employee.show.family_members.title'|trans }}
+					</button>
+					<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="documents" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+						{{ 'employee.show.documents.title'|trans }}
+					</button>
+				</nav>
+			</div>
 
-            <div data-tabs-target="panel" data-tab-value="financial" class="bg-white rounded-box p-6 hidden">
-                 <div class="max-w-2xl">
-                    <h3 class="font-semibold text-lg flex items-center gap-2 mb-4 text-gray-900">
-                        <span class="icon-[tabler--building-bank] text-primary"></span>
-                        {{ 'employee.show.financial.title'|trans }}
-                    </h3>
-                    <div class="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                        <dl class="space-y-4">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.financial.bank_name'|trans }}</dt>
-                                <dd class="text-sm font-medium sm:col-span-2 text-gray-900">{{ employee.bankName|default('Not set') }}</dd>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.financial.iban'|trans }}</dt>
-                                <dd class="text-sm font-mono sm:col-span-2 text-gray-900">{{ employee.iban|default('Not set') }}</dd>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.financial.account_number'|trans }}</dt>
-                                <dd class="text-sm font-mono sm:col-span-2 text-gray-900">{{ employee.bankAccountNumber|default('Not set') }}</dd>
-                            </div>
-                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.financial.swift_bic_code'|trans }}</dt>
-                                <dd class="text-sm font-mono sm:col-span-2 text-gray-900">{{ employee.bankIdentifierCode|default('Not set') }}</dd>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ 'employee.show.financial.branch'|trans }}</dt>
-                                <dd class="text-sm sm:col-span-2 text-gray-900">{{ employee.bankBranch|default('Not set') }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-                </div>
-            </div>
+			<!-- Tab Panels -->
+			<div data-tabs-target="panel" data-tab-value="overview" class="bg-white dark:bg-gray-800 rounded-box p-6">
+				<div
+					class="grid grid-cols-1 md:grid-cols-1 gap-8">
+					<!-- Personal Info -->
+					<div class="space-y-4">
+						<h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900 dark:text-white">
+							<span class="icon-[tabler--user] text-primary"></span>
+							{{ 'employee.show.personal_info.title'|trans }}
+						</h3>
+						<dl class="">
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.personal_info.full_name'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.fullName }}</dd>
+							</div>
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.personal_info.gender'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2 capitalize">{{ employee.gender|default('-') }}</dd>
+							</div>
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.personal_info.date_of_birth'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.dateOfBirth ? employee.dateOfBirth|date('Y-m-d') : '-' }}</dd>
+							</div>
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.personal_info.national_id'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.nationalId|default('-') }}</dd>
+							</div>
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.personal_info.marital_status'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2 capitalize">{{ employee.maritalStatus|default('-') }}</dd>
+							</div>
+						</dl>
+					</div>
 
-            <div data-tabs-target="panel" data-tab-value="family" class="bg-white rounded-box p-6 hidden">
-                 <div class="max-w-2xl">
-                     <div class="flex justify-between items-center mb-4">
-                         <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
-                            <span class="icon-[tabler--users] text-primary"></span>
-                            {{ 'employee.show.family_members.title'|trans }}
-                        </h3>
-                    </div>
-                    {% if employee.familyMembers is empty %}
-                        <p class="text-sm text-gray-500 italic">{{ 'employee.show.family_members.no_family_members'|trans }}</p>
-                    {% else %}
-                         <ul class="space-y-2">
-                            {% for member in employee.familyMembers %}
-                                <li class="p-3 bg-gray-50 rounded-lg flex justify-between items-center border border-gray-100">
-                                    <span class="text-gray-900">{{ member.name }}</span>
-                                    <span class="badge badge-sm">{{ member.relationship }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </div>
+					<!-- Contact & Address -->
+					<div class="space-y-4">
+						<h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900 dark:text-white">
+							<span class="icon-[tabler--address-book] text-primary"></span>
+							{{ 'employee.show.contact_address.title'|trans }}
+						</h3>
+						<dl class="">
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.contact_address.email'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.email|default('-') }}</dd>
+							</div>
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.contact_address.mobile'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.mobile|default('-') }}</dd>
+							</div>
+							<div class="py-3 grid grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.contact_address.address'|trans }}</dt>
+								<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">
+									{{ employee.address|default('-') }}<br>
+									{% if employee.city or employee.country %}
+										{{ employee.city }},
+										{{ employee.country }}
+									{% endif %}
+								</dd>
+							</div>
+						</dl>
+					</div>
 
-            <div data-tabs-target="panel" data-tab-value="documents" class="bg-white rounded-box p-6 hidden">
-                 <div class="max-w-2xl">
-                    <div class="flex justify-between items-center mb-4">
-                         <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
-                            <span class="icon-[tabler--files] text-primary"></span>
-                            {{ 'employee.show.documents.title'|trans }}
-                        </h3>
-                    </div>
-                     {% if employee.documents is empty %}
-                        <p class="text-sm text-gray-500 italic">{{ 'employee.show.documents.no_documents'|trans }}</p>
-                    {% else %}
-                        <ul class="space-y-2">
-                            {% for doc in employee.documents %}
-                                <li class="p-3 bg-gray-50 rounded-lg flex justify-between items-center border border-gray-100">
-                                    <div class="flex items-center gap-2">
-                                        <span class="icon-[tabler--file] text-gray-400"></span>
-                                        <span class="text-gray-900">{{ doc.type|capitalize }}</span>
-                                    </div>
-                                    <a href="{{ '/uploads/documents/' ~ doc.file }}" class="btn btn-xs btn-ghost text-gray-600">{{ 'employee.show.documents.download'|trans }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+					<!-- Employment Details -->
+					<div class="space-y-4 md:col-span-1">
+						<h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
+							<span class="icon-[tabler--briefcase] text-primary"></span>
+							{{ 'employee.show.employment_details.title'|trans }}
+						</h3>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0">
+							<dl class="">
+								<div class="py-3 grid grid-cols-3 gap-4">
+									<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.employment_details.joined_date'|trans }}</dt>
+									<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.joinedAt|date('Y-m-d') }}</dd>
+								</div>
+								<div class="py-3 grid grid-cols-3 gap-4">
+									<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.employment_details.work_email'|trans }}</dt>
+									<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.workEmail|default('-') }}</dd>
+								</div>
+							</dl>
+							<dl class="">
+								<div class="py-3 grid grid-cols-3 gap-4">
+									<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.employment_details.work_location'|trans }}</dt>
+									<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.workLocation|default('-') }}</dd>
+								</div>
+								<div class="py-3 grid grid-cols-3 gap-4">
+									<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.employment_details.work_phone'|trans }}</dt>
+									<dd class="text-sm text-gray-900 dark:text-white/70 col-span-2">{{ employee.workPhone|default('-') }}</dd>
+								</div>
+							</dl>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div data-tabs-target="panel" data-tab-value="contract" class="bg-white dark:bg-gray-800 rounded-box p-6 hidden">
+				<div class="flex justify-between items-center mb-4">
+					<h3 class="font-bold text-lg text-gray-900 dark:text-white">{{ 'employee.show.contract.title'|trans }}</h3>
+				</div>
+
+				{% if employee.contracts is empty %}
+					<div class="text-center py-10 text-gray-500 dark:text-gray-400">
+						<span class="icon-[tabler--file-off] size-10 mb-2"></span>
+						<p>{{ 'employee.show.contract.no_contract'|trans }}</p>
+					</div>
+				{% else %}
+					<div class="overflow-x-auto">
+						<table class="table text-gray-900 dark:text-white/70">
+							<thead class="bg-gray-50 dark:bg-gray-700/50">
+								<tr class="text-gray-500 dark:text-gray-400">
+									<th>{{ 'employee.show.contract.status'|trans }}</th>
+									<th>{{ 'employee.show.contract.type'|trans }}</th>
+									<th>{{ 'employee.show.contract.duration'|trans }}</th>
+									<th>{{ 'employee.show.contract.basic_salary'|trans }}</th>
+									<th>{{ 'employee.show.contract.allowances'|trans }}</th>
+									<th>{{ 'employee.show.contract.total'|trans }}</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for contract in employee.contracts %}
+									<tr class="{{ contract.status == 'active' ? 'bg-gray-50 dark:bg-gray-700/50' : '' }}">
+										<td>
+											<div class="badge badge-soft badge-{{ contract.status == 'active' ? 'success' : 'ghost' }} badge-sm text-whit dark:text-gray-400">
+												{{ contract.status|capitalize }}
+											</div>
+										</td>
+										<td class="capitalize">{{ contract.type }}</td>
+										<td>
+											<div class="text-sm">{{ contract.startDate|date('Y-m-d') }}</div>
+											<div class="text-xs text-gray-500 dark:text-gray-400">
+												{{ 'employee.show.contract.to'|trans }}
+												{{ contract.endDate ? contract.endDate|date('Y-m-d') : 'employee.show.contract.ongoing'|trans }}
+											</div>
+										</td>
+										<td>{{ contract.basicSalary|number_format(2) }}</td>
+										<td>
+											<div class="text-xs">
+												{{ 'employee.show.contract.housing_allowance'|trans }}:
+												{{ contract.housingAllowance|number_format(2) }}<br>
+												{{ 'employee.show.contract.transport_allowance'|trans }}:
+												{{ contract.transportAllowance|number_format(2) }}
+											</div>
+										</td>
+										<td class="font-medium">{{ contract.totalSalary|number_format(2) }}</td>
+										<td>
+											<button class="btn btn-square btn-ghost btn-sm">
+												<span class="icon-[tabler--eye] text-lg text-gray-500 hover:text-white dark:text-gray-400 dark:hover:text-white"></span>
+											</button>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				{% endif %}
+			</div>
+
+			<div data-tabs-target="panel" data-tab-value="financial" class="bg-white dark:bg-gray-800 rounded-box p-6 hidden">
+				<div class="max-w-2xl">
+					<h3 class="font-semibold text-lg flex items-center gap-2 mb-4 text-gray-900 dark:text-white">
+						<span class="icon-[tabler--building-bank] text-primary"></span>
+						{{ 'employee.show.financial.title'|trans }}
+					</h3>
+					<div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 border border-gray-100 dark:border-gray-700">
+						<dl class="space-y-4">
+							<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.financial.bank_name'|trans }}</dt>
+								<dd class="text-sm font-medium sm:col-span-2 text-gray-900 dark:text-white">{{ employee.bankName|default('Not set') }}</dd>
+							</div>
+							<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.financial.iban'|trans }}</dt>
+								<dd class="text-sm font-mono sm:col-span-2 text-gray-900 dark:text-white">{{ employee.iban|default('Not set') }}</dd>
+							</div>
+							<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.financial.account_number'|trans }}</dt>
+								<dd class="text-sm font-mono sm:col-span-2 text-gray-900 dark:text-white">{{ employee.bankAccountNumber|default('Not set') }}</dd>
+							</div>
+							<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.financial.swift_bic_code'|trans }}</dt>
+								<dd class="text-sm font-mono sm:col-span-2 text-gray-900 dark:text-white">{{ employee.bankIdentifierCode|default('Not set') }}</dd>
+							</div>
+							<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+								<dt class="text-sm font-medium text-gray-500 dark:text-white/70">{{ 'employee.show.financial.branch'|trans }}</dt>
+								<dd class="text-sm sm:col-span-2 text-gray-900 dark:text-white">{{ employee.bankBranch|default('Not set') }}</dd>
+							</div>
+						</dl>
+					</div>
+				</div>
+			</div>
+
+			<div data-tabs-target="panel" data-tab-value="family" class="bg-white dark:bg-gray-800 rounded-box p-6 hidden">
+				<div class="max-w-2xl">
+					<div class="flex justify-between items-center mb-4">
+						<h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900 dark:text-white">
+							<span class="icon-[tabler--users] text-primary"></span>
+							{{ 'employee.show.family_members.title'|trans }}
+						</h3>
+					</div>
+					{% if employee.familyMembers is empty %}
+						<p class="text-sm text-gray-500 dark:text-gray-400 italic">{{ 'employee.show.family_members.no_family_members'|trans }}</p>
+					{% else %}
+						<ul class="space-y-2">
+							{% for member in employee.familyMembers %}
+								<li class="p-3 bg-gray-50 dark:bg-gray-700/20 rounded-lg flex justify-between items-center border border-gray-100 dark:border-gray-700">
+									<span class="text-gray-900 dark:text-white">{{ member.name }}</span>
+									<span class="badge badge-sm text-gray-600 dark:text-white/70">{{ member.relationship }}</span>
+								</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+
+			<div data-tabs-target="panel" data-tab-value="documents" class="bg-white dark:bg-gray-800 rounded-box p-6 hidden">
+				<div class="max-w-2xl">
+					<div class="flex justify-between items-center mb-4">
+						<h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900 dark:text-white">
+							<span class="icon-[tabler--files] text-primary"></span>
+							{{ 'employee.show.documents.title'|trans }}
+						</h3>
+					</div>
+					{% if employee.documents is empty %}
+						<p class="text-sm text-gray-500 dark:text-gray-400 italic">{{ 'employee.show.documents.no_documents'|trans }}</p>
+					{% else %}
+						<ul class="space-y-2">
+							{% for doc in employee.documents %}
+								<li class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg flex justify-between items-center border border-gray-100 dark:border-gray-700">
+									<div class="flex items-center gap-2">
+										<span class="icon-[tabler--file] text-gray-400 dark:text-gray-500"></span>
+										<span class="text-gray-900 dark:text-white">{{ doc.type|capitalize }}</span>
+									</div>
+									<a href="{{ '/uploads/documents/' ~ doc.file }}" class="btn btn-xs btn-ghost text-gray-600 dark:text-gray-400">{{ 'employee.show.documents.download'|trans }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
