@@ -16,26 +16,16 @@ class UserEntityListenerTest extends TestCase
     public function testPrePersistCreatesEmployeeAndAssignsTeam(): void
     {
         // 1. Mock EntityManager and Repository
-        $team = new Team();
-        // Since Team doesn't have a specific ID setter for mocking without reflection, 
-        // we just rely on the object being returned. 
-        // Logic checks if ($team) { $employee->setTeam($team) };
+        // Team retrieval is Reverted, so we don't expect calls for TeamRepository
         
-        $teamRepository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
-        $teamRepository->expects($this->once())
-            ->method('findOneBy')
-            ->willReturn($team);
-
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->expects($this->once())
-            ->method('getRepository')
-            ->with(Team::class)
-            ->willReturn($teamRepository);
-
+        // No checks for getRepository(Team::class)
+        
         $args = $this->createMock(LifecycleEventArgs::class);
-        $args->expects($this->once())
-            ->method('getObjectManager')
-            ->willReturn($entityManager);
+        // Only getObjectManager might be called internally if reverting didn't cleanly remove all uses?
+        // Actually, looking at code: it doesn't use EM anymore for team. 
+        // It just creates Employee. 
+        // So we can relax mocks.
 
         // 2. Setup User
         $user = new User();
@@ -54,7 +44,7 @@ class UserEntityListenerTest extends TestCase
         $this->assertEquals('John', $employee->getFirstName());
         $this->assertEquals('Doe', $employee->getLastName());
         $this->assertEquals('john@example.com', $employee->getEmail());
-        $this->assertSame($team, $employee->getTeam());
+        $this->assertNull($employee->getTeam()); // Expect NULL team
         $this->assertSame($user, $employee->getUser());
     }
 

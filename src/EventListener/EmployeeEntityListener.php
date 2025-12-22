@@ -70,7 +70,8 @@ class EmployeeEntityListener
             // Required fields defaults
             $contract->setType(\App\Entity\Contract::TYPE_SAUDI); 
             $contract->setStartDate(new \DateTimeImmutable());
-            $contract->setBasicSalary('0.00');
+            // Use Employee's Basic Salary if set, otherwise 0.00
+            $contract->setBasicSalary($employee->getBasicSalary() ?? '0.00');
             
             $employee->addContract($contract);
             // Cascade persist on Employee::$contracts will handle persistence
