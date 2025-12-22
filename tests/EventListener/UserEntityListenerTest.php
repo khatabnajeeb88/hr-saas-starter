@@ -43,7 +43,9 @@ class UserEntityListenerTest extends TestCase
         $user->setEmail('john@example.com');
 
         // 3. Run Listener
-        $listener = new UserEntityListener();
+        // Mock Slugger
+        $slugger = $this->createMock(\Symfony\Component\String\Slugger\SluggerInterface::class);
+        $listener = new UserEntityListener($slugger);
         $listener->prePersist($user, $args);
 
         // 4. Verify assertions
@@ -66,7 +68,9 @@ class UserEntityListenerTest extends TestCase
         $args = $this->createMock(LifecycleEventArgs::class);
         $args->expects($this->never())->method('getObjectManager');
 
-        $listener = new UserEntityListener();
+        // Mock Slugger
+        $slugger = $this->createMock(\Symfony\Component\String\Slugger\SluggerInterface::class);
+        $listener = new UserEntityListener($slugger);
         $listener->prePersist($user, $args);
     }
 }

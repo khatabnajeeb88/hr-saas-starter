@@ -429,16 +429,10 @@ class EmployeeController extends AbstractController
 
             $entityManager->persist($employee);
             
-            // Auto-create draft contract
-            $contract = new \App\Entity\Contract();
-            $contract->setEmployee($employee);
-            $contract->setBasicSalary($employee->getBasicSalary() ?? '0.00');
-            $contract->setStartDate($employee->getJoiningDate() ?? new \DateTimeImmutable());
-            // Default to Saudi for now, or maybe infer?
-            $contract->setType(\App\Entity\Contract::TYPE_SAUDI); 
-            $contract->setStatus(\App\Entity\Contract::STATUS_DRAFT);
+            // Auto-create draft contract is now handled by EmployeeEntityListener
+            // $contract = new \App\Entity\Contract(); ...
             
-            $entityManager->persist($contract);
+            $entityManager->flush();
             
             $entityManager->flush();
 
