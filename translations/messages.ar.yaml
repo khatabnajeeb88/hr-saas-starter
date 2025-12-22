@@ -250,12 +250,16 @@ register:
     title: إنشاء حساب
     get_started: ابدأ الآن
     subtitle: أنشئ حسابك للبدء
+    email: البريد الإلكتروني
     email_placeholder: أدخل بريدك الإلكتروني
     password: كلمة المرور
     password_placeholder: أنشئ كلمة مرور قوية
     create_account: إنشاء حساب
     have_account: لديك حساب بالفعل؟
     sign_in: تسجيل الدخول
+    agree_terms: أوافق على الشروط والأحكام
+    or_continue_with: أو اكمل مع
+    full_name: الاسم الكامل
 
 common:
     status: الحالة

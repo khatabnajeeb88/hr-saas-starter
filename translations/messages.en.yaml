@@ -250,12 +250,16 @@ register:
     title: Create Account
     get_started: Get Started
     subtitle: Create your account to get started
+    email: Email
     email_placeholder: Enter your email
     password: Password
     password_placeholder: Create a strong password
     create_account: Create Account
     have_account: Already have an account?
     sign_in: Sign in
+    full_name: Full Name
+    agree_terms: I agree to the terms and conditions
+    or_continue_with: Or continue with
 
 common:
     status: Status

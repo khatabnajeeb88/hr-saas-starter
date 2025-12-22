@@ -102,7 +102,7 @@ class Employee
     private Collection $requests;
 
     #[ORM\ManyToOne(inversedBy: 'employees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Team $team = null;
 
     // New Fields
@@ -150,6 +150,10 @@ class Employee
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $iban = null;
+
+    #[ORM\OneToOne(inversedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -741,6 +745,18 @@ class Employee
     public function setIban(?string $iban): static
     {
         $this->iban = $iban;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
         return $this;
     }
 }

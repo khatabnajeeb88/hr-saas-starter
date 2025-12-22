@@ -53,6 +53,14 @@ class OnboardingController extends AbstractController
 
         $em->persist($team);
         $em->persist($member);
+        
+        // Assign Team to Employee
+        $employee = $user->getEmployee();
+        if ($employee) {
+            $employee->setTeam($team);
+            // $employee is already managed, flush will save it
+        }
+
         $em->flush();
 
         // Set as current team

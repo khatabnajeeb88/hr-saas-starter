@@ -84,6 +84,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column]
     private bool $isVerified = false;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Employee $employee = null;
+
     public function __construct()
     {
         $this->teamMembers = new ArrayCollection();
@@ -357,6 +360,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
                 $apiToken->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmployee(): ?Employee
+    {
+        return $this->employee;
+    }
+
+    public function setEmployee(?Employee $employee): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($employee === null && $this->employee !== null) {
+            $this->employee->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($employee !== null && $employee->getUser() !== $this) {
+            $employee->setUser($this);
+        }
+
+        $this->employee = $employee;
 
         return $this;
     }

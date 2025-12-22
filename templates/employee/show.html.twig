@@ -18,8 +18,8 @@
 					</div>
 				{% else %}
 					<div class="avatar placeholder">
-						<div class="bg-neutral text-neutral-content rounded-full w-16">
-							<span class="text-xl">{{ employee.firstName|first }}{{ employee.lastName|first }}</span>
+						<div class="h-16 w-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm">
+							{{ employee.firstName|first }}{{ employee.lastName|first }}
 						</div>
 					</div>
 				{% endif %}
