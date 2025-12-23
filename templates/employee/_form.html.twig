@@ -1,6 +1,6 @@
 {% form_theme form 'form/theme.html.twig' %}
 
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'data-controller': 'form-validator', 'data-action': 'submit->form-validator#validate', 'novalidate': 'novalidate'}}) }}
 <div
 	data-controller="tabs" data-tabs-active-class="border-b-2 border-purple-500 text-purple-600 dark:text-purple-400" class="space-y-6">
 
@@ -218,15 +218,15 @@
 			</div>
 
 			{# <div>
-			                    {{ form_label(form.tags) }}
-			                    <div class="join w-full">
-			                        {{ form_widget(form.tags) }}
-			                        <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="createTagModal" data-overlay="#createTagModal">
-			                            <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
-			                        </button>
-			                    </div>
-			                    {{ form_errors(form.tags) }}
-			                 </div> #}
+						                    {{ form_label(form.tags) }}
+						                    <div class="join w-full">
+						                        {{ form_widget(form.tags) }}
+						                        <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="createTagModal" data-overlay="#createTagModal">
+						                            <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
+						                        </button>
+						                    </div>
+						                    {{ form_errors(form.tags) }}
+						                 </div> #}
 		</div>
 	</div>
 

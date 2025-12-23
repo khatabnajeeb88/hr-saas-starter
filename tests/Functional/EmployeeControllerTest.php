@@ -16,6 +16,8 @@ class EmployeeControllerTest extends WebTestCase
     private $entityManager;
     private $user;
     private $team;
+    private $department;
+    private $employmentType;
 
     protected function setUp(): void
     {
@@ -49,6 +51,16 @@ class EmployeeControllerTest extends WebTestCase
         $this->team->addMember($teamMember);
         $this->user->addTeamMember($teamMember);
 
+        // Create Department
+        $this->department = new \App\Entity\Department();
+        $this->department->setName('Test Department ' . uniqid());
+        $this->entityManager->persist($this->department);
+
+        // Create Employment Type
+        $this->employmentType = new \App\Entity\EmploymentType();
+        $this->employmentType->setName('Full Time ' . uniqid());
+        $this->entityManager->persist($this->employmentType);
+
         $this->entityManager->flush();
     }
 
@@ -75,7 +87,14 @@ class EmployeeControllerTest extends WebTestCase
         $form['employee[firstName]'] = 'John';
         $form['employee[lastName]'] = 'Doe';
         $form['employee[email]'] = $email;
+        $form['employee[mobile]'] = '1234567890';
         $form['employee[jobTitle]'] = 'Developer';
+        $form['employee[department]'] = $this->department->getId();
+        $form['employee[employmentType]'] = $this->employmentType->getId();
+        $form['employee[workType]'] = 'remote';
+        $form['employee[shift]'] = 'regular';
+        $form['employee[joiningDate]'] = (new \DateTime())->format('Y-m-d');
+        $form['employee[basicSalary]'] = '5000.00';
         $form['employee[employmentStatus]'] = 'active';
 
         $this->client->submit($form);
@@ -102,8 +121,14 @@ class EmployeeControllerTest extends WebTestCase
         $form['employee[firstName]'] = 'Contract';
         $form['employee[lastName]'] = 'Test';
         $form['employee[email]'] = $email;
-        $form['employee[basicSalary]'] = '5000.00';
+        $form['employee[mobile]'] = '9876543210';
+        $form['employee[jobTitle]'] = 'Contractor';
+        $form['employee[department]'] = $this->department->getId();
+        $form['employee[employmentType]'] = $this->employmentType->getId();
+        $form['employee[workType]'] = 'office';
+        $form['employee[shift]'] = 'regular';
         $form['employee[joiningDate]'] = (new \DateTime())->format('Y-m-d');
+        $form['employee[basicSalary]'] = '5000.00';
 
         $this->client->submit($form);
 
@@ -129,7 +154,15 @@ class EmployeeControllerTest extends WebTestCase
         $employee->setFirstName('Jane');
         $employee->setLastName('Doe');
         $employee->setEmail('jane.doe.' . uniqid() . '@example.com');
+        $employee->setMobile('5555555555');
         $employee->setTeam($team);
+        $employee->setDepartment($this->department);
+        $employee->setEmploymentType($this->employmentType);
+        $employee->setJobTitle('Tester');
+        $employee->setWorkType('hybrid');
+        $employee->setShift('regular');
+        $employee->setBasicSalary('4000.00');
+        $employee->setJoiningDate(new \DateTimeImmutable());
         $employee->setJoinedAt(new \DateTimeImmutable());
         $this->entityManager->persist($employee);
         $this->entityManager->flush();
@@ -162,7 +195,15 @@ class EmployeeControllerTest extends WebTestCase
         $employee->setFirstName('To Delete');
         $employee->setLastName('User');
         $employee->setEmail('delete.me@example.com');
+        $employee->setMobile('1111111111');
         $employee->setTeam($team);
+        $employee->setDepartment($this->department);
+        $employee->setEmploymentType($this->employmentType);
+        $employee->setJobTitle('Disposable');
+        $employee->setWorkType('office');
+        $employee->setShift('night');
+        $employee->setBasicSalary('3000.00');
+        $employee->setJoiningDate(new \DateTimeImmutable());
         $employee->setJoinedAt(new \DateTimeImmutable());
         $this->entityManager->persist($employee);
         $this->entityManager->flush();
@@ -216,6 +257,14 @@ class EmployeeControllerTest extends WebTestCase
         $form['employee[firstName]'] = 'Image';
         $form['employee[lastName]'] = 'Test';
         $form['employee[email]'] = $email;
+        $form['employee[mobile]'] = '2222222222';
+        $form['employee[jobTitle]'] = 'Model';
+        $form['employee[department]'] = $this->department->getId();
+        $form['employee[employmentType]'] = $this->employmentType->getId();
+        $form['employee[workType]'] = 'remote';
+        $form['employee[shift]'] = 'regular';
+        $form['employee[joiningDate]'] = (new \DateTime())->format('Y-m-d');
+        $form['employee[basicSalary]'] = '6000.00';
         $form['employee[profileImage]'] = $uploadedFile;
 
         $this->client->submit($form);
@@ -248,7 +297,15 @@ class EmployeeControllerTest extends WebTestCase
         $employee->setFirstName('Manager');
         $employee->setLastName('Candidate');
         $employee->setEmail('manager.' . uniqid() . '@example.com');
+        $employee->setMobile('3333333333');
         $employee->setTeam($team);
+        $employee->setDepartment($this->department);
+        $employee->setEmploymentType($this->employmentType);
+        $employee->setJobTitle('Manager');
+        $employee->setWorkType('office');
+        $employee->setShift('regular');
+        $employee->setBasicSalary('8000.00');
+        $employee->setJoiningDate(new \DateTimeImmutable());
         $employee->setJoinedAt(new \DateTimeImmutable());
         $this->entityManager->persist($employee);
         
@@ -257,7 +314,15 @@ class EmployeeControllerTest extends WebTestCase
         $otherEmployee->setFirstName('Other');
         $otherEmployee->setLastName('Employee');
         $otherEmployee->setEmail('other.' . uniqid() . '@example.com');
+        $otherEmployee->setMobile('4444444444');
         $otherEmployee->setTeam($team);
+        $otherEmployee->setDepartment($this->department);
+        $otherEmployee->setEmploymentType($this->employmentType);
+        $otherEmployee->setJobTitle('Subordinate');
+        $otherEmployee->setWorkType('office');
+        $otherEmployee->setShift('regular');
+        $otherEmployee->setBasicSalary('4000.00');
+        $otherEmployee->setJoiningDate(new \DateTimeImmutable());
         $otherEmployee->setJoinedAt(new \DateTimeImmutable());
         $this->entityManager->persist($otherEmployee);
         
@@ -310,6 +375,14 @@ class EmployeeControllerTest extends WebTestCase
         $employee->setFirstName('Original');
         $employee->setLastName('Team Employee');
         $employee->setTeam($this->team);
+        $employee->setMobile('6666666666');
+        $employee->setDepartment($this->department);
+        $employee->setEmploymentType($this->employmentType);
+        $employee->setJobTitle('Protected');
+        $employee->setWorkType('office');
+        $employee->setShift('regular');
+        $employee->setBasicSalary('5500.00');
+        $employee->setJoiningDate(new \DateTimeImmutable());
         $employee->setJoinedAt(new \DateTimeImmutable());
         $this->entityManager->persist($employee);
         
