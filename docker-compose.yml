@@ -91,7 +91,9 @@ services:
       SERVER_NAME: ':80'
       MERCURE_PUBLISHER_JWT_KEY: 'nGiMJPUEtnjBYjz+eZHESmZUBQ23AJXyuwtFrj4v4no='
       MERCURE_SUBSCRIBER_JWT_KEY: 'nGiMJPUEtnjBYjz+eZHESmZUBQ23AJXyuwtFrj4v4no='
-      MERCURE_EXTRA_DIRECTIVES: demo
+      MERCURE_EXTRA_DIRECTIVES: |
+        demo
+        cors_origins http://localhost:8000
     ports:
       - "1337:80"
     networks:

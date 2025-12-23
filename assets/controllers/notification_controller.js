@@ -15,7 +15,7 @@ export default class extends Controller {
         const url = new URL(this.mercureUrlValue);
         this.topicsValue.forEach(topic => url.searchParams.append('topic', topic));
 
-        this.eventSource = new EventSource(url);
+        this.eventSource = new EventSource(url.toString(), { withCredentials: true });
         this.eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
             this.notify(data);
