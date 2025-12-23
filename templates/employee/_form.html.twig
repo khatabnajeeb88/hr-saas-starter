@@ -1,537 +1,466 @@
 {% form_theme form 'form/theme.html.twig' %}
 
 {{ form_start(form) }}
-    <div data-controller="tabs" data-tabs-active-class="border-b-2 border-purple-500 text-purple-600 dark:text-purple-400" class="space-y-6">
-        
-        {# Tab Navigation #}
-        <div class="border-b border-gray-200 dark:border-gray-700">
-            <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
-                <button type="button" 
-                        data-action="click->tabs#switch"
-                        data-tabs-target="tab"
-                        data-tab-value="personal"
-                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                    {{ 'employee.form.personal_info.title'|trans }}
-                </button>
+<div
+	data-controller="tabs" data-tabs-active-class="border-b-2 border-purple-500 text-purple-600 dark:text-purple-400" class="space-y-6">
 
-                <button type="button"
-                        data-action="click->tabs#switch"
-                        data-tabs-target="tab"
-                        data-tab-value="work"
-                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                    {{ 'employee.form.work_info.title'|trans }}
-                </button>
+	{# Tab Navigation #}
+	<div class="border-b border-gray-200 dark:border-gray-700">
+		<nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
+			<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="personal" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+				{{ 'employee.form.personal_info.title'|trans }}
+			</button>
 
-                <button type="button"
-                        data-action="click->tabs#switch"
-                        data-tabs-target="tab"
-                        data-tab-value="bank"
-                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                    {{ 'employee.form.bank_details.title'|trans }}
-                </button>
+			<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="work" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+				{{ 'employee.form.work_info.title'|trans }}
+			</button>
 
-                <button type="button"
-                        data-action="click->tabs#switch"
-                        data-tabs-target="tab"
-                        data-tab-value="family"
-                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                    {{ 'employee.form.labels.family_members'|trans }}
-                </button>
+			<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="bank" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+				{{ 'employee.form.bank_details.title'|trans }}
+			</button>
 
-                <button type="button"
-                        data-action="click->tabs#switch"
-                        data-tabs-target="tab"
-                        data-tab-value="documents"
-                        class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
-                    {{ 'employee.document.title'|trans([], 'messages') }}
-                </button>
-            </nav>
-        </div>
+			<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="family" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+				{{ 'employee.form.labels.family_members'|trans }}
+			</button>
 
-        {# Section 1: Personal Info (Renamed from Account & Personal) #}
-        {# Section 1: Personal Info (Renamed from Account & Personal) #}
-        <div data-tabs-target="panel" data-tab-value="personal" class="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
-            {# Personal Info Sub-section (Renamed from Account Details) #}
-            <div class="space-y-6 sm:space-y-5">
-                <div>
-                     <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.personal_info.title'|trans }}</h3>
-                     <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.personal_info.description'|trans }}</p>
-                </div>
-                <div class="space-y-6 sm:space-y-5">
-                    <div class="col-span-1 sm:col-span-2 flex justify-start pb-6">
-                        
-                        <div class="relative w-32 h-32 group cursor-pointer" data-controller="image-preview" onclick="this.querySelector('input').click()">
-                            {# Current Profile Photo / Placeholder #}
-                            <div class="w-full h-full rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 relative">
-                                {% if employee.profileImage %}
-                                    <img data-image-preview-target="preview" 
-                                         src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" 
-                                         alt="Profile photo" 
-                                         class="w-full h-full object-cover">
-                                    <div data-image-preview-target="placeholder" class="hidden w-full h-full flex items-center justify-center text-gray-400">
-                                        <svg class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    </div>
-                                {% else %}
-                                    <img data-image-preview-target="preview" class="hidden w-full h-full object-cover">
-                                    <div data-image-preview-target="placeholder" class="w-full h-full flex items-center justify-center text-gray-400">
-                                        <svg class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    </div>
-                                {% endif %}
-                                
-                                {# Overlay #}
-                                <div class="absolute bottom-0 w-full h-1/3 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-50 transition-opacity duration-200">
-                                    <span class="text-white text-xs font-medium">{{ 'employee.form.edit_photo'|trans([], 'messages')|default('Edit') }}</span>
-                                </div>
-                            </div>
+			<button type="button" data-action="click->tabs#switch" data-tabs-target="tab" data-tab-value="documents" class="whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors duration-200">
+				{{ 'employee.document.title'|trans([], 'messages') }}
+			</button>
+		</nav>
+	</div>
 
-                            {# Hidden File Input #}
-                            <div class="hidden">
-                                {{ form_widget(form.profileImage, { 'attr': { 'data-image-preview-target': 'input', 'data-action': 'change->image-preview#update' } }) }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                        <div>
-                            {{ form_row(form.firstName) }}
-                        </div>
-                        <div>
-                            {{ form_row(form.lastName) }}
-                        </div>
-                    </div>
+	{# Section 1: Personal Info (Renamed from Account & Personal) #}
+	{# Section 1: Personal Info (Renamed from Account & Personal) #}
+	<div
+		data-tabs-target="panel" data-tab-value="personal" class="space-y-8 divide-y divide-gray-200 dark:divide-gray-700">
+		{# Personal Info Sub-section (Renamed from Account Details) #}
+		<div class="space-y-6 sm:space-y-5">
+			<div>
+				<h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.personal_info.title'|trans }}</h3>
+				<p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.personal_info.description'|trans }}</p>
+			</div>
+			<div class="space-y-6 sm:space-y-5">
+				<div class="col-span-1 sm:col-span-2 flex justify-start pb-6">
+
+					<div
+						class="relative w-32 h-32 group cursor-pointer" data-controller="image-preview" onclick="this.querySelector('input').click()">
+						{# Current Profile Photo / Placeholder #}
+						<div class="w-full h-full rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 relative">
+							{% if employee.profileImage %}
+								<img data-image-preview-target="preview" src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" alt="Profile photo" class="w-full h-full object-cover">
+								<div data-image-preview-target="placeholder" class="hidden w-full h-full flex items-center justify-center text-gray-400">
+									<svg class="h-24 w-24" fill="currentColor" viewbox="0 0 24 24">
+										<path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/>
+									</svg>
+								</div>
+							{% else %}
+								<img data-image-preview-target="preview" class="hidden w-full h-full object-cover">
+								<div data-image-preview-target="placeholder" class="w-full h-full flex items-center justify-center text-gray-400">
+									<svg class="h-24 w-24" fill="currentColor" viewbox="0 0 24 24">
+										<path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/>
+									</svg>
+								</div>
+							{% endif %}
+
+							{# Overlay #}
+							<div class="absolute bottom-0 w-full h-1/3 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-50 transition-opacity duration-200">
+								<span class="text-white text-xs font-medium">{{ 'employee.form.edit_photo'|trans([], 'messages')|default('Edit') }}</span>
+							</div>
+						</div>
+
+						{# Hidden File Input #}
+						<div class="hidden">
+							{{ form_widget(form.profileImage, { 'attr': { 'data-image-preview-target': 'input', 'data-action': 'change->image-preview#update' } }) }}
+						</div>
+					</div>
+				</div>
+				<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+					<div>
+						{{ form_row(form.firstName) }}
+					</div>
+					<div>
+						{{ form_row(form.lastName) }}
+					</div>
+				</div>
 
 
+				<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+					<div>
+						{{ form_row(form.email) }}
+					</div>
+					<div>
+						{{ form_row(form.mobile) }}
+					</div>
+				</div>
 
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                        <div>
-                            {{ form_row(form.email) }}
-                        </div>
-                         <div>
-                            {{ form_row(form.mobile) }}
-                        </div>
-                    </div>
+				<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+					<div>
+						{{ form_row(form.nationalId) }}
+					</div>
+					<div class="grid grid-cols-2 gap-4">
+						{{ form_row(form.nationalIdIssueDate) }}
+						{{ form_row(form.nationalIdExpiryDate) }}
+					</div>
+				</div>
 
-                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                         <div>
-                            {{ form_row(form.nationalId) }}
-                        </div>
-                         <div class="grid grid-cols-2 gap-4">
-                            {{ form_row(form.nationalIdIssueDate) }}
-                            {{ form_row(form.nationalIdExpiryDate) }}
-                         </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
-                        <div>
-                            {{ form_row(form.dateOfBirth) }}
-                        </div>
-                        <div>
-                             {{ form_row(form.gender) }}
-                        </div>
-                        <div>
-                             {{ form_row(form.maritalStatus) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
+				<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+					<div>
+						{{ form_row(form.dateOfBirth) }}
+					</div>
+					<div>
+						{{ form_row(form.gender) }}
+					</div>
+					<div>
+						{{ form_row(form.maritalStatus) }}
+					</div>
+				</div>
+			</div>
+		</div>
 
-            {# Address Sub-section (Renamed from Personal Info) #}
-            <div class="pt-8 space-y-6 sm:space-y-5">
-                <div>
-                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.address.title'|trans }}</h3>
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.address.description'|trans }}</p>
-                </div>
-                <div class="space-y-6 sm:space-y-5">
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                        <div>
-                            {{ form_row(form.country) }}
-                        </div>
-                         <div>
-                            {{ form_row(form.city) }}
-                        </div>
-                    </div>
+		{# Address Sub-section (Renamed from Personal Info) #}
+		<div class="pt-8 space-y-6 sm:space-y-5">
+			<div>
+				<h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.address.title'|trans }}</h3>
+				<p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.address.description'|trans }}</p>
+			</div>
+			<div class="space-y-6 sm:space-y-5">
+				<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+					<div>
+						{{ form_row(form.country) }}
+					</div>
+					<div>
+						{{ form_row(form.city) }}
+					</div>
+				</div>
 
-                    <div>
-                        {{ form_row(form.address) }}
-                    </div>
-                </div>
-            </div>
-        </div>
+				<div>
+					{{ form_row(form.address) }}
+				</div>
+			</div>
+		</div>
+	</div>
 
-         {# Section 2: Work Info #}
-        <div data-tabs-target="panel" data-tab-value="work" class="hidden space-y-6 sm:space-y-5">
-            <div>
-                <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.work_info.title'|trans }}</h3>
-            </div>
-             <div class="space-y-6 sm:space-y-5">
-                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-1">
-                    <div>
-                        {{ form_row(form.jobTitle) }}
-                    </div>
-                    <div class="hidden">
-                        {{ form_row(form.employeeRole) }}
-                    </div>
-                </div>
-                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                    <div>
-                        {{ form_label(form.department) }}
-                        <div class="join w-full">
-                            {{ form_widget(form.department) }}
-                            <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" onclick="createDepartmentModal.showModal()">
-                                <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
-                            </button>
-                        </div>
-                        {{ form_errors(form.department) }}
-                    </div>
-                    <div>
-                         {{ form_row(form.manager) }}
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                    <div>
-                        {{ form_row(form.workType) }}
-                    </div>
-                    <div>
-                        {{ form_row(form.shift) }}
-                    </div>
-                </div>
-                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                     <div>
-                        {{ form_label(form.employmentType) }}
-                        <div class="join w-full">
-                            {{ form_widget(form.employmentType) }}
-                            <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" onclick="createEmploymentTypeModal.showModal()">
-                                <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
-                            </button>
-                        </div>
-                        {{ form_errors(form.employmentType) }}
-                     </div>
-                     <div>
-                         {{ form_row(form.employmentStatus) }}
-                     </div>
-                 </div>
+	{# Section 2: Work Info #}
+	<div data-tabs-target="panel" data-tab-value="work" class="hidden space-y-6 sm:space-y-5">
+		<div>
+			<h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.work_info.title'|trans }}</h3>
+		</div>
+		<div class="space-y-6 sm:space-y-5">
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-1">
+				<div>
+					{{ form_row(form.jobTitle) }}
+				</div>
+				<div class="hidden">
+					{{ form_row(form.employeeRole) }}
+				</div>
+			</div>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+				<div>
+					{{ form_label(form.department) }}
+					<div class="join w-full">
+						{{ form_widget(form.department) }}
+						<button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" onclick="createDepartmentModal.showModal()">
+							<span class="icon-[tabler--plus] text-xl text-gray-500"></span>
+						</button>
+					</div>
+					{{ form_errors(form.department) }}
+				</div>
+				<div>
+					{{ form_row(form.manager) }}
+				</div>
+			</div>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+				<div>
+					{{ form_row(form.workType) }}
+				</div>
+				<div>
+					{{ form_row(form.shift) }}
+				</div>
+			</div>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+				<div>
+					{{ form_label(form.employmentType) }}
+					<div class="join w-full">
+						{{ form_widget(form.employmentType) }}
+						<button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" onclick="createEmploymentTypeModal.showModal()">
+							<span class="icon-[tabler--plus] text-xl text-gray-500"></span>
+						</button>
+					</div>
+					{{ form_errors(form.employmentType) }}
+				</div>
+				<div>
+					{{ form_row(form.employmentStatus) }}
+				</div>
+			</div>
 
-                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
-                     <div>
-                         {{ form_row(form.workEmail) }}
-                     </div>
-                     <div>
-                         {{ form_row(form.workPhone) }}
-                     </div>
-                     <div>
-                         {{ form_row(form.workLocation) }}
-                     </div>
-                 </div>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+				<div>
+					{{ form_row(form.workEmail) }}
+				</div>
+				<div>
+					{{ form_row(form.workPhone) }}
+				</div>
+				<div>
+					{{ form_row(form.workLocation) }}
+				</div>
+			</div>
 
-                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
-                     <div>
-                         {{ form_row(form.joiningDate) }}
-                     </div>
-                     <div>
-                         {{ form_row(form.contractEndDate) }}
-                     </div>
-                     <div>
-                         {{ form_row(form.basicSalary) }}
-                     </div>
-                 </div>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+				<div>
+					{{ form_row(form.joiningDate) }}
+				</div>
+				<div>
+					{{ form_row(form.contractEndDate) }}
+				</div>
+				<div>
+					{{ form_row(form.basicSalary) }}
+				</div>
+			</div>
 
-                 {# <div>
-                    {{ form_label(form.tags) }}
-                    <div class="join w-full">
-                        {{ form_widget(form.tags) }}
-                        <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="createTagModal" data-overlay="#createTagModal">
-                            <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
-                        </button>
-                    </div>
-                    {{ form_errors(form.tags) }}
-                 </div> #}
-             </div>
-        </div>
+			{# <div>
+			                    {{ form_label(form.tags) }}
+			                    <div class="join w-full">
+			                        {{ form_widget(form.tags) }}
+			                        <button class="btn bg-gray-50 shadow-none border-gray-300 h-10 join-item" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="createTagModal" data-overlay="#createTagModal">
+			                            <span class="icon-[tabler--plus] text-xl text-gray-500"></span>
+			                        </button>
+			                    </div>
+			                    {{ form_errors(form.tags) }}
+			                 </div> #}
+		</div>
+	</div>
 
-        {# Section 3: Bank Details #}
-        <div data-tabs-target="panel" data-tab-value="bank" class="hidden space-y-6 sm:space-y-5">
-             <div>
-                <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.bank_details.title'|trans }}</h3>
-            </div>
-            <div class="space-y-6 sm:space-y-5">
-                <div>
-                     {{ form_row(form.bankName) }}
-                </div>
-                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                    <div>
-                         {{ form_row(form.bankIdentifierCode) }}
-                    </div>
-                    <div>
-                         {{ form_row(form.bankBranch) }}
-                    </div>
-                </div>
-                 <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                     <div>
-                         {{ form_row(form.bankAccountNumber) }}
-                    </div>
-                     <div>
-                         {{ form_row(form.iban) }}
-                    </div>
-                </div>
-            </div>
-        </div>
+	{# Section 3: Bank Details #}
+	<div data-tabs-target="panel" data-tab-value="bank" class="hidden space-y-6 sm:space-y-5">
+		<div>
+			<h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.bank_details.title'|trans }}</h3>
+		</div>
+		<div class="space-y-6 sm:space-y-5">
+			<div>
+				{{ form_row(form.bankName) }}
+			</div>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+				<div>
+					{{ form_row(form.bankIdentifierCode) }}
+				</div>
+				<div>
+					{{ form_row(form.bankBranch) }}
+				</div>
+			</div>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+				<div>
+					{{ form_row(form.bankAccountNumber) }}
+				</div>
+				<div>
+					{{ form_row(form.iban) }}
+				</div>
+			</div>
+		</div>
+	</div>
 
-        {# Section 4: Family Members (New Tab) #}
-        <div data-tabs-target="panel" data-tab-value="family" class="hidden space-y-6 sm:space-y-5">
-            <div>
-                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.labels.family_members'|trans }}</h3>
-            </div>
-            
-            {% set prototype_family_html %}
-                <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
-                    <button type="button" 
-                            class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
-                            data-action="form-collection#removeCollectionElement">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                        {{ form_row(form.familyMembers.vars.prototype.name) }}
-                        {{ form_row(form.familyMembers.vars.prototype.relationship) }}
-                        {{ form_row(form.familyMembers.vars.prototype.dateOfBirth) }}
-                        {{ form_row(form.familyMembers.vars.prototype.phone) }}
-                    </div>
-                </div>
-            {% endset %}
+	{# Section 4: Family Members (New Tab) #}
+	<div data-tabs-target="panel" data-tab-value="family" class="hidden space-y-6 sm:space-y-5">
+		<div>
+			<h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.form.labels.family_members'|trans }}</h3>
+		</div>
 
-            <div class=""
-                 data-controller="form-collection"
-                 data-form-collection-index-value="{{ form.familyMembers|length > 0 ? form.familyMembers|last.vars.name + 1 : 0 }}"
-                 data-form-collection-prototype-value="{{ prototype_family_html|e('html_attr') }}">
-                
-                <div class="flex items-center justify-end mb-4">
-                    <button type="button"
-                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                            data-action="form-collection#addCollectionElement">
-                        {{ 'employee.form.add_family_member'|trans([], 'messages')|default('Add Family Member') }}
-                    </button>
-                </div>
+		{% set prototype_family_html %}
+		<div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
+			<button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-red-500" data-action="form-collection#removeCollectionElement">
+				<svg class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+				</svg>
+			</button>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+				{{ form_row(form.familyMembers.vars.prototype.name) }}
+				{{ form_row(form.familyMembers.vars.prototype.relationship) }}
+				{{ form_row(form.familyMembers.vars.prototype.dateOfBirth) }}
+				{{ form_row(form.familyMembers.vars.prototype.phone) }}
+			</div>
+		</div>
+		{% endset %}
 
-                <div data-form-collection-target="collection" class="space-y-4">
-                    {% for memberForm in form.familyMembers %}
-                        <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
-                            <button type="button" 
-                                    class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
-                                    data-action="form-collection#removeCollectionElement">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                                {{ form_row(memberForm.name) }}
-                                {{ form_row(memberForm.relationship) }}
-                                {{ form_row(memberForm.dateOfBirth) }}
-                                {{ form_row(memberForm.phone) }}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+		<div class="" data-controller="form-collection" data-form-collection-index-value="{{ form.familyMembers|length > 0 ? form.familyMembers|last.vars.name + 1 : 0 }}" data-form-collection-prototype-value="{{ prototype_family_html|e('html_attr') }}">
 
-        {# Section 5: Documents (New Tab) #}
-        <div data-tabs-target="panel" data-tab-value="documents" class="hidden space-y-6 sm:space-y-5">
-            <div>
-                 <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.document.title'|trans([], 'messages') }}</h3>
-            </div>
+			<div class="flex items-center justify-end mb-4">
+				<button type="button" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" data-action="form-collection#addCollectionElement">
+					{{ 'employee.form.add_family_member'|trans([], 'messages')|default('Add Family Member') }}
+				</button>
+			</div>
 
-            {% set prototype_docs_html %}
-                <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
-                    <button type="button" 
-                            class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
-                            data-action="form-collection#removeCollectionElement">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                        {{ form_row(form.documents.vars.prototype.type) }}
-                        {{ form_row(form.documents.vars.prototype.documentNumber) }}
-                        {{ form_row(form.documents.vars.prototype.expiryDate) }}
-                         {{ form_row(form.documents.vars.prototype.file) }}
-                    </div>
-                </div>
-            {% endset %}
+			<div data-form-collection-target="collection" class="space-y-4">
+				{% for memberForm in form.familyMembers %}
+					<div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
+						<button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-red-500" data-action="form-collection#removeCollectionElement">
+							<svg class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+							</svg>
+						</button>
+						<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+							{{ form_row(memberForm.name) }}
+							{{ form_row(memberForm.relationship) }}
+							{{ form_row(memberForm.dateOfBirth) }}
+							{{ form_row(memberForm.phone) }}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 
-            <div class=""
-                 data-controller="form-collection"
-                 data-form-collection-index-value="{{ form.documents|length > 0 ? form.documents|last.vars.name + 1 : 0 }}"
-                 data-form-collection-prototype-value="{{ prototype_docs_html|e('html_attr') }}">
-                
-                <div class="flex items-center justify-end mb-4">
-                    <button type="button"
-                            class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                            data-action="form-collection#addCollectionElement">
-                        {{ 'employee.form.add_document'|trans([], 'messages')|default('Add Document') }}
-                    </button>
-                </div>
+	{# Section 5: Documents (New Tab) #}
+	<div data-tabs-target="panel" data-tab-value="documents" class="hidden space-y-6 sm:space-y-5">
+		<div>
+			<h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100">{{ 'employee.document.title'|trans([], 'messages') }}</h3>
+		</div>
 
-                <div data-form-collection-target="collection" class="space-y-4">
-                    {% for docForm in form.documents %}
-                        <div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
-                            <button type="button" 
-                                    class="absolute top-2 right-2 text-gray-400 hover:text-red-500"
-                                    data-action="form-collection#removeCollectionElement">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
-                                {{ form_row(docForm.type) }}
-                                {{ form_row(docForm.documentNumber) }}
-                                {{ form_row(docForm.expiryDate) }}
-                                {{ form_row(docForm.file) }}
-                                {% if docForm.vars.data.file %}
-                                    <div class="flex items-center mt-6">
-                                        <a href="{{ asset('uploads/documents/' ~ docForm.vars.data.file) }}" target="_blank" class="text-purple-600 hover:text-purple-900 text-sm font-medium flex items-center">
-                                            <span class="icon-[tabler--eye] mr-1"></span>
-                                            {{ 'employee.document.view'|trans([], 'messages')|default('View Document') }}
-                                        </a>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+		{% set prototype_docs_html %}
+		<div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative mb-4">
+			<button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-red-500" data-action="form-collection#removeCollectionElement">
+				<svg class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+				</svg>
+			</button>
+			<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+				{{ form_row(form.documents.vars.prototype.type) }}
+				{{ form_row(form.documents.vars.prototype.documentNumber) }}
+				{{ form_row(form.documents.vars.prototype.expiryDate) }}
+				{{ form_row(form.documents.vars.prototype.file) }}
+			</div>
+		</div>
+		{% endset %}
 
-    </div>
+		<div class="" data-controller="form-collection" data-form-collection-index-value="{{ form.documents|length > 0 ? form.documents|last.vars.name + 1 : 0 }}" data-form-collection-prototype-value="{{ prototype_docs_html|e('html_attr') }}">
 
-    <div class="pt-5">
-        <div class="flex justify-end gap-3">
-            <a href="{{ path('app_employee_index') }}" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ 'employee.form.cancel'|trans }}</a>
-            <button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-purple-600 py-2 px-4 text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ button_label|default('employee.form.save'|trans) }}</button>
-        </div>
-    </div>
-    {# Create Department Modal #}
-    {# Create Department Modal #}
-    <dialog id="createDepartmentModal" 
-         class="modal" 
-         data-controller="create-entity"
-         data-create-entity-create-url-value="{{ path('app_department_create_ajax') }}"
-         data-create-entity-select-id-value="employee_department">
-        <div class="modal-box bg-white dark:bg-gray-800">
-            <h3 class="font-bold text-lg text-gray-700 dark:text-gray-300 mb-4">{{ 'department.form.create_title'|trans([], 'messages')|default('Create Department') }}</h3>
-            
-            <form method="dialog">
-                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400 dark:text-gray-600">✕</button>
-            </form>
+			<div class="flex items-center justify-end mb-4">
+				<button type="button" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" data-action="form-collection#addCollectionElement">
+					{{ 'employee.form.add_document'|trans([], 'messages')|default('Add Document') }}
+				</button>
+			</div>
 
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {{ 'department.form.name'|trans([], 'messages')|default('Department Name') }}
-                    </label>
-                    <input type="text" 
-                           id="newDepartmentName" 
-                           class="input border border-gray-300 dark:border-gray-600 rounded-md w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                           data-create-department-target="input">
-                </div>
-            </div>
+			<div data-form-collection-target="collection" class="space-y-4">
+				{% for docForm in form.documents %}
+					<div class="collection-item border rounded-md p-4 bg-gray-50 dark:bg-gray-800 relative">
+						<button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-red-500" data-action="form-collection#removeCollectionElement">
+							<svg class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+							</svg>
+						</button>
+						<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+							{{ form_row(docForm.type) }}
+							{{ form_row(docForm.documentNumber) }}
+							{{ form_row(docForm.expiryDate) }}
+							{{ form_row(docForm.file) }}
+							{% if docForm.vars.data.file %}
+								<div class="flex items-center mt-6">
+									<a href="{{ asset('uploads/documents/' ~ docForm.vars.data.file) }}" target="_blank" class="text-purple-600 hover:text-purple-900 text-sm font-medium flex items-center">
+										<span class="icon-[tabler--eye] mr-1"></span>
+										{{ 'employee.document.view'|trans([], 'messages')|default('View Document') }}
+									</a>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 
-            <div class="modal-action">
-                <form method="dialog">
-                    <button class="btn btn-ghost text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-white">{{ 'department.form.cancel'|trans([], 'messages')|default('Cancel') }}</button>
-                </form>
-                <button type="button" 
-                        class="btn bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white border-0"  
-                        id="saveNewDepartment"
-                        data-action="click->create-entity#create">
-                    {{ 'department.form.create'|trans([], 'messages')|default('Create') }}
-                </button>
-            </div>
-        </div>
-    </dialog>
+</div>
 
 
-    {# Create Employment Type Modal #}
-    {# Create Employment Type Modal #}
-    <dialog id="createEmploymentTypeModal" 
-         class="modal" 
-         data-controller="create-entity"
-         data-create-entity-create-url-value="{{ path('app_employment_type_create_ajax') }}"
-         data-create-entity-select-id-value="employee_employmentType">
-        <div class="modal-box bg-white dark:bg-gray-800">
-            <h3 class="font-bold text-lg text-gray-700 dark:text-gray-300 mb-4">{{ 'employment_type.form.create_title'|trans([], 'messages')|default('Create Employment Type') }}</h3>
-            
-            <form method="dialog">
-                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400 dark:text-gray-600">✕</button>
-            </form>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {{ 'employment_type.form.name'|trans([], 'messages')|default('Employment Type Name') }}
-                    </label>
-                    <input type="text" 
-                           id="newEmploymentTypeName" 
-                           class="input border border-gray-300 dark:border-gray-600 rounded-md w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                           data-create-entity-target="input">
-                </div>
-            </div>
-
-            <div class="modal-action">
-                <form method="dialog">
-                    <button class="btn btn-ghost text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-white">{{ 'employment_type.form.cancel'|trans([], 'messages')|default('Cancel') }}</button>
-                </form>
-                <button type="button" 
-                        class="btn bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white border-0" 
-                        id="saveNewEmploymentType"
-                        data-action="click->create-entity#create">
-                    {{ 'employment_type.form.create'|trans([], 'messages')|default('Create') }}
-                </button>
-            </div>
-        </div>
-    </dialog>
-
-    {# Create Tag Modal #}
-    {# Create Tag Modal #}
-    <dialog id="createTagModal" 
-         class="modal" 
-         data-controller="create-entity"
-         data-create-entity-create-url-value="{{ path('app_tag_create_ajax') }}"
-         data-create-entity-select-id-value="employee_tags">
-        <div class="modal-box bg-white dark:bg-gray-800">
-            <h3 class="font-bold text-lg text-gray-700 dark:text-gray-300 mb-4">{{ 'tag.form.create_title'|trans([], 'messages')|default('Create Tag') }}</h3>
-            
-            <form method="dialog">
-                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400 dark:text-gray-600">✕</button>
-            </form>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {{ 'tag.form.name'|trans([], 'messages')|default('Tag Name') }}
-                    </label>
-                    <input type="text" 
-                           id="newTagName" 
-                           class="input border border-gray-300 dark:border-gray-600 rounded-md w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                           data-create-entity-target="input">
-                </div>
-            </div>
-
-            <div class="modal-action">
-                <form method="dialog">
-                    <button class="btn btn-ghost text-gray-400 dark:text-gray-600">{{ 'tag.form.cancel'|trans([], 'messages')|default('Cancel') }}</button>
-                </form>
-                <button type="button" 
-                        class="btn btn-primary text-white" 
-                        id="saveNewTag"
-                        data-action="click->create-entity#create">
-                    {{ 'tag.form.create'|trans([], 'messages')|default('Create') }}
-                </button>
-            </div>
-        </div>
-    </dialog>
-
+<div class="pt-5">
+	<div class="flex justify-end gap-3">
+		<a href="{{ path('app_employee_index') }}" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ 'employee.form.cancel'|trans }}</a>
+		<button type="submit" class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-purple-600 py-2 px-4 text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">{{ button_label|default('employee.form.save'|trans) }}</button>
+	</div>
+</div>
 {{ form_end(form) }}
+
+{# Create Department Modal #}
+<dialog id="createDepartmentModal" class="modal" data-controller="create-entity" data-create-entity-create-url-value="{{ path('app_department_create_ajax') }}" data-create-entity-select-id-value="employee_department">
+	<div class="modal-box bg-white dark:bg-gray-800">
+		<h3 class="font-bold text-lg text-gray-700 dark:text-gray-300 mb-4">{{ 'department.form.create_title'|trans([], 'messages')|default('Create Department') }}</h3>
+
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400 dark:text-gray-600">✕</button>
+		</form>
+
+		<div class="space-y-4">
+			<div>
+				<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+					{{ 'department.form.name'|trans([], 'messages')|default('Department Name') }}
+				</label>
+				<input type="text" id="newDepartmentName" class="input border border-gray-300 dark:border-gray-600 rounded-md w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" data-create-department-target="input">
+			</div>
+		</div>
+
+		<div class="modal-action">
+			<form method="dialog">
+				<button class="btn btn-ghost text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-white">{{ 'department.form.cancel'|trans([], 'messages')|default('Cancel') }}</button>
+			</form>
+			<button type="button" class="btn bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white border-0" id="saveNewDepartment" data-action="click->create-entity#create">
+				{{ 'department.form.create'|trans([], 'messages')|default('Create') }}
+			</button>
+		</div>
+	</div>
+</dialog>
+
+
+{# Create Employment Type Modal #}
+<dialog id="createEmploymentTypeModal" class="modal" data-controller="create-entity" data-create-entity-create-url-value="{{ path('app_employment_type_create_ajax') }}" data-create-entity-select-id-value="employee_employmentType">
+	<div class="modal-box bg-white dark:bg-gray-800">
+		<h3 class="font-bold text-lg text-gray-700 dark:text-gray-300 mb-4">{{ 'employment_type.form.create_title'|trans([], 'messages')|default('Create Employment Type') }}</h3>
+
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400 dark:text-gray-600">✕</button>
+		</form>
+
+		<div class="space-y-4">
+			<div>
+				<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+					{{ 'employment_type.form.name'|trans([], 'messages')|default('Employment Type Name') }}
+				</label>
+				<input type="text" id="newEmploymentTypeName" class="input border border-gray-300 dark:border-gray-600 rounded-md w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" data-create-entity-target="input">
+			</div>
+		</div>
+
+		<div class="modal-action">
+			<form method="dialog">
+				<button class="btn btn-ghost text-gray-400 dark:text-gray-600 hover:text-white dark:hover:text-white">{{ 'employment_type.form.cancel'|trans([], 'messages')|default('Cancel') }}</button>
+			</form>
+			<button type="button" class="btn bg-purple-600 hover:bg-purple-700 dark:bg-purple-700 dark:hover:bg-purple-800 text-white border-0" id="saveNewEmploymentType" data-action="click->create-entity#create">
+				{{ 'employment_type.form.create'|trans([], 'messages')|default('Create') }}
+			</button>
+		</div>
+	</div>
+</dialog>
+
+{# Create Tag Modal #}
+<dialog id="createTagModal" class="modal" data-controller="create-entity" data-create-entity-create-url-value="{{ path('app_tag_create_ajax') }}" data-create-entity-select-id-value="employee_tags">
+	<div class="modal-box bg-white dark:bg-gray-800">
+		<h3 class="font-bold text-lg text-gray-700 dark:text-gray-300 mb-4">{{ 'tag.form.create_title'|trans([], 'messages')|default('Create Tag') }}</h3>
+
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400 dark:text-gray-600">✕</button>
+		</form>
+
+		<div class="space-y-4">
+			<div>
+				<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+					{{ 'tag.form.name'|trans([], 'messages')|default('Tag Name') }}
+				</label>
+				<input type="text" id="newTagName" class="input border border-gray-300 dark:border-gray-600 rounded-md w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300" data-create-entity-target="input">
+			</div>
+		</div>
+
+		<div class="modal-action">
+			<form method="dialog">
+				<button class="btn btn-ghost text-gray-400 dark:text-gray-600">{{ 'tag.form.cancel'|trans([], 'messages')|default('Cancel') }}</button>
+			</form>
+			<button type="button" class="btn btn-primary text-white" id="saveNewTag" data-action="click->create-entity#create">
+				{{ 'tag.form.create'|trans([], 'messages')|default('Create') }}
+			</button>
+		</div>
+	</div>
+</dialog>

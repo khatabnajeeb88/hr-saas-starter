@@ -51,12 +51,19 @@ class EmployeeType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'employee.form.labels.email',
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please enter an email address'),
+                    new \Symfony\Component\Validator\Constraints\Email(message: 'Please enter a valid email address'),
+                ],
                 'attr' => ['placeholder' => 'employee.form.placeholders.email', 'class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('jobTitle', TextType::class, [
                 'label' => 'employee.form.labels.job_title',
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please enter a job title'),
+                ],
                 'attr' => ['placeholder' => 'employee.form.placeholders.job_title', 'class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('nationalId', TextType::class, [
@@ -80,7 +87,10 @@ class EmployeeType extends AbstractType
                 'class' => \App\Entity\Department::class,
                 'choice_label' => 'name',
                 'label' => 'employee.form.labels.department',
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please select a department'),
+                ],
                 'placeholder' => 'employee.form.placeholders.select_department',
                 'attr' => ['class' => 'sf-select join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
             ])
@@ -96,7 +106,14 @@ class EmployeeType extends AbstractType
                 'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             // Personal
-            ->add('mobile', TextType::class, ['label' => 'employee.form.labels.mobile', 'required' => false, 'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']])
+            ->add('mobile', TextType::class, [
+                'label' => 'employee.form.labels.mobile',
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please enter a mobile number'),
+                ],
+                'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+            ])
             ->add('gender', ChoiceType::class, [
                 'label' => 'employee.form.labels.gender',
                 'placeholder' => 'employee.form.placeholders.select_gender',
@@ -157,7 +174,10 @@ class EmployeeType extends AbstractType
                     'employee.work_type.remote' => 'remote',
                     'employee.work_type.hybrid' => 'hybrid',
                 ],
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please select a work type'),
+                ],
                 'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('shift', ChoiceType::class, [
@@ -167,7 +187,10 @@ class EmployeeType extends AbstractType
                     'employee.shift.regular' => 'regular',
                     'employee.shift.night' => 'night',
                 ],
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please select a shift'),
+                ],
                 'attr' => ['class' => 'sf-select shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('employeeRole', TextType::class, [
@@ -198,7 +221,10 @@ class EmployeeType extends AbstractType
                 'class' => EmploymentType::class,
                 'choice_label' => 'name',
                 'label' => 'employee.form.labels.employment_type_entity',
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please select an employment type'),
+                ],
                 'placeholder' => 'employee.form.placeholders.select_employment_type',
                 'attr' => ['class' => 'sf-select join-item shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-s-md']
             ])
@@ -230,7 +256,10 @@ class EmployeeType extends AbstractType
                 'label' => 'employee.form.labels.joining_date',
                 'widget' => 'single_text',
                 'input' => 'datetime_immutable',
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotNull(message: 'Please select a joining date'),
+                ],
                 'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('contractEndDate', DateType::class, [
@@ -242,7 +271,10 @@ class EmployeeType extends AbstractType
             ])
             ->add('basicSalary', TextType::class, [
                 'label' => 'employee.form.labels.basic_salary',
-                'required' => false,
+                'required' => true,
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\NotBlank(message: 'Please enter the basic salary'),
+                ],
                 'attr' => ['class' => 'shadow-none h-10 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
             ])
             ->add('documents', CollectionType::class, [
