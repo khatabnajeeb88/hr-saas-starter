@@ -10,7 +10,11 @@ module.exports = {
     'bg-base-300/60'
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['"Noto Sans Arabic"', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }
