@@ -1,19 +1,22 @@
 {% extends 'layouts/dashboard.html.twig' %}
 
-{% block title %}Edit Employee{% endblock %}
+{% block title %}Edit Employee
+{% endblock %}
 
 {% block dashboard_content %}
-    <div class="max-w-3xl mx-auto space-y-6">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'employee.form.edit_title'|trans }}</h1>
-                <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.edit_desc'|trans }}</p>
-            </div>
-             {{ include('employee/_delete_form.html.twig') }}
-        </div>
+	<div class="max-w-3xl mx-auto space-y-6">
+		<div class="flex justify-between items-center">
+			<div>
+				<h1 class="text-2xl font-bold text-gray-800 dark:text-white">{{ 'employee.form.edit_title'|trans }}</h1>
+				<p class="text-sm text-gray-500 dark:text-gray-400">{{ 'employee.form.edit_desc'|trans }}</p>
+			</div>
+			{% if employee.user != app.user %}
+				{{ include('employee/_delete_form.html.twig') }}
+			{% endif %}
+		</div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            {{ include('employee/_form.html.twig', {'button_label': 'employee.form.update'|trans}) }}
-        </div>
-    </div>
+		<div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+			{{ include('employee/_form.html.twig', {'button_label': 'employee.form.update'|trans}) }}
+		</div>
+	</div>
 {% endblock %}

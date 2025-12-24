@@ -387,14 +387,28 @@ class EmployeeController extends AbstractController
 
         $employees = $this->getBulkEmployees($request, $employeeRepository);
         $count = 0;
+        $skipped = 0;
 
         foreach ($employees as $employee) {
+            // Prevent self-deletion
+            if ($employee->getUser() === $this->getUser()) {
+                $skipped++;
+                continue;
+            }
+
             $entityManager->remove($employee);
             $count++;
         }
 
         $entityManager->flush();
-        $this->addFlash('success', $count . ' employees deleted successfully.');
+        
+        if ($count > 0) {
+            $this->addFlash('success', $count . ' employees deleted successfully.');
+        }
+        
+        if ($skipped > 0) {
+            $this->addFlash('warning', 'Skipped deletion of your own employee profile.');
+        }
 
         return $this->redirectToRoute('app_employee_index');
     }
@@ -499,6 +513,12 @@ class EmployeeController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete'.$employee->getId(), $request->request->get('_token'))) {
+            // Prevent self-deletion
+            if ($employee->getUser() === $this->getUser()) {
+                $this->addFlash('error', 'You cannot delete your own employee profile.');
+                return $this->redirectToRoute('app_employee_index');
+            }
+
             $entityManager->remove($employee);
             $entityManager->flush();
         }
