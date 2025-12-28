@@ -768,6 +768,9 @@ portal:
         dob: Date of Birth
         gender: Gender
         address: Address
+        city: City
+        country: Country
+        marital_status: Marital Status
         bank_details: Bank Details
         bank_name: Bank Name
         account_number: Account Number

@@ -769,6 +769,9 @@ portal:
         dob: تاريخ الميلاد
         gender: الجنس
         address: العنوان
+        city: المدينة
+        country: الدولة
+        marital_status: الحالة الاجتماعية
         bank_details: التفاصيل البنكية
         bank_name: اسم البنك
         account_number: رقم الحساب

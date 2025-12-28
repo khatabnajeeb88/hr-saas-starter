@@ -109,10 +109,25 @@
 						{{ form_widget(form.gender, {'attr': {'class': 'select select-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
 						{{ form_errors(form.gender) }}
 					</div>
+					<div class="form-control">
+						{{ form_label(form.maritalStatus, 'portal.profile.marital_status'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.maritalStatus, {'attr': {'class': 'select select-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.maritalStatus) }}
+					</div>
 					<div class="form-control md:col-span-2">
 						{{ form_label(form.address, 'portal.profile.address'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
 						{{ form_widget(form.address, {'attr': {'class': 'textarea textarea-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
 						{{ form_errors(form.address) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.city, 'portal.profile.city'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.city, {'attr': {'class': 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.city) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.country, 'portal.profile.country'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.country, {'attr': {'class': 'select select-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.country) }}
 					</div>
 				</div>
 			</div>
@@ -162,17 +177,17 @@
 					</button>
 				</div>
 				{# Hide the collection label/widget wrapper if needed, dependent on how form handles it. 
-																																										                    If collection widget renders everything, fine. But I manually looped. 
-																																										                    I should NOT render form_widget(form.familyMembers) again if I looped. #}
+																																																		                    If collection widget renders everything, fine. But I manually looped. 
+																																																		                    I should NOT render form_widget(form.familyMembers) again if I looped. #}
 			{# Hiding original widget to avoid duplication if I used manual loop #}
 				{# But I'm using Stimulus collection controller presumably available in the project. 
-																																										                    I'll assume there is a 'collection' controller or I'll need to add one. 
-																																										                    The plan didn't explicitly mention adding JS for collection, but it's standard.
-																																										                    I will check if I need to add simple JS or if I can rely on existing. 
-																																										                    'data-controller="collection"' implies it exists. 
-																																										                    I'll proceed assuming it exists or I might mock it. 
-																																										                    Let's just use a simple button for now, or assume the user has this setup. 
-																																										                    Wait, I should check assets/controllers if I can. #}
+																																																		                    I'll assume there is a 'collection' controller or I'll need to add one. 
+																																																		                    The plan didn't explicitly mention adding JS for collection, but it's standard.
+																																																		                    I will check if I need to add simple JS or if I can rely on existing. 
+																																																		                    'data-controller="collection"' implies it exists. 
+																																																		                    I'll proceed assuming it exists or I might mock it. 
+																																																		                    Let's just use a simple button for now, or assume the user has this setup. 
+																																																		                    Wait, I should check assets/controllers if I can. #}
 			</div>
 
 			<div class="flex justify-end pt-4">
