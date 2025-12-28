@@ -4,7 +4,7 @@
 	<div class="max-w-4xl mx-auto">
 		<div class="flex items-center gap-4 mb-8">
 			<a href="{{ path('app_employee_portal_profile') }}" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-				<svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+				<svg class="w-5 h-5 text-slate-500 rtl:rotate-180" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
 				</svg>
 			</a>
@@ -32,112 +32,155 @@
 			</div>
 		</div>
 
-		{# Personal Details #}
-		<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-			<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 border-b border-slate-100 dark:border-slate-700 pb-2">{{ 'portal.profile.edit.personal_details'|trans }}</h3>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-				<div class="form-control">
-					{{ form_label(form.firstName, 'portal.profile.first_name'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.firstName, {'attr': {'class': 'input input-bordered w-full bg-slate-50'}}) }}
-					{{ form_errors(form.firstName) }}
-				</div>
-				<div class="form-control">
-					{{ form_label(form.lastName, 'portal.profile.last_name'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.lastName, {'attr': {'class': 'input input-bordered w-full bg-slate-50'}}) }}
-					{{ form_errors(form.lastName) }}
-				</div>
-				<div class="form-control">
-					{{ form_label(form.email, 'portal.profile.email'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.email, {'attr': {'class': 'input input-bordered w-full'}}) }}
-					{{ form_errors(form.email) }}
-				</div>
-				<div class="form-control">
-					{{ form_label(form.mobile, 'portal.profile.phone'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.mobile, {'attr': {'class': 'input input-bordered w-full'}}) }}
-					{{ form_errors(form.mobile) }}
-				</div>
-				<div class="form-control">
-					{{ form_label(form.dateOfBirth, 'portal.profile.dob'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.dateOfBirth, {'attr': {'class': 'input input-bordered w-full'}}) }}
-					{{ form_errors(form.dateOfBirth) }}
-				</div>
-				<div class="form-control">
-					{{ form_label(form.gender, 'portal.profile.gender'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.gender, {'attr': {'class': 'select select-bordered w-full'}}) }}
-					{{ form_errors(form.gender) }}
-				</div>
-				<div class="form-control md:col-span-2">
-					{{ form_label(form.address, 'portal.profile.address'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.address, {'attr': {'class': 'textarea textarea-bordered w-full'}}) }}
-					{{ form_errors(form.address) }}
-				</div>
-			</div>
-		</div>
+		{# Profile Image #}
+		<div class="flex flex-col space-y-8 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+			<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+				<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 border-b border-slate-100 dark:border-slate-700 pb-2">{{ 'portal.profile.edit.profile_image'|trans }}</h3>
+				<div class="flex flex-col items-center gap-4">
+					<div class="relative group cursor-pointer" onclick="document.getElementById('{{ form.profileImage.vars.id }}').click()">
+						<div class="shrink-0 relative overflow-hidden rounded-full ring-4 ring-slate-50 dark:ring-slate-700/50 hover:ring-purple-100 dark:hover:ring-purple-900/50 transition-all">
+							{% if employee.profileImage %}
+								<img id="profile-image-preview" class="h-32 w-32 object-cover transition-opacity group-hover:opacity-75" src="{{ asset('uploads/photos/' ~ employee.profileImage) }}" alt="{{ employee.firstName }}">
+							{% else %}
+								<div id="profile-image-placeholder" class="h-32 w-32 bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500 text-4xl font-bold transition-opacity group-hover:opacity-75">
+									{{ employee.firstName|first }}{{ employee.lastName|first }}
+								</div>
+								<img id="profile-image-preview" class="h-32 w-32 object-cover hidden" src="" alt="Preview">
+							{% endif %}
 
-		{# Bank Details #}
-		<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-			<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 border-b border-slate-100 dark:border-slate-700 pb-2">{{ 'portal.profile.edit.bank_info'|trans }}</h3>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-				<div class="form-control">
-					{{ form_label(form.bankName, 'portal.profile.bank_name'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.bankName, {'attr': {'class': 'input input-bordered w-full'}}) }}
-					{{ form_errors(form.bankName) }}
-				</div>
-				<div class="form-control">
-					{{ form_label(form.bankAccountNumber, 'portal.profile.account_number'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.bankAccountNumber, {'attr': {'class': 'input input-bordered w-full'}}) }}
-					{{ form_errors(form.bankAccountNumber) }}
-				</div>
-				<div class="form-control md:col-span-2">
-					{{ form_label(form.iban, 'portal.profile.iban'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.iban, {'attr': {'class': 'input input-bordered w-full font-mono'}}) }}
-					{{ form_errors(form.iban) }}
-				</div>
-			</div>
-		</div>
-
-		{# Dependents #}
-		<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-			<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 border-b border-slate-100 dark:border-slate-700 pb-2">{{ 'portal.profile.dependents'|trans }}</h3>
-			<div class="space-y-4" data-controller="collection" data-collection-index-value="{{ form.familyMembers|length > 0 ? form.familyMembers|last.vars.name + 1 : 0 }}" data-collection-prototype-value="{{ form_widget(form.familyMembers.vars.prototype)|e('html_attr') }}">
-
-				<div data-collection-target="collection" class="space-y-4">
-					{% for member in form.familyMembers %}
-						<div class="relative bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-slate-600">
-							{{ form_widget(member) }}
-							<button type="button" data-action="collection#remove" class="absolute top-2 right-2 text-slate-400 hover:text-red-500">
-								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+							{# Overlay Icon #}
+							<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+								<svg class="w-8 h-8 text-slate-700 dark:text-slate-200" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
 								</svg>
-							</button>
+							</div>
 						</div>
-					{% endfor %}
-				</div>
+						<div class="absolute bottom-0 right-0 bg-purple-600 text-white p-2 rounded-full shadow-lg transform translate-x-1 translate-y-1 group-hover:scale-110 transition-transform">
+							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+							</svg>
+						</div>
+					</div>
 
-				<button type="button" data-action="collection#add" class="btn btn-outline btn-neutral btn-sm w-full border-dashed">
-					{{ 'portal.profile.edit.add_dependent'|trans }}
+					<div class="text-center">
+						{{ form_label(form.profileImage, 'portal.profile.edit.upload_image'|trans, {'label_attr': {'class': 'hidden'}}) }}
+						{{ form_widget(form.profileImage, {'attr': {'class': 'hidden', 'onchange': 'if(this.files && this.files[0]) { var reader = new FileReader(); reader.onload = function(e) { var img = document.getElementById("profile-image-preview"); var placeholder = document.getElementById("profile-image-placeholder"); if(placeholder) placeholder.classList.add("hidden"); img.src = e.target.result; img.classList.remove("hidden"); }; reader.readAsDataURL(this.files[0]); }'}}) }}
+						<p class="text-sm font-medium text-purple-600 dark:text-purple-400 cursor-pointer hover:underline" onclick="document.getElementById('{{ form.profileImage.vars.id }}').click()">
+							{{ 'portal.profile.edit.upload_image'|trans }}
+						</p>
+						<p class="text-xs text-slate-500 mt-1">{{ 'portal.profile.edit.image_help'|trans }}</p>
+						{{ form_errors(form.profileImage) }}
+					</div>
+				</div>
+			</div>
+
+			{# Personal Details #}
+			<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+				<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 border-b border-slate-100 dark:border-slate-700 pb-2">{{ 'portal.profile.edit.personal_details'|trans }}</h3>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div class="form-control">
+						{{ form_label(form.firstName, 'portal.profile.first_name'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.firstName, {'attr': {'class': 'input input-bordered text-slate-800 dark:text-slate-100 w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.firstName) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.lastName, 'portal.profile.last_name'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.lastName, {'attr': {'class': 'input input-bordered text-slate-800 dark:text-slate-100 w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.lastName) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.email, 'portal.profile.email'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.email, {'attr': {'class': 'input input-bordered text-slate-800 dark:text-slate-100 w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.email) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.mobile, 'portal.profile.phone'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.mobile, {'attr': {'class': 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.mobile) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.dateOfBirth, 'portal.profile.dob'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.dateOfBirth, {'attr': {'class': 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.dateOfBirth) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.gender, 'portal.profile.gender'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.gender, {'attr': {'class': 'select select-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.gender) }}
+					</div>
+					<div class="form-control md:col-span-2">
+						{{ form_label(form.address, 'portal.profile.address'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.address, {'attr': {'class': 'textarea textarea-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.address) }}
+					</div>
+				</div>
+			</div>
+
+			{# Bank Details #}
+			<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+				<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 border-b border-slate-100 dark:border-slate-700 pb-2">{{ 'portal.profile.edit.bank_info'|trans }}</h3>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div class="form-control">
+						{{ form_label(form.bankName, 'portal.profile.bank_name'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.bankName, {'attr': {'class': 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.bankName) }}
+					</div>
+					<div class="form-control">
+						{{ form_label(form.bankAccountNumber, 'portal.profile.account_number'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.bankAccountNumber, {'attr': {'class': 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.bankAccountNumber) }}
+					</div>
+					<div class="form-control md:col-span-2">
+						{{ form_label(form.iban, 'portal.profile.iban'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+						{{ form_widget(form.iban, {'attr': {'class': 'input input-bordered w-full font-mono bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
+						{{ form_errors(form.iban) }}
+					</div>
+				</div>
+			</div>
+
+			{# Dependents #}
+			<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+				<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6 border-b border-slate-100 dark:border-slate-700 pb-2">{{ 'portal.profile.dependents'|trans }}</h3>
+				<div class="space-y-4" data-controller="collection" data-collection-index-value="{{ form.familyMembers|length > 0 ? form.familyMembers|last.vars.name + 1 : 0 }}" data-collection-prototype-value="{{ form_widget(form.familyMembers.vars.prototype)|e('html_attr') }}">
+
+					<div data-collection-target="collection" class="space-y-4">
+						{% for member in form.familyMembers %}
+							<div class="relative bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-slate-600">
+								{{ form_widget(member) }}
+								<button type="button" data-action="collection#remove" class="absolute top-2 right-2 text-slate-400 hover:text-red-500">
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+									</svg>
+								</button>
+							</div>
+						{% endfor %}
+					</div>
+
+					<button type="button" data-action="collection#add" class="btn btn-outline btn-neutral btn-sm w-full border-dashed">
+						{{ 'portal.profile.edit.add_dependent'|trans }}
+					</button>
+				</div>
+				{# Hide the collection label/widget wrapper if needed, dependent on how form handles it. 
+																																										                    If collection widget renders everything, fine. But I manually looped. 
+																																										                    I should NOT render form_widget(form.familyMembers) again if I looped. #}
+			{# Hiding original widget to avoid duplication if I used manual loop #}
+				{# But I'm using Stimulus collection controller presumably available in the project. 
+																																										                    I'll assume there is a 'collection' controller or I'll need to add one. 
+																																										                    The plan didn't explicitly mention adding JS for collection, but it's standard.
+																																										                    I will check if I need to add simple JS or if I can rely on existing. 
+																																										                    'data-controller="collection"' implies it exists. 
+																																										                    I'll proceed assuming it exists or I might mock it. 
+																																										                    Let's just use a simple button for now, or assume the user has this setup. 
+																																										                    Wait, I should check assets/controllers if I can. #}
+			</div>
+
+			<div class="flex justify-end pt-4">
+				<button type="submit" class="btn btn-primary bg-purple-600 hover:bg-purple-700 text-white border-none px-8">
+					{{ 'portal.profile.edit.save_changes'|trans }}
 				</button>
 			</div>
-			{# Hide the collection label/widget wrapper if needed, dependent on how form handles it. 
-									                    If collection widget renders everything, fine. But I manually looped. 
-									                    I should NOT render form_widget(form.familyMembers) again if I looped. #}
-		{# Hiding original widget to avoid duplication if I used manual loop #}
-			{# But I'm using Stimulus collection controller presumably available in the project. 
-									                    I'll assume there is a 'collection' controller or I'll need to add one. 
-									                    The plan didn't explicitly mention adding JS for collection, but it's standard.
-									                    I will check if I need to add simple JS or if I can rely on existing. 
-									                    'data-controller="collection"' implies it exists. 
-									                    I'll proceed assuming it exists or I might mock it. 
-									                    Let's just use a simple button for now, or assume the user has this setup. 
-									                    Wait, I should check assets/controllers if I can. #}
-		</div>
 
-		<div class="flex justify-end pt-4">
-			<button type="submit" class="btn btn-primary bg-purple-600 hover:bg-purple-700 text-white border-none px-8">
-				{{ 'portal.profile.edit.save_changes'|trans }}
-			</button>
+			{{ form_end(form) }}
 		</div>
-
-		{{ form_end(form) }}
-	</div>
-{% endblock %}
+	{% endblock %}

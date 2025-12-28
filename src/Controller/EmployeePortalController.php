@@ -48,7 +48,7 @@ class EmployeePortalController extends AbstractController
     }
 
     #[Route('/profile/edit', name: 'app_employee_portal_profile_edit')]
-    public function editProfile(Request $request, EntityManagerInterface $entityManager): Response
+    public function editProfile(Request $request, EntityManagerInterface $entityManager, \Symfony\Component\String\Slugger\SluggerInterface $slugger): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -58,6 +58,7 @@ class EmployeePortalController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->handleProfileImageUpload($form, $employee, $slugger);
             $entityManager->flush();
 
             $this->addFlash('success', 'Profile updated successfully.');
@@ -152,5 +153,28 @@ class EmployeePortalController extends AbstractController
         }
 
         return $this->file($filePath);
+    }
+
+    private function handleProfileImageUpload($form, Employee $employee, \Symfony\Component\String\Slugger\SluggerInterface $slugger): void
+    {
+        /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $imageFile */
+        $imageFile = $form->get('profileImage')->getData();
+
+        if ($imageFile) {
+            $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+            try {
+                $imageFile->move(
+                    $this->getParameter('kernel.project_dir').'/public/uploads/photos',
+                    $newFilename
+                );
+            } catch (\Symfony\Component\HttpFoundation\File\Exception\FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+
+            $employee->setProfileImage($newFilename);
+        }
     }
 }

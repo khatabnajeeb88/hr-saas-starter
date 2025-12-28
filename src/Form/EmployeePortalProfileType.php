@@ -26,6 +26,23 @@ class EmployeePortalProfileType extends AbstractType
     {
         $builder
             // Personal Details
+            ->add('profileImage', FileType::class, [
+                'label' => 'Profile Image',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File(
+                        maxSize: '5M',
+                        mimeTypes: [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        mimeTypesMessage: 'Please upload a valid image (JPEG, PNG, WEBP)',
+                    )
+                ],
+                'attr' => ['class' => 'file-input file-input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'],
+            ])
             ->add('firstName', TextType::class, [
                 'disabled' => true, // Read-only
                 'label' => 'First Name'

@@ -144,22 +144,22 @@
 			<div class="space-y-4">
 				<div class="form-control">
 					{{ form_label(form.type, 'portal.documents.upload_modal.form_type'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.type, {'attr': {'class': 'select select-bordered w-full bg-slate-50'}}) }}
+					{{ form_widget(form.type, {'attr': {'class': 'select select-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
 					{{ form_errors(form.type) }}
 				</div>
 				<div class="form-control">
 					{{ form_label(form.documentNumber, 'portal.documents.upload_modal.form_number'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.documentNumber, {'attr': {'class': 'input input-bordered w-full bg-slate-50'}}) }}
+					{{ form_widget(form.documentNumber, {'attr': {'class': 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
 					{{ form_errors(form.documentNumber) }}
 				</div>
 				<div class="form-control">
 					{{ form_label(form.expiryDate, 'portal.documents.upload_modal.form_expiry'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.expiryDate, {'attr': {'class': 'input input-bordered w-full bg-slate-50'}}) }}
+					{{ form_widget(form.expiryDate, {'attr': {'class': 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
 					{{ form_errors(form.expiryDate) }}
 				</div>
 				<div class="form-control">
 					{{ form_label(form.file, 'portal.documents.upload_modal.form_file'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
-					{{ form_widget(form.file, {'attr': {'class': 'file-input file-input-bordered w-full bg-slate-50'}}) }}
+					{{ form_widget(form.file, {'attr': {'class': 'file-input file-input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'}}) }}
 					{{ form_errors(form.file) }}
 				</div>
 			</div>

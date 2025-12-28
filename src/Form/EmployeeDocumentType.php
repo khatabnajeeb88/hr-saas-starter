@@ -38,7 +38,7 @@ class EmployeeDocumentType extends AbstractType
                 'widget' => 'single_text',
                 'required' => false,
                 'input' => 'datetime_immutable',
-                'attr' => ['class' => 'shadow-none py-2.5 px-4 border-1 border-gray-300 focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm rounded-md']
+                'attr' => ['class' => 'input input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100']
             ])
             ->add('file', FileType::class, [
                 'label' => 'employee.document.file',
@@ -55,7 +55,7 @@ class EmployeeDocumentType extends AbstractType
                         mimeTypesMessage: 'Please upload a valid PDF or Image document'
                     )
                 ],
-                'attr' => ['class' => 'block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100', 'accept' => '.pdf,.jpg,.jpeg,.png']
+                'attr' => ['class' => 'file-input file-input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100', 'accept' => '.pdf,.jpg,.jpeg,.png']
             ])
         ;
     }
