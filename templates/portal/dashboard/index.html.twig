@@ -1,0 +1,210 @@
+{% extends 'layouts/portal.html.twig' %}
+
+{% block portal_content %}
+	{# Welcome Section #}
+	<div class="mb-8">
+		<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">Welcome back,
+			{{ employee.firstName }}! 👋</h2>
+		<p class="text-slate-500 dark:text-slate-400">Here's what's happening today.</p>
+	</div>
+
+	{# Quick Stats & Actions Grid #}
+	<div
+		class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+		{# Leave Balance #}
+		<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
+			<div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 flex items-center justify-center mb-3">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+			</div>
+			<span class="text-2xl font-bold text-slate-800 dark:text-slate-100">12</span>
+			<span class="text-xs text-slate-500 dark:text-slate-400">Leave Balance</span>
+		</div>
+
+		{# Upcoming Shift #}
+		<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center">
+			<div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400 flex items-center justify-center mb-3">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+				</svg>
+			</div>
+			<span class="text-lg font-bold text-slate-800 dark:text-slate-100">{{ "now"|date("09:00") }}</span>
+			<span class="text-xs text-slate-500 dark:text-slate-400">Next Shift</span>
+		</div>
+
+		{# Pending Actions #}
+		<div
+			class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center justify-center text-center relative overflow-hidden">
+			{# Notification Badge #}
+			<div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500"></div>
+			<div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400 flex items-center justify-center mb-3">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+				</svg>
+			</div>
+			<span class="text-2xl font-bold text-slate-800 dark:text-slate-100">2</span>
+			<span class="text-xs text-slate-500 dark:text-slate-400">Pending Actions</span>
+		</div>
+
+		{# Birthday Notif #}
+		<div class="bg-gradient-to-br from-pink-500 to-purple-600 p-4 rounded-2xl shadow-lg shadow-purple-200 dark:shadow-none flex flex-col items-center justify-center text-center text-white">
+			<svg class="w-8 h-8 mb-2 text-white/90" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454A2.5 2.5 0 002 18v1.5c0 .276.224.5.5.5h19c.276 0 .5-.224.5-.5V18a2.5 2.5 0 00-2.5-2.454zM12 3v1m0 16v5m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+			</svg>
+			<span class="text-sm font-bold">Anna's B-Day</span>
+			<span class="text-[10px] opacity-80">Today 🎉</span>
+		</div>
+	</div>
+
+	<div
+		class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+		{# Left Column: Feed & Events #}
+		<div
+			class="lg:col-span-2 space-y-8">
+			{# Quick Actions Row #}
+			<div class="grid grid-cols-3 gap-3 md:gap-4">
+				<button class="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all group">
+					<div class="w-10 h-10 rounded-full bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 group-hover:scale-110 transition-transform flex items-center justify-center mb-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+						</svg>
+					</div>
+					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Request Leave</span>
+				</button>
+				<button class="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all group">
+					<div class="w-10 h-10 rounded-full bg-teal-50 text-teal-600 dark:bg-teal-900/20 dark:text-teal-400 group-hover:scale-110 transition-transform flex items-center justify-center mb-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+						</svg>
+					</div>
+					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Check In/Out</span>
+				</button>
+				<button class="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all group">
+					<div class="w-10 h-10 rounded-full bg-sky-50 text-sky-600 dark:bg-sky-900/20 dark:text-sky-400 group-hover:scale-110 transition-transform flex items-center justify-center mb-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+						</svg>
+					</div>
+					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Payslips</span>
+				</button>
+			</div>
+
+			{# Company News Feed #}
+			<div>
+				<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-2">
+					<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+					</svg>
+					Company News
+				</h3>
+				<div class="space-y-4">
+					<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+						<div class="flex gap-4">
+							<div class="w-12 h-12 rounded-xl bg-purple-100 shrink-0 flex items-center justify-center text-purple-600">
+								📢
+							</div>
+							<div class="min-w-0 flex-1">
+								<h4 class="font-bold text-slate-800 dark:text-slate-100 truncate">Annual Town Hall Meeting</h4>
+								<p class="text-sm text-slate-500 mt-1 line-clamp-2">Join us this Friday for our annual town hall meeting where we'll discuss the roadmap for 2026 and celebrate our achievements.</p>
+								<div class="mt-3 flex items-center gap-2 text-xs text-slate-400">
+									<span>2 hours ago</span>
+									<span>•</span>
+									<span>Announcement</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+						<div class="flex gap-4">
+							<div class="w-12 h-12 rounded-xl bg-green-100 shrink-0 flex items-center justify-center text-green-600">
+								🌱
+							</div>
+							<div class="min-w-0 flex-1">
+								<h4 class="font-bold text-slate-800 dark:text-slate-100 truncate">New Wellness Benefits</h4>
+								<p class="text-sm text-slate-500 mt-1 line-clamp-2">We're introducing new wellness benefits starting next month, including gym reimbursement and mental health days.</p>
+								<div class="mt-3 flex items-center gap-2 text-xs text-slate-400">
+									<span>1 day ago</span>
+									<span>•</span>
+									<span>HR Update</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# Right Column: Upcoming Events #}
+		<div class="space-y-8">
+			<div>
+				<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-2">
+					<svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+					</svg>
+					Upcoming Events
+				</h3>
+				<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+					<div class="p-4 border-b border-slate-100 dark:border-slate-700 flex items-center gap-3">
+						<div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-700 shrink-0 flex flex-col items-center justify-center text-xs font-bold">
+							<span class="text-slate-400">DEC</span>
+							<span class="text-slate-800 dark:text-slate-200 text-lg leading-none">25</span>
+						</div>
+						<div class="min-w-0 flex-1">
+							<h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm truncate">Christmas Holiday</h5>
+							<span class="text-xs text-slate-500 block truncate">All Day • Public Holiday</span>
+						</div>
+					</div>
+					<div class="p-4 border-b border-slate-100 dark:border-slate-700 flex items-center gap-3">
+						<div class="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/20 shrink-0 flex flex-col items-center justify-center text-xs font-bold text-purple-600">
+							<span class="text-purple-400">DEC</span>
+							<span class="text-purple-700 dark:text-purple-300 text-lg leading-none">28</span>
+						</div>
+						<div class="min-w-0 flex-1">
+							<h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm truncate">Team Quarterly Review</h5>
+							<span class="text-xs text-slate-500 block truncate">10:00 AM • Main Conference Room</span>
+						</div>
+					</div>
+					<div class="p-4 flex items-center gap-3">
+						<div class="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/20 shrink-0 flex flex-col items-center justify-center text-xs font-bold text-blue-600">
+							<span class="text-blue-400">JAN</span>
+							<span class="text-blue-700 dark:text-blue-300 text-lg leading-none">05</span>
+						</div>
+						<div class="min-w-0 flex-1">
+							<h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm truncate">New Hire Orientation</h5>
+							<span class="text-xs text-slate-500 block truncate">09:00 AM • Training Room B</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{# Team Birthdays #}
+			<div>
+				<h3 class="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center gap-2">
+					<svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454A2.5 2.5 0 002 18v1.5c0 .276.224.5.5.5h19c.276 0 .5-.224.5-.5V18a2.5 2.5 0 00-2.5-2.454zM12 3v1m0 16v5m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+					</svg>
+					Celebrations
+				</h3>
+				<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
+					<div class="flex items-center gap-3 mb-3">
+						<img src="https://ui-avatars.com/api/?name=Anna+Smith" class="w-10 h-10 rounded-full shrink-0 object-cover" alt="Anna">
+						<div class="min-w-0 flex-1">
+							<p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Anna Smith</p>
+							<p class="text-xs text-slate-500 truncate">Birthday • Today</p>
+						</div>
+						<button class="ml-auto text-xs bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full font-medium hover:bg-purple-200 transition-colors shrink-0">Wish HBD</button>
+					</div>
+					<div class="flex items-center gap-3">
+						<img src="https://ui-avatars.com/api/?name=John+Doe" class="w-10 h-10 rounded-full shrink-0 object-cover" alt="John">
+						<div class="min-w-0 flex-1">
+							<p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">John Doe</p>
+							<p class="text-xs text-slate-500 truncate">Work Anniversary • 5 Years</p>
+						</div>
+						<button class="ml-auto text-xs bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-medium hover:bg-blue-200 transition-colors shrink-0">Congrats</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

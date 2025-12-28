@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="drawer lg:drawer-open min-h-screen bg-slate-50 dark:bg-slate-900">
+		<input id="my-drawer-4" type="checkbox" class="drawer-toggle"/>
+		<div
+			class="drawer-content flex flex-col">
+			<!-- Navbar -->
+			<nav class="navbar w-full bg-white dark:bg-slate-800 shadow-sm sticky top-0 z-30 px-4 h-16">
+				<div class="flex-none lg:hidden">
+					<label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost text-slate-600 dark:text-slate-300">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+						</svg>
+					</label>
+				</div>
+				<div class="flex-1 px-2 mx-2">
+					<span class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">HR Portal</span>
+				</div>
+				<div class="flex-none gap-3">
+					<span class="hidden md:inline font-semibold text-slate-800 dark:text-slate-100 text-sm">
+						Hi,
+						{{ app.user.employee.firstName }}
+					</span>
+					<div class="avatar">
+						<div class="w-9 h-9 rounded-full ring-2 ring-purple-50 dark:ring-purple-900/20">
+							<img src="{{ app.user.employee.profileImage ? asset('uploads/photos/' ~ app.user.employee.profileImage) : 'https://ui-avatars.com/api/?name=' ~ app.user.name|url_encode }}" alt="Profile"/>
+						</div>
+					</div>
+				</div>
+			</nav>
+
+			<!-- Page content -->
+			<main class="flex-1 p-4 md:p-8 w-full max-w-7xl mx-auto">
+				{% block portal_content %}{% endblock %}
+			</main>
+		</div>
+
+		<div class="drawer-side z-40">
+			<label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+			<div
+				class="flex min-h-full flex-col items-start bg-white dark:bg-slate-800 border-e border-slate-200 dark:border-slate-700 w-64">
+				{# Sidebar Header / Logo area could go here if not in Navbar #}
+				<div class="w-full p-4 flex items-center justify-center lg:hidden border-b border-slate-100 dark:border-slate-700 mb-2">
+					<span class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Menu</span>
+				</div>
+
+				<ul
+					class="menu w-full grow p-4 gap-2 text-base">
+					<!-- Dashboard -->
+					<li>
+						<a href="{{ path('app_employee_portal_dashboard') }}" class="{{ app.request.attributes.get('_route') == 'app_employee_portal_dashboard' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }}">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+							</svg>
+							<span>Dashboard</span>
+						</a>
+					</li>
+
+					<!-- Profile -->
+					<li>
+						<a href="{{ path('app_employee_portal_profile') }}" class="{{ app.request.attributes.get('_route') starts with 'app_employee_portal_profile' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }}">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+							</svg>
+							<span>Profile</span>
+						</a>
+					</li>
+
+					<!-- Documents -->
+					<li>
+						<a href="{{ path('app_employee_portal_documents') }}" class="{{ app.request.attributes.get('_route') == 'app_employee_portal_documents' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }}">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+							</svg>
+							<span>Documents</span>
+						</a>
+					</li>
+				</ul>
+
+				<div class="w-full p-4 border-t border-slate-200 dark:border-slate-700 mt-auto">
+					<a href="{{ path('app_logout') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-red-500 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+						</svg>
+						<span>Sign Out</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
