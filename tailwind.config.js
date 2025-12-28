@@ -16,5 +16,10 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant('is-drawer-open', '.drawer-toggle:checked ~ .drawer-side &')
+      addVariant('is-drawer-close', '.drawer-toggle:not(:checked) ~ .drawer-side &')
+    },
+  ],
 }

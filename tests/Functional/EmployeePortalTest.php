@@ -24,8 +24,8 @@ class EmployeePortalTest extends WebTestCase
     {
         // Login as a user without ROLE_EMP (assuming regular user handling or create one)
         // For simplicity, let's try to access as anonymous first
-        $this->client->request('GET', '/portal/');
-        $this->assertResponseRedirects('/login'); // Should redirect to login
+        $this->client->request('GET', '/en/portal');
+        $this->assertResponseRedirects('/en/login'); // Should redirect to login
 
         // Or create a user without employee role if possible.
     }
@@ -35,10 +35,10 @@ class EmployeePortalTest extends WebTestCase
         $user = $this->createEmployeeUser();
         $this->client->loginUser($user);
 
-        $crawler = $this->client->request('GET', '/portal/');
+        $crawler = $this->client->request('GET', '/en/portal');
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h2', 'Welcome back');
-        $this->assertSelectorTextContains('nav', 'Dashboard');
+        $this->assertSelectorTextContains('.menu', 'Dashboard');
     }
 
     public function testProfileEdit(): void
@@ -46,14 +46,14 @@ class EmployeePortalTest extends WebTestCase
         $user = $this->createEmployeeUser();
         $this->client->loginUser($user);
 
-        $crawler = $this->client->request('GET', '/portal/profile/edit');
+        $crawler = $this->client->request('GET', '/en/portal/profile/edit');
         $this->assertResponseIsSuccessful();
 
         $form = $crawler->selectButton('Save Changes')->form();
         $form['employee_portal_profile[mobile]'] = '0501234567';
         
         $this->client->submit($form);
-        $this->assertResponseRedirects('/portal/profile');
+        $this->assertResponseRedirects('/en/portal/profile');
         $this->client->followRedirect();
         
         $this->assertSelectorTextContains('body', '0501234567');
@@ -76,7 +76,20 @@ class EmployeePortalTest extends WebTestCase
         $employee->setEmail($email);
         $employee->setMobile('0500000000');
         $employee->setUser($user);
+        $user->setEmployee($employee);
         
+        $team = new \App\Entity\Team();
+        $team->setName("Test Team {$uniqueId}");
+        $team->setSlug("test-team-{$uniqueId}");
+        // Add minimal required fields for Team
+        
+        $teamMember = new \App\Entity\TeamMember();
+        $teamMember->setUser($user);
+        $teamMember->setTeam($team);
+        $teamMember->setRole(\App\Entity\TeamMember::ROLE_OWNER); // Use appropriate role
+        
+        $this->entityManager->persist($team);
+        $this->entityManager->persist($teamMember);
         $this->entityManager->persist($user);
         $this->entityManager->persist($employee);
         $this->entityManager->flush();
