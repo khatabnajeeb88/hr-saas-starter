@@ -3,14 +3,14 @@
 {% block portal_content %}
 	<div class="flex items-center justify-between mb-8">
 		<div>
-			<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">My Profile</h2>
-			<p class="text-slate-500 dark:text-slate-400">Manage your personal information</p>
+			<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">{{ 'portal.profile.title'|trans }}</h2>
+			<p class="text-slate-500 dark:text-slate-400">{{ 'portal.profile.subtitle'|trans }}</p>
 		</div>
 		<a href="{{ path('app_employee_portal_profile_edit') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-colors font-medium">
 			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
 			</svg>
-			Edit Profile
+			{{ 'portal.profile.edit_button'|trans }}
 		</a>
 	</div>
 
@@ -30,22 +30,22 @@
 			</div>
 
 			<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-				<h4 class="font-bold text-slate-800 dark:text-slate-100 mb-4">Employment Details</h4>
+				<h4 class="font-bold text-slate-800 dark:text-slate-100 mb-4">{{ 'portal.profile.employment_details'|trans }}</h4>
 				<div class="space-y-4 text-sm">
 					<div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
-						<span class="text-slate-500">Employee ID</span>
+						<span class="text-slate-500">{{ 'portal.profile.employee_id'|trans }}</span>
 						<span class="font-medium text-slate-800 dark:text-slate-100">{{ employee.badgeId|default('#') }}</span>
 					</div>
 					<div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
-						<span class="text-slate-500">Department</span>
+						<span class="text-slate-500">{{ 'portal.profile.department'|trans }}</span>
 						<span class="font-medium text-slate-800 dark:text-slate-100">{{ employee.department.name|default('-') }}</span>
 					</div>
 					<div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
-						<span class="text-slate-500">Manager</span>
+						<span class="text-slate-500">{{ 'portal.profile.manager'|trans }}</span>
 						<span class="font-medium text-slate-800 dark:text-slate-100">{{ employee.manager.fullName|default('-') }}</span>
 					</div>
 					<div class="flex justify-between py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
-						<span class="text-slate-500">Joined Date</span>
+						<span class="text-slate-500">{{ 'portal.profile.joined_date'|trans }}</span>
 						<span class="font-medium text-slate-800 dark:text-slate-100">{{ employee.joiningDate ? employee.joiningDate|date('M d, Y') : '-' }}</span>
 					</div>
 				</div>
@@ -61,27 +61,27 @@
 					<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
 					</svg>
-					Personal Information
+					{{ 'portal.profile.personal_info'|trans }}
 				</h4>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div>
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Email Address</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.email'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium">{{ employee.email }}</p>
 					</div>
 					<div>
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Phone Number</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.phone'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium">{{ employee.mobile|default('-') }}</p>
 					</div>
 					<div>
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Date of Birth</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.dob'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium">{{ employee.dateOfBirth ? employee.dateOfBirth|date('M d, Y') : '-' }}</p>
 					</div>
 					<div>
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Gender</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.gender'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium">{{ employee.gender|default('-') }}</p>
 					</div>
 					<div class="md:col-span-2">
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Address</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.address'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium">{{ employee.address|default('-') }}</p>
 					</div>
 				</div>
@@ -93,19 +93,19 @@
 					<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
 					</svg>
-					Bank Details
+					{{ 'portal.profile.bank_details'|trans }}
 				</h4>
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 					<div>
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Bank Name</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.bank_name'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium">{{ employee.bankName|default('-') }}</p>
 					</div>
 					<div>
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">Account Number</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.account_number'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium">{{ employee.bankAccountNumber ? '•••• ' ~ employee.bankAccountNumber|slice(-4) : '-' }}</p>
 					</div>
 					<div class="md:col-span-2">
-						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">IBAN</label>
+						<label class="block text-xs text-slate-500 dark:text-slate-400 mb-1">{{ 'portal.profile.iban'|trans }}</label>
 						<p class="text-slate-800 dark:text-slate-100 font-medium font-mono">{{ employee.iban|default('-') }}</p>
 					</div>
 				</div>
@@ -117,7 +117,7 @@
 					<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
 					</svg>
-					Dependents
+					{{ 'portal.profile.dependents'|trans }}
 				</h4>
 				{% if employee.familyMembers|length > 0 %}
 					{# Desktop Table #}
@@ -125,9 +125,9 @@
 						<table class="w-full text-sm text-left">
 							<thead class="text-xs text-slate-500 uppercase bg-slate-50 dark:bg-slate-700/50">
 								<tr>
-									<th class="px-4 py-2">Name</th>
-									<th class="px-4 py-2">Relation</th>
-									<th class="px-4 py-2">Date of Birth</th>
+									<th class="px-4 py-2">{{ 'employee.name'|trans }}</th>
+									<th class="px-4 py-2">{{ 'portal.profile.relation'|trans }}</th>
+									<th class="px-4 py-2">{{ 'portal.profile.dob'|trans }}</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -149,11 +149,11 @@
 								<h5 class="font-bold text-slate-800 dark:text-slate-100">{{ member.name }}</h5>
 								<div class="mt-2 grid grid-cols-2 gap-2 text-sm">
 									<div>
-										<span class="block text-xs text-slate-500 uppercase tracking-wide">Relation</span>
+										<span class="block text-xs text-slate-500 uppercase tracking-wide">{{ 'portal.profile.relation'|trans }}</span>
 										<span class="font-medium dark:text-slate-300">{{ member.relationship }}</span>
 									</div>
 									<div>
-										<span class="block text-xs text-slate-500 uppercase tracking-wide">Birthday</span>
+										<span class="block text-xs text-slate-500 uppercase tracking-wide">{{ 'portal.dashboard.birthday'|trans }}</span>
 										<span class="font-medium dark:text-slate-300">{{ member.dateOfBirth ? member.dateOfBirth|date('M d, Y') : '-' }}</span>
 									</div>
 								</div>
@@ -161,7 +161,7 @@
 						{% endfor %}
 					</div>
 				{% else %}
-					<p class="text-sm text-slate-500 italic">No dependents information added.</p>
+					<p class="text-sm text-slate-500 italic">{{ 'portal.profile.no_dependents'|trans }}</p>
 				{% endif %}
 			</div>
 

@@ -721,3 +721,89 @@ family_member:
         relationship: Relationship
         date_of_birth: Date of Birth
         phone: Phone
+
+portal:
+    menu:
+        dashboard: Dashboard
+        profile: Profile
+        documents: Documents
+        sign_out: Sign Out
+        menu_title: Menu
+        welcome: Hi, %name%
+
+    dashboard:
+        welcome_title: Welcome back, %name%! 👋
+        welcome_subtitle: Here's what's happening today.
+        leave_balance: Leave Balance
+        next_shift: Next Shift
+        pending_actions: Pending Actions
+        request_leave: Request Leave
+        check_in_out: Check In/Out
+        payslips: Payslips
+        company_news: Company News
+        upcoming_events: Upcoming Events
+        celebrations: Celebrations
+        wish_hbd: Wish HBD
+        congrats: Congrats
+        today: Today
+        birthday: Birthday
+        work_anniversary: Work Anniversary
+        public_holiday: Public Holiday
+        all_day: All Day
+
+    profile:
+        title: My Profile
+        subtitle: Manage your personal information
+        edit_button: Edit Profile
+        employment_details: Employment Details
+        first_name: First Name
+        last_name: Last Name
+        employee_id: Employee ID
+        department: Department
+        manager: Manager
+        joined_date: Joined Date
+        personal_info: Personal Information
+        email: Email Address
+        phone: Phone Number
+        dob: Date of Birth
+        gender: Gender
+        address: Address
+        bank_details: Bank Details
+        bank_name: Bank Name
+        account_number: Account Number
+        iban: IBAN
+        dependents: Dependents
+        relation: Relation
+        no_dependents: No dependents information added.
+        edit:
+            title: Edit Profile
+            subtitle: Update your personal information
+            read_only_notice: Some fields like Job Title and Salary are read-only used for administrative purposes. Please contact HR for corrections.
+            personal_details: Personal Details
+            bank_info: Bank Information
+            save_changes: Save Changes
+            add_dependent: + Add Dependent
+
+    documents:
+        title: My Documents
+        subtitle: Manage your employment documents
+        upload_button: Upload Document
+        contracts_title: Employment Contracts
+        contract_label: Employment Contract
+        indefinite: Indefinite
+        uploaded_title: Uploaded Documents
+        no_documents: No documents uploaded yet.
+        expired: Expired
+        expiring_in: Expiring in %days% days
+        no_expiry: No Expiry
+        number: "No: %number%"
+        expires_on: "Expires: %date%"
+        upload_modal:
+            title: Upload Document
+            cancel: Cancel
+            submit: Upload
+            form_title: Title
+            form_type: Document Type
+            form_number: Document Number
+            form_expiry: Expiry Date
+            form_file: File

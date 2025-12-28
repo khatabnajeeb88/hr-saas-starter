@@ -3,9 +3,8 @@
 {% block portal_content %}
 	{# Welcome Section #}
 	<div class="mb-8">
-		<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">Welcome back,
-			{{ employee.firstName }}! 👋</h2>
-		<p class="text-slate-500 dark:text-slate-400">Here's what's happening today.</p>
+		<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">{{ 'portal.dashboard.welcome_title'|trans({'%name%': employee.firstName}) }}</h2>
+		<p class="text-slate-500 dark:text-slate-400">{{ 'portal.dashboard.welcome_subtitle'|trans }}</p>
 	</div>
 
 	{# Quick Stats & Actions Grid #}
@@ -19,7 +18,7 @@
 				</svg>
 			</div>
 			<span class="text-2xl font-bold text-slate-800 dark:text-slate-100">12</span>
-			<span class="text-xs text-slate-500 dark:text-slate-400">Leave Balance</span>
+			<span class="text-xs text-slate-500 dark:text-slate-400">{{ 'portal.dashboard.leave_balance'|trans }}</span>
 		</div>
 
 		{# Upcoming Shift #}
@@ -30,7 +29,7 @@
 				</svg>
 			</div>
 			<span class="text-lg font-bold text-slate-800 dark:text-slate-100">{{ "now"|date("09:00") }}</span>
-			<span class="text-xs text-slate-500 dark:text-slate-400">Next Shift</span>
+			<span class="text-xs text-slate-500 dark:text-slate-400">{{ 'portal.dashboard.next_shift'|trans }}</span>
 		</div>
 
 		{# Pending Actions #}
@@ -44,7 +43,7 @@
 				</svg>
 			</div>
 			<span class="text-2xl font-bold text-slate-800 dark:text-slate-100">2</span>
-			<span class="text-xs text-slate-500 dark:text-slate-400">Pending Actions</span>
+			<span class="text-xs text-slate-500 dark:text-slate-400">{{ 'portal.dashboard.pending_actions'|trans }}</span>
 		</div>
 
 		{# Birthday Notif #}
@@ -53,7 +52,8 @@
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454A2.5 2.5 0 002 18v1.5c0 .276.224.5.5.5h19c.276 0 .5-.224.5-.5V18a2.5 2.5 0 00-2.5-2.454zM12 3v1m0 16v5m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
 			</svg>
 			<span class="text-sm font-bold">Anna's B-Day</span>
-			<span class="text-[10px] opacity-80">Today 🎉</span>
+			<span class="text-[10px] opacity-80">{{ 'portal.dashboard.today'|trans }}
+				🎉</span>
 		</div>
 	</div>
 
@@ -70,7 +70,7 @@
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
 						</svg>
 					</div>
-					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Request Leave</span>
+					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ 'portal.dashboard.request_leave'|trans }}</span>
 				</button>
 				<button class="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all group">
 					<div class="w-10 h-10 rounded-full bg-teal-50 text-teal-600 dark:bg-teal-900/20 dark:text-teal-400 group-hover:scale-110 transition-transform flex items-center justify-center mb-2">
@@ -78,7 +78,7 @@
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
 						</svg>
 					</div>
-					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Check In/Out</span>
+					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ 'portal.dashboard.check_in_out'|trans }}</span>
 				</button>
 				<button class="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-purple-200 dark:hover:border-purple-800 hover:shadow-md transition-all group">
 					<div class="w-10 h-10 rounded-full bg-sky-50 text-sky-600 dark:bg-sky-900/20 dark:text-sky-400 group-hover:scale-110 transition-transform flex items-center justify-center mb-2">
@@ -86,7 +86,7 @@
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
 						</svg>
 					</div>
-					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Payslips</span>
+					<span class="text-sm font-medium text-slate-700 dark:text-slate-200">{{ 'portal.dashboard.payslips'|trans }}</span>
 				</button>
 			</div>
 
@@ -96,7 +96,7 @@
 					<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
 					</svg>
-					Company News
+					{{ 'portal.dashboard.company_news'|trans }}
 				</h3>
 				<div class="space-y-4">
 					<div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
@@ -142,7 +142,7 @@
 					<svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
 					</svg>
-					Upcoming Events
+					{{ 'portal.dashboard.upcoming_events'|trans }}
 				</h3>
 				<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
 					<div class="p-4 border-b border-slate-100 dark:border-slate-700 flex items-center gap-3">
@@ -152,7 +152,9 @@
 						</div>
 						<div class="min-w-0 flex-1">
 							<h5 class="font-bold text-slate-800 dark:text-slate-100 text-sm truncate">Christmas Holiday</h5>
-							<span class="text-xs text-slate-500 block truncate">All Day • Public Holiday</span>
+							<span class="text-xs text-slate-500 block truncate">{{ 'portal.dashboard.all_day'|trans }}
+								•
+								{{ 'portal.dashboard.public_holiday'|trans }}</span>
 						</div>
 					</div>
 					<div class="p-4 border-b border-slate-100 dark:border-slate-700 flex items-center gap-3">
@@ -184,24 +186,27 @@
 					<svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-1.5-.454A2.5 2.5 0 002 18v1.5c0 .276.224.5.5.5h19c.276 0 .5-.224.5-.5V18a2.5 2.5 0 00-2.5-2.454zM12 3v1m0 16v5m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
 					</svg>
-					Celebrations
+					{{ 'portal.dashboard.celebrations'|trans }}
 				</h3>
 				<div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
 					<div class="flex items-center gap-3 mb-3">
 						<img src="https://ui-avatars.com/api/?name=Anna+Smith" class="w-10 h-10 rounded-full shrink-0 object-cover" alt="Anna">
 						<div class="min-w-0 flex-1">
 							<p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">Anna Smith</p>
-							<p class="text-xs text-slate-500 truncate">Birthday • Today</p>
+							<p class="text-xs text-slate-500 truncate">{{ 'portal.dashboard.birthday'|trans }}
+								•
+								{{ 'portal.dashboard.today'|trans }}</p>
 						</div>
-						<button class="ml-auto text-xs bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full font-medium hover:bg-purple-200 transition-colors shrink-0">Wish HBD</button>
+						<button class="ml-auto text-xs bg-purple-100 text-purple-700 px-3 py-1.5 rounded-full font-medium hover:bg-purple-200 transition-colors shrink-0">{{ 'portal.dashboard.wish_hbd'|trans }}</button>
 					</div>
 					<div class="flex items-center gap-3">
 						<img src="https://ui-avatars.com/api/?name=John+Doe" class="w-10 h-10 rounded-full shrink-0 object-cover" alt="John">
 						<div class="min-w-0 flex-1">
 							<p class="text-sm font-bold text-slate-800 dark:text-slate-100 truncate">John Doe</p>
-							<p class="text-xs text-slate-500 truncate">Work Anniversary • 5 Years</p>
+							<p class="text-xs text-slate-500 truncate">{{ 'portal.dashboard.work_anniversary'|trans }}
+								• 5 Years</p>
 						</div>
-						<button class="ml-auto text-xs bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-medium hover:bg-blue-200 transition-colors shrink-0">Congrats</button>
+						<button class="ml-auto text-xs bg-blue-100 text-blue-700 px-3 py-1.5 rounded-full font-medium hover:bg-blue-200 transition-colors shrink-0">{{ 'portal.dashboard.congrats'|trans }}</button>
 					</div>
 				</div>
 			</div>

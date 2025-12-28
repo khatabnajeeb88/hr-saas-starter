@@ -17,12 +17,11 @@
 					</label>
 				</div>
 				<div class="flex-1 px-2 mx-2">
-					<span class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">HR Portal</span>
+					<span class="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">HR Portal</span>
 				</div>
 				<div class="flex-none gap-3">
 					<span class="hidden md:inline font-semibold text-slate-800 dark:text-slate-100 text-sm">
-						Hi,
-						{{ app.user.employee.firstName }}
+						{{ 'portal.menu.welcome'|trans({'%name%': app.user.employee.firstName}) }}
 					</span>
 					<div class="avatar">
 						<div class="w-9 h-9 rounded-full ring-2 ring-purple-50 dark:ring-purple-900/20">
@@ -43,48 +42,48 @@
 			<div class="flex min-h-full flex-col items-start bg-white dark:bg-slate-800 border-e border-slate-200 dark:border-slate-700 transition-all duration-300 w-64 is-drawer-close:w-20 overflow-hidden">
 
 				<div class="w-full p-4 flex items-center justify-center lg:hidden border-b border-slate-100 dark:border-slate-700 mb-2">
-					<span class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Menu</span>
+					<span class="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{{ 'portal.menu.menu_title'|trans }}</span>
 				</div>
 
 				<ul
 					class="menu w-full grow p-2 gap-2 text-base">
 					<!-- Dashboard -->
 					<li>
-						<a href="{{ path('app_employee_portal_dashboard') }}" class="flex items-center gap-3 {{ app.request.attributes.get('_route') == 'app_employee_portal_dashboard' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }} is-drawer-close:justify-center" title="Dashboard">
+						<a href="{{ path('app_employee_portal_dashboard') }}" class="flex items-center gap-3 {{ app.request.attributes.get('_route') == 'app_employee_portal_dashboard' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }} is-drawer-close:justify-center" title="{{ 'portal.menu.dashboard'|trans }}">
 							<svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
 							</svg>
-							<span class="is-drawer-close:hidden text-sm">Dashboard</span>
+							<span class="is-drawer-close:hidden text-sm">{{ 'portal.menu.dashboard'|trans }}</span>
 						</a>
 					</li>
 
 					<!-- Profile -->
 					<li>
-						<a href="{{ path('app_employee_portal_profile') }}" class="flex items-center gap-3 {{ app.request.attributes.get('_route') starts with 'app_employee_portal_profile' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }} is-drawer-close:justify-center" title="Profile">
+						<a href="{{ path('app_employee_portal_profile') }}" class="flex items-center gap-3 {{ app.request.attributes.get('_route') starts with 'app_employee_portal_profile' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }} is-drawer-close:justify-center" title="{{ 'portal.menu.profile'|trans }}">
 							<svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
 							</svg>
-							<span class="is-drawer-close:hidden text-sm">Profile</span>
+							<span class="is-drawer-close:hidden text-sm">{{ 'portal.menu.profile'|trans }}</span>
 						</a>
 					</li>
 
 					<!-- Documents -->
 					<li>
-						<a href="{{ path('app_employee_portal_documents') }}" class="flex items-center gap-3 {{ app.request.attributes.get('_route') == 'app_employee_portal_documents' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }} is-drawer-close:justify-center" title="Documents">
+						<a href="{{ path('app_employee_portal_documents') }}" class="flex items-center gap-3 {{ app.request.attributes.get('_route') == 'app_employee_portal_documents' ? 'active bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400 font-medium' : 'text-slate-600 dark:text-slate-400' }} is-drawer-close:justify-center" title="{{ 'portal.menu.documents'|trans }}">
 							<svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
 							</svg>
-							<span class="is-drawer-close:hidden text-sm">Documents</span>
+							<span class="is-drawer-close:hidden text-sm">{{ 'portal.menu.documents'|trans }}</span>
 						</a>
 					</li>
 				</ul>
 
 				<div class="w-full p-4 border-t border-slate-200 dark:border-slate-700 mt-auto">
-					<a href="{{ path('app_logout') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-red-500 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors is-drawer-close:justify-center" title="Sign Out">
+					<a href="{{ path('app_logout') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-red-500 dark:text-slate-400 dark:hover:bg-slate-800 transition-colors is-drawer-close:justify-center" title="{{ 'portal.menu.sign_out'|trans }}">
 						<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
 						</svg>
-						<span class="is-drawer-close:hidden">Sign Out</span>
+						<span class="is-drawer-close:hidden">{{ 'portal.menu.sign_out'|trans }}</span>
 					</a>
 				</div>
 			</div>

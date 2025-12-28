@@ -4,14 +4,14 @@
 	<div class="max-w-4xl mx-auto">
 		<div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
 			<div>
-				<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">My Documents</h2>
-				<p class="text-slate-500 dark:text-slate-400">Manage your employment documents</p>
+				<h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100">{{ 'portal.documents.title'|trans }}</h2>
+				<p class="text-slate-500 dark:text-slate-400">{{ 'portal.documents.subtitle'|trans }}</p>
 			</div>
 			<button onclick="upload_modal.showModal()" class="btn btn-primary bg-purple-600 hover:bg-purple-700 text-white border-none gap-2">
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
 				</svg>
-				Upload Document
+				{{ 'portal.documents.upload_button'|trans }}
 			</button>
 		</div>
 
@@ -23,7 +23,7 @@
 					<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
 					</svg>
-					Employment Contracts
+					{{ 'portal.documents.contracts_title'|trans }}
 				</h3>
 				<div class="grid gap-4">
 					{% for contract in employee.contracts %}
@@ -35,14 +35,14 @@
 									</svg>
 								</div>
 								<div>
-									<h4 class="font-bold text-slate-800 dark:text-slate-100">Employment Contract</h4>
+									<h4 class="font-bold text-slate-800 dark:text-slate-100">{{ 'portal.documents.contract_label'|trans }}</h4>
 									<p class="text-xs text-slate-500">
 										{{ contract.startDate|date('M d, Y') }}
 										-
 										{% if contract.endDate %}
 											{{ contract.endDate|date('M d, Y') }}
 										{% else %}
-											Indefinite
+											{{ 'portal.documents.indefinite'|trans }}
 										{% endif %}
 									</p>
 								</div>
@@ -66,7 +66,7 @@
 				<svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
 				</svg>
-				Uploaded Documents
+				{{ 'portal.documents.uploaded_title'|trans }}
 			</h3>
 
 			{% if employee.documents|length > 0 %}
@@ -97,20 +97,21 @@
 									<div class="flex flex-wrap items-center gap-2">
 										<h4 class="font-bold text-slate-800 dark:text-slate-100 capitalize truncate">{{ doc.type|replace({'_': ' '}) }}</h4>
 										{% if isExpired %}
-											<span class="badge badge-error badge-sm shrink-0">Expired</span>
+											<span class="badge badge-error badge-sm shrink-0">{{ 'portal.documents.expired'|trans }}</span>
 										{% elseif daysLeft is not null and daysLeft < 30 %}
-											<span class="badge badge-warning badge-sm shrink-0">Expiring in
-												{{ daysLeft }}
-												days</span>
+											<span class="badge badge-warning badge-sm shrink-0">{{ 'portal.documents.expiring_in'|trans({'%days%': daysLeft}) }}</span>
 										{% endif %}
 									</div>
 									<p class="text-xs text-slate-500 mt-0.5 truncate">
-										{% if doc.documentNumber %}No:
+										{% if doc.documentNumber %}
+											{{ 'portal.documents.number'|trans({'%number%': doc.documentNumber}) }}
 											<span class="font-mono">{{ doc.documentNumber }}</span>
 											•
 										{% endif %}
-										{% if doc.expiryDate %}Expires:
-											{{ doc.expiryDate|date('M d, Y') }}{% else %}No Expiry
+										{% if doc.expiryDate %}
+											{{ 'portal.documents.expires_on'|trans({'%date%': doc.expiryDate|date('M d, Y')}) }}
+										{% else %}
+											{{ 'portal.documents.no_expiry'|trans }}
 										{% endif %}
 									</p>
 								</div>
@@ -129,7 +130,7 @@
 					<svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
 					</svg>
-					<p class="text-slate-500">No documents uploaded yet.</p>
+					<p class="text-slate-500">{{ 'portal.documents.no_documents'|trans }}</p>
 				</div>
 			{% endif %}
 		</div>
@@ -138,33 +139,33 @@
 	{# Upload Modal #}
 	<dialog id="upload_modal" class="modal modal-bottom sm:modal-middle">
 		<div class="modal-box bg-white dark:bg-slate-800">
-			<h3 class="font-bold text-lg text-slate-800 dark:text-slate-100 mb-4">Upload Document</h3>
+			<h3 class="font-bold text-lg text-slate-800 dark:text-slate-100 mb-4">{{ 'portal.documents.upload_modal.title'|trans }}</h3>
 			{{ form_start(form) }}
 			<div class="space-y-4">
 				<div class="form-control">
-					{{ form_label(form.type, null, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+					{{ form_label(form.type, 'portal.documents.upload_modal.form_type'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
 					{{ form_widget(form.type, {'attr': {'class': 'select select-bordered w-full bg-slate-50'}}) }}
 					{{ form_errors(form.type) }}
 				</div>
 				<div class="form-control">
-					{{ form_label(form.documentNumber, null, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+					{{ form_label(form.documentNumber, 'portal.documents.upload_modal.form_number'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
 					{{ form_widget(form.documentNumber, {'attr': {'class': 'input input-bordered w-full bg-slate-50'}}) }}
 					{{ form_errors(form.documentNumber) }}
 				</div>
 				<div class="form-control">
-					{{ form_label(form.expiryDate, null, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+					{{ form_label(form.expiryDate, 'portal.documents.upload_modal.form_expiry'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
 					{{ form_widget(form.expiryDate, {'attr': {'class': 'input input-bordered w-full bg-slate-50'}}) }}
 					{{ form_errors(form.expiryDate) }}
 				</div>
 				<div class="form-control">
-					{{ form_label(form.file, null, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
+					{{ form_label(form.file, 'portal.documents.upload_modal.form_file'|trans, {'label_attr': {'class': 'label-text font-medium mb-1 block'}}) }}
 					{{ form_widget(form.file, {'attr': {'class': 'file-input file-input-bordered w-full bg-slate-50'}}) }}
 					{{ form_errors(form.file) }}
 				</div>
 			</div>
 			<div class="modal-action">
-				<button type="button" onclick="upload_modal.close()" class="btn">Cancel</button>
-				<button type="submit" class="btn btn-primary bg-purple-600 border-none text-white">Upload</button>
+				<button type="button" onclick="upload_modal.close()" class="btn">{{ 'portal.documents.upload_modal.cancel'|trans }}</button>
+				<button type="submit" class="btn btn-primary bg-purple-600 border-none text-white">{{ 'portal.documents.upload_modal.submit'|trans }}</button>
 			</div>
 			{{ form_end(form) }}
 		</div>
