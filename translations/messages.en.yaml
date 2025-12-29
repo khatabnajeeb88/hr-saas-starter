@@ -785,6 +785,10 @@ portal:
             profile_image: Profile Image
             upload_image: Upload New Image
             image_help: "Accepted formats: JPG, PNG. Max size: 5MB"
+            image_mime_error: "Please upload a valid image (JPEG, PNG, WEBP)"
+            select_gender: "Select Gender"
+            select_marital_status: "Select Status"
+            select_country: "Select Country"
             personal_details: Personal Details
             bank_info: Bank Information
             save_changes: Save Changes

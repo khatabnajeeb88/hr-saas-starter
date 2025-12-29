@@ -27,7 +27,7 @@ class EmployeePortalProfileType extends AbstractType
         $builder
             // Personal Details
             ->add('profileImage', FileType::class, [
-                'label' => 'Profile Image',
+                'label' => 'portal.profile.edit.profile_image',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
@@ -38,73 +38,80 @@ class EmployeePortalProfileType extends AbstractType
                             'image/png',
                             'image/webp',
                         ],
-                        mimeTypesMessage: 'Please upload a valid image (JPEG, PNG, WEBP)',
+                        mimeTypesMessage: 'portal.profile.edit.image_mime_error',
                     )
                 ],
                 'attr' => ['class' => 'file-input file-input-bordered w-full bg-slate-50 dark:bg-slate-900 dark:text-slate-100'],
             ])
             ->add('firstName', TextType::class, [
                 'disabled' => true, // Read-only
-                'label' => 'First Name'
+                'label' => 'portal.profile.first_name'
             ])
             ->add('lastName', TextType::class, [
                  'disabled' => true, // Read-only
-                 'label' => 'Last Name'
+                 'label' => 'portal.profile.last_name'
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Personal Email',
+                'label' => 'portal.profile.email',
                 'required' => false,
             ])
             ->add('mobile', TelType::class, [
-                'label' => 'Mobile Number'
+                'label' => 'portal.profile.phone'
             ])
             ->add('gender', ChoiceType::class, [
                 'choices' => [
-                    'Male' => 'Male',
-                    'Female' => 'Female',
+                    'employee.gender.male' => 'Male',
+                    'employee.gender.female' => 'Female',
                 ],
-                'placeholder' => 'Select Gender',
+                // 'choice_translation_domain' => 'messages', // Default is true, so keys above will be translated
+                'placeholder' => 'portal.profile.edit.select_gender',
+                'label' => 'portal.profile.gender'
             ])
             ->add('dateOfBirth', DateType::class, [
                 'widget' => 'single_text',
                 'html5' => true,
+                'label' => 'portal.profile.dob'
             ])
             ->add('maritalStatus', ChoiceType::class, [
                 'choices' => [
-                    'Single' => 'Single',
-                    'Married' => 'Married',
-                    'Divorced' => 'Divorced',
-                    'Widowed' => 'Widowed',
+                    'employee.marital_status.single' => 'Single',
+                    'employee.marital_status.married' => 'Married',
+                    'employee.marital_status.divorced' => 'Divorced',
+                    'employee.marital_status.widowed' => 'Widowed',
                 ],
-                'placeholder' => 'Select Status',
+                'placeholder' => 'portal.profile.edit.select_marital_status',
                 'required' => false,
+                'label' => 'portal.profile.marital_status'
             ])
             
             // Address
             ->add('address', TextareaType::class, [
                 'attr' => ['rows' => 3],
                 'required' => false,
+                'label' => 'portal.profile.address'
             ])
             ->add('city', TextType::class, [
                 'required' => false,
+                'label' => 'portal.profile.city'
             ])
             ->add('country', CountryType::class, [
-                'placeholder' => 'Select Country',
+                'placeholder' => 'portal.profile.edit.select_country',
                 'required' => false,
+                'label' => 'portal.profile.country'
             ])
 
              // Bank Details
             ->add('bankName', TextType::class, [
                 'required' => false,
-                'label' => 'Bank Name'
+                'label' => 'portal.profile.bank_name'
             ])
             ->add('bankAccountNumber', TextType::class, [
                 'required' => false,
-                'label' => 'Account Number'
+                'label' => 'portal.profile.account_number'
             ])
             ->add('iban', TextType::class, [
                 'required' => false,
-                'label' => 'IBAN'
+                'label' => 'portal.profile.iban'
             ])
 
             // Family Members (Dependents)

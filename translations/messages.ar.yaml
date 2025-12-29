@@ -786,6 +786,10 @@ portal:
             profile_image: الصورة الشخصية
             upload_image: رفع صورة جديدة
             image_help: "الصيغ المدعومة: JPG, PNG. أقصى حجم: 5 ميجابايت"
+            image_mime_error: "يرجى تحميل صورة صالحة (JPEG, PNG, WEBP)"
+            select_gender: "اختر الجنس"
+            select_marital_status: "اختر الحالة"
+            select_country: "اختر الدولة"
             personal_details: البيانات الشخصية
             bank_info: المعلومات البنكية
             save_changes: حفظ التغييرات

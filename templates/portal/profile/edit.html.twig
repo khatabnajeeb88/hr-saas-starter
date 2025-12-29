@@ -163,11 +163,11 @@
 						{% for member in form.familyMembers %}
 							<div class="relative bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-slate-600">
 								{{ form_widget(member) }}
-								<button type="button" data-action="collection#remove" class="absolute top-2 right-2 text-slate-400 hover:text-red-500">
-									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-									</svg>
-								</button>
+								<button type="button" data-action="collection#remove" class="absolute top-2 end-2 text-slate-400 hover:text-red-500">
+	<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+	</svg>
+</button>
 							</div>
 						{% endfor %}
 					</div>
@@ -177,17 +177,17 @@
 					</button>
 				</div>
 				{# Hide the collection label/widget wrapper if needed, dependent on how form handles it. 
-																																																		                    If collection widget renders everything, fine. But I manually looped. 
-																																																		                    I should NOT render form_widget(form.familyMembers) again if I looped. #}
+																																																										                    If collection widget renders everything, fine. But I manually looped. 
+																																																										                    I should NOT render form_widget(form.familyMembers) again if I looped. #}
 			{# Hiding original widget to avoid duplication if I used manual loop #}
 				{# But I'm using Stimulus collection controller presumably available in the project. 
-																																																		                    I'll assume there is a 'collection' controller or I'll need to add one. 
-																																																		                    The plan didn't explicitly mention adding JS for collection, but it's standard.
-																																																		                    I will check if I need to add simple JS or if I can rely on existing. 
-																																																		                    'data-controller="collection"' implies it exists. 
-																																																		                    I'll proceed assuming it exists or I might mock it. 
-																																																		                    Let's just use a simple button for now, or assume the user has this setup. 
-																																																		                    Wait, I should check assets/controllers if I can. #}
+																																																										                    I'll assume there is a 'collection' controller or I'll need to add one. 
+																																																										                    The plan didn't explicitly mention adding JS for collection, but it's standard.
+																																																										                    I will check if I need to add simple JS or if I can rely on existing. 
+																																																										                    'data-controller="collection"' implies it exists. 
+																																																										                    I'll proceed assuming it exists or I might mock it. 
+																																																										                    Let's just use a simple button for now, or assume the user has this setup. 
+																																																										                    Wait, I should check assets/controllers if I can. #}
 			</div>
 
 			<div class="flex justify-end pt-4">
